@@ -26,7 +26,11 @@ const PROXY_SOURCES = [
   'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/http.txt',
   'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt',
   'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt',
-  'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt'
+  'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt',
+  'https://raw.githubusercontent.com/sunny9577/proxy-scraper/master/generated/http_proxies.txt',
+  'https://raw.githubusercontent.com/prxchk/proxy-list/main/http.txt',
+  'https://raw.githubusercontent.com/officialputuid/KangProxy/KangProxy/http/http.txt',
+  'https://raw.githubusercontent.com/ErcinDedeoglu/proxies/main/proxies/http.txt'
 ];
 
 // Sequential Base-37 Minecraft Username Generator (case-insensitive: a-z, 0-9, _)
@@ -297,41 +301,50 @@ class BatchProxyPool {
     this.isScraping = true;
 
     try {
-      if (onProgress) onProgress(`Scraping fresh candidate proxies from sources...`);
+      if (onProgress) onProgress(`Scraping fresh candidate proxies across ${PROXY_SOURCES.length} sources...`);
       const candidates = new Set();
+      const perSourceCap = Math.ceil(batchSize / PROXY_SOURCES.length) + 15;
 
-      for (const src of PROXY_SOURCES) {
-        try {
-          const res = await fetch(src, { signal: AbortSignal.timeout(6000) });
-          if (res.ok) {
-            const text = await res.text();
-            for (const raw of text.split('\n')) {
-              const line = raw.trim();
-              if (line && !line.startsWith('#') && /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}$/.test(line)) {
-                const pUrl = `http://${line}`;
-                if (!this.testedCandidates.has(pUrl)) {
-                  candidates.add(pUrl);
+      // Fetch all sources concurrently
+      await Promise.allSettled(
+        PROXY_SOURCES.map(async src => {
+          try {
+            const res = await fetch(src, { signal: AbortSignal.timeout(5000) });
+            if (res.ok) {
+              const text = await res.text();
+              const lines = text.split('\n');
+              let taken = 0;
+              for (const raw of lines) {
+                const line = raw.trim();
+                if (line && !line.startsWith('#') && /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}$/.test(line)) {
+                  const pUrl = `http://${line}`;
+                  if (!this.testedCandidates.has(pUrl)) {
+                    candidates.add(pUrl);
+                    taken++;
+                    if (taken >= perSourceCap) break;
+                  }
                 }
               }
             }
-          }
-        } catch {}
-        if (candidates.size >= batchSize) break;
-      }
+          } catch {}
+        })
+      );
 
-      const list = Array.from(candidates).slice(0, batchSize);
+      // Randomly shuffle so candidates from all sources are evenly tested
+      const list = Array.from(candidates).sort(() => Math.random() - 0.5).slice(0, batchSize);
       if (list.length === 0) {
         this.testedCandidates.clear();
         return 0;
       }
 
-      if (onProgress) onProgress(`Validating ${list.length} candidates against API...`);
+      if (onProgress) onProgress(`Validating ${list.length} candidates against FastClient API...`);
       let found = 0;
       let tested = 0;
 
-      // Validate in parallel chunks of 20
-      const CHUNK_SIZE = 20;
+      // Validate in parallel chunks of 25 with 2000ms timeout
+      const CHUNK_SIZE = 25;
       for (let i = 0; i < list.length; i += CHUNK_SIZE) {
+        if (!this.isScraping) break;
         const chunk = list.slice(i, i + CHUNK_SIZE);
         const results = await Promise.all(
           chunk.map(async pUrl => {
@@ -374,7 +387,7 @@ class BatchProxyPool {
       const timer = setTimeout(() => {
         try { if (req) req.destroy(); } catch {}
         finish(false);
-      }, 3000);
+      }, 2000);
 
       let req;
       try {
@@ -528,10 +541,17 @@ class ProxyPingerService {
         proxy = this.pool.getReadyProxy();
 
         if (!proxy) {
+          // Pool starved: trigger scraper immediately if idle
+          if (!this.pool.isScraping) {
+            this.pool.scrapeAndValidateBatch(250, msg => {
+              this.stats.statusMessage = msg;
+            }).catch(() => {});
+          }
+
           const earliest = this.pool.getFirstCooldownProxy();
           const sleepMs = earliest && earliest.remainingCooldownSec <= 1
             ? Math.max(100, Math.floor(earliest.remainingCooldownSec * 1000))
-            : 250;
+            : 350;
           await new Promise(r => setTimeout(r, sleepMs));
           continue;
         }
@@ -572,10 +592,19 @@ class ProxyPingerService {
           console.log(`[ProxyPinger W${workerId}] 429 RateLimit on ${proxy.masked}. Requeuing "${username}"`);
           usernameLedger.requeueFailed(username);
         } else {
-          // Dead / failing proxy: cull it immediately so it doesn't cause more failed pings
+          // 3-strike rule: give proxies 3 strikes before permanently killing them
           this.stats.otherErrors++;
-          proxy.isDead = true;
-          this.stats.statusMessage = `[W${workerId}] Culled dead proxy ${proxy.masked} (${res.error || res.statusCode}). Requeuing "${username}"...`;
+          proxy.consecutiveFailures++;
+
+          if (proxy.consecutiveFailures >= 3) {
+            proxy.isDead = true;
+            this.stats.statusMessage = `[W${workerId}] Culled dead proxy ${proxy.masked} (3/3 failures). Requeuing "${username}"...`;
+          } else {
+            // Soft backoff: 60s cooldown to allow network glitch to resolve
+            proxy.cooldownUntil = Date.now() + 60000;
+            this.stats.statusMessage = `[W${workerId}] Proxy ${proxy.masked} glitched (${proxy.consecutiveFailures}/3). 60s backoff. Requeuing "${username}"...`;
+          }
+
           usernameLedger.requeueFailed(username);
           await new Promise(r => setTimeout(r, 50));
         }
@@ -587,6 +616,23 @@ class ProxyPingerService {
           proxy.inUse = false; // Always release proxy lock
         }
       }
+    }
+  }
+
+  async runHarvester() {
+    console.log('[ProxyPinger] Continuous background proxy harvester active.');
+    while (this.running) {
+      try {
+        // Keep pool flooded with ready proxies (target >= 40 ready)
+        if (this.pool.readyCount < 40 && !this.pool.isScraping) {
+          await this.pool.scrapeAndValidateBatch(250, msg => {
+            this.stats.statusMessage = msg;
+          });
+        }
+      } catch (err) {
+        console.warn('[Harvester] Scrape error:', err.message);
+      }
+      await new Promise(r => setTimeout(r, 10000));
     }
   }
 
@@ -613,16 +659,12 @@ class ProxyPingerService {
       console.warn('[ProxyPinger] DB init warning:', err.message);
     }
 
-    console.log(`[ProxyPinger] Starting 24/7 background proxy pinging with ${this.concurrency} parallel workers...`);
+    console.log(`[ProxyPinger] Starting 24/7 background proxy pinging with ${this.concurrency} parallel workers and continuous harvester...`);
 
-    // 2. Startup harvest if pool has fewer than 15 proxies
-    if (this.pool.readyCount < 15) {
-      console.log('[ProxyPinger] Startup: Harvesting initial proxy pool for parallel workers...');
-      this.pool.scrapeAndValidateBatch(250, msg => {
-        this.stats.statusMessage = msg;
-      }).catch(() => {});
-    }
+    // 2. Start continuous harvester loop
+    this.harvesterPromise = this.runHarvester();
 
+    // 3. Launch parallel workers
     this.workerPromises = [];
     for (let i = 1; i <= this.concurrency; i++) {
       this.workerPromises.push(this.runWorker(i));

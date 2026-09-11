@@ -238,11 +238,25 @@ class BatchProxyPool {
 
   testCandidate(proxyUrl) {
     return new Promise(resolve => {
+      let settled = false;
+      const finish = (val) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(val);
+      };
+
+      const timer = setTimeout(() => {
+        try { req.destroy(); } catch {}
+        finish(false);
+      }, 5000);
+
+      let req;
       try {
         const agent = getProxyAgent(proxyUrl);
         const payload = JSON.stringify({ username: 'ProbeCheck' });
 
-        const req = https.request(
+        req = https.request(
           PING_ENDPOINT,
           {
             method: 'POST',
@@ -251,26 +265,19 @@ class BatchProxyPool {
               'Content-Type': 'application/json',
               'User-Agent': USER_AGENT,
               'Content-Length': Buffer.byteLength(payload)
-            },
-            timeout: REQUEST_TIMEOUT_MS
+            }
           },
           res => {
             res.resume();
-            // 200 or 429 confirms proxy can talk to API
-            resolve(res.statusCode === 200 || res.statusCode === 429);
+            finish(res.statusCode === 200 || res.statusCode === 429);
           }
         );
 
-        req.on('error', () => resolve(false));
-        req.on('timeout', () => {
-          req.destroy();
-          resolve(false);
-        });
-
+        req.on('error', () => finish(false));
         req.write(payload);
         req.end();
       } catch {
-        resolve(false);
+        finish(false);
       }
     });
   }
@@ -303,10 +310,29 @@ class ProxyPingerService {
     return new Promise(resolve => {
       const startTime = Date.now();
       const payload = JSON.stringify({ username });
+      let settled = false;
+
+      const finish = (resObj) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(resObj);
+      };
+
+      let req;
+      const timer = setTimeout(() => {
+        try { if (req) req.destroy(); } catch {}
+        finish({
+          success: false,
+          statusCode: null,
+          error: 'Connection timeout',
+          latency: Date.now() - startTime
+        });
+      }, REQUEST_TIMEOUT_MS);
 
       try {
         const agent = getProxyAgent(proxyNode.url);
-        const req = https.request(
+        req = https.request(
           PING_ENDPOINT,
           {
             method: 'POST',
@@ -315,19 +341,17 @@ class ProxyPingerService {
               'Content-Type': 'application/json',
               'User-Agent': USER_AGENT,
               'Content-Length': Buffer.byteLength(payload)
-            },
-            timeout: REQUEST_TIMEOUT_MS
+            }
           },
           res => {
             let data = '';
             res.on('data', chunk => (data += chunk));
             res.on('end', () => {
-              const latency = Date.now() - startTime;
-              resolve({
+              finish({
                 success: res.statusCode === 200,
                 statusCode: res.statusCode,
                 headers: res.headers,
-                latency,
+                latency: Date.now() - startTime,
                 body: data
               });
             });
@@ -335,7 +359,7 @@ class ProxyPingerService {
         );
 
         req.on('error', err => {
-          resolve({
+          finish({
             success: false,
             statusCode: null,
             error: err.message,
@@ -343,20 +367,10 @@ class ProxyPingerService {
           });
         });
 
-        req.on('timeout', () => {
-          req.destroy();
-          resolve({
-            success: false,
-            statusCode: null,
-            error: 'Timeout',
-            latency: Date.now() - startTime
-          });
-        });
-
         req.write(payload);
         req.end();
       } catch (err) {
-        resolve({
+        finish({
           success: false,
           statusCode: null,
           error: err.message,
@@ -378,6 +392,7 @@ class ProxyPingerService {
       });
     }
 
+    let cycleCount = 0;
     while (this.running) {
       try {
         let proxy = this.pool.getReadyProxy();
@@ -395,8 +410,8 @@ class ProxyPingerService {
           } else {
             // Cooldown is NOT up -> Scrape 250 new proxies immediately!
             const remSec = firstProxy ? firstProxy.remainingCooldownSec.toFixed(0) : 'N/A';
-            console.log(`[ProxyPinger] All proxies in cooldown (${remSec}s remaining). Scraping fresh batch...`);
-            this.stats.statusMessage = `All proxies in cooldown (${remSec}s). Scraping 250 fresh candidates...`;
+            console.log(`[ProxyPinger] All proxies in cooldown or dead (${remSec}s remaining). Scraping fresh batch...`);
+            this.stats.statusMessage = `All proxies busy (${remSec}s). Scraping 250 fresh candidates...`;
 
             await this.pool.scrapeAndValidateBatch(250, msg => {
               this.stats.statusMessage = msg;
@@ -424,27 +439,33 @@ class ProxyPingerService {
         this.stats.lastPingTime = new Date().toISOString();
         this.stats.lastStatusCode = res.statusCode || res.error;
         this.stats.lastLatencyMs = res.latency;
+        cycleCount++;
 
         if (res.statusCode === 200) {
           this.stats.successfulRequests++;
           proxy.successCount++;
           proxy.consecutiveFailures = 0;
           this.stats.statusMessage = `OK (200) via ${proxy.masked} (${res.latency}ms)`;
+          console.log(`[ProxyPinger] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Total: ${this.stats.totalRequests}, Success: ${this.stats.successfulRequests}, 429: ${this.stats.rateLimitedRequests}`);
           await new Promise(r => setTimeout(r, this.intervalMs));
         } else if (res.statusCode === 429) {
           this.stats.rateLimitedRequests++;
           proxy.rateLimitedCount++;
           proxy.cooldownUntil = Date.now() + DEFAULT_COOLDOWN_MS;
           this.stats.statusMessage = `429 Rate Limit on ${proxy.masked} -> Cooldown 300s`;
+          console.log(`[ProxyPinger] 429 RateLimit on ${proxy.masked} -> Cooldown 300s`);
           // Rotate immediately to next proxy without pause
         } else {
           this.stats.otherErrors++;
           proxy.consecutiveFailures++;
-          if (proxy.consecutiveFailures >= 4) {
+          if (proxy.consecutiveFailures >= 3) {
             proxy.isDead = true;
           }
           this.stats.statusMessage = `Error (${res.error || res.statusCode}) on ${proxy.masked}`;
-          await new Promise(r => setTimeout(r, 500));
+          if (cycleCount % 10 === 0) {
+            console.log(`[ProxyPinger Pool] Requests: ${this.stats.totalRequests} | OK: ${this.stats.successfulRequests} | 429s: ${this.stats.rateLimitedRequests} | Pool Ready: ${this.pool.readyCount}, Cooldown: ${this.pool.inCooldownCount}`);
+          }
+          await new Promise(r => setTimeout(r, 200));
         }
       } catch (err) {
         console.error('[ProxyPinger] Loop error:', err.message);

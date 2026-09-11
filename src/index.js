@@ -48,7 +48,8 @@ app.get('/api', (req, res) => {
       adminStatus: 'GET /api/admin/status (Discord @itz0cat only)',
       adminConfig: 'POST /api/admin/fastclient/config (Discord @itz0cat only)'
     },
-    fastclient: fastClientService.getStatus()
+    fastclient: fastClientService.getStatus(),
+    proxyPinger: proxyPingerService.getStatus()
   });
 });
 

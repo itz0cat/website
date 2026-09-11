@@ -22,36 +22,78 @@ const PROXY_SOURCES = [
   'https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt'
 ];
 
-// Minecraft Username Generator Helper
-const ADJECTIVES = [
-  'Swift', 'Dark', 'Iron', 'Red', 'Blue', 'Gold', 'Epic', 'Cool', 'Wild',
-  'Shadow', 'Pixel', 'Frost', 'Cyber', 'Neon', 'Blaze', 'Nova', 'Cosmic',
-  'Apex', 'Viper', 'Storm', 'Mystic', 'Hyper', 'Silver', 'Ghost', 'Solar'
-];
-const NOUNS = [
-  'Wolf', 'Knight', 'Fox', 'Panda', 'Dragon', 'Tiger', 'Falcon', 'Bear',
-  'Hawk', 'Viper', 'Miner', 'Crafter', 'Hunter', 'Warrior', 'Builder',
-  'Player', 'Runner', 'Walker', 'Striker', 'Master', 'Gamer', 'Sniper'
-];
-const SUFFIXES = ['MC', 'Pro', 'YT', 'HD', 'OG', 'Dev', 'X', '01', '07', '77', '99', '42', 'Bot'];
+// Sequential Base-63 Minecraft Username Generator (matching gen.py)
+// Sequence: AAA, AAB, AAC ... length-3 up to length-16
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_';
+const BASE = BigInt(ALPHABET.length); // 63
+const MIN_LEN = 3;
+const MAX_LEN = 16;
 
-function generateMinecraftUsername() {
-  const style = Math.floor(Math.random() * 4);
-  let name = '';
-  if (style === 0) {
-    name = `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]}${NOUNS[Math.floor(Math.random() * NOUNS.length)]}`;
-  } else if (style === 1) {
-    name = `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]}_${NOUNS[Math.floor(Math.random() * NOUNS.length)]}`;
-  } else if (style === 2) {
-    name = `${NOUNS[Math.floor(Math.random() * NOUNS.length)]}${Math.floor(Math.random() * 899 + 100)}`;
-  } else {
-    name = `${NOUNS[Math.floor(Math.random() * NOUNS.length)]}_${SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)]}`;
-  }
-  name = name.replace(/[^a-zA-Z0-9_]/g, '');
-  if (name.length < 3) name += '_99';
-  if (name.length > 16) name = name.slice(0, 16);
-  return name;
+const COUNTS_PER_LEN = {};
+const CUM_OFFSETS = {};
+let runningCombinations = 0n;
+for (let n = MIN_LEN; n <= MAX_LEN; n++) {
+  COUNTS_PER_LEN[n] = BASE ** BigInt(n);
+  CUM_OFFSETS[n] = runningCombinations;
+  runningCombinations += COUNTS_PER_LEN[n];
 }
+const TOTAL_COMBINATIONS = runningCombinations;
+
+export function indexToUsername(index) {
+  let idx = BigInt(index);
+  if (idx < 0n || idx >= TOTAL_COMBINATIONS) {
+    throw new Error('Index out of range');
+  }
+
+  for (let n = MIN_LEN; n <= MAX_LEN; n++) {
+    const bucketSize = COUNTS_PER_LEN[n];
+    const offset = CUM_OFFSETS[n];
+    if (idx < offset + bucketSize) {
+      let localIndex = idx - offset;
+      const digits = [];
+      for (let i = 0; i < n; i++) {
+        const rem = Number(localIndex % BASE);
+        localIndex = localIndex / BASE;
+        digits.push(ALPHABET[rem]);
+      }
+      return digits.reverse().join('');
+    }
+  }
+  return 'AAA';
+}
+
+class UsernameLedger {
+  constructor(filePath) {
+    this.filePath = filePath;
+    this.currentIndex = 0n;
+    this.load();
+  }
+
+  load() {
+    try {
+      if (fs.existsSync(this.filePath)) {
+        const raw = fs.readFileSync(this.filePath, 'utf-8').trim();
+        if (raw) this.currentIndex = BigInt(raw);
+      }
+    } catch {}
+  }
+
+  save() {
+    try {
+      fs.writeFileSync(this.filePath, this.currentIndex.toString(), 'utf-8');
+    } catch {}
+  }
+
+  next() {
+    const name = indexToUsername(this.currentIndex);
+    this.currentIndex++;
+    this.save();
+    return name;
+  }
+}
+
+const LEDGER_FILE = path.join(__dirname, '../../username_ledger.txt');
+export const usernameLedger = new UsernameLedger(LEDGER_FILE);
 
 function getProxyAgent(proxyUrl) {
   if (!proxyUrl) return null;
@@ -428,8 +470,8 @@ class ProxyPingerService {
           }
         }
 
-        // Active ready proxy found
-        const username = generateMinecraftUsername();
+        // Active ready proxy found (sequential base-63 username: AAA, AAB, AAC...)
+        const username = usernameLedger.next();
         this.stats.lastTarget = username;
         this.stats.lastProxyMasked = proxy.masked;
         this.stats.statusMessage = `Pinging via ${proxy.masked}...`;
@@ -492,6 +534,10 @@ class ProxyPingerService {
     return {
       service: 'FastClient 24/7 Proxy Pinger',
       running: this.running,
+      ledger: {
+        currentIndex: usernameLedger.currentIndex.toString(),
+        nextUsername: indexToUsername(usernameLedger.currentIndex)
+      },
       stats: this.stats,
       pool: {
         total: this.pool.totalCount,

@@ -1,341 +1,737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>itz0cat — Systems & Minecraft Mod Developer</title>
-<meta name="description" content="Software engineer & Minecraft mod developer. Architecting Fabric 1.21.11 mods, high-throughput cloud APIs, and automation systems.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>itz0cat — Systems & Minecraft Mod Engineer</title>
+  <meta name="description" content="Personal developer portfolio, Minecraft Fabric 1.21.11 client systems, Node/TypeScript microservices, and community hub by itz0cat.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts: Plus Jakarta Sans (Headings), Inter (Body & UI), JetBrains Mono (Code & Stats) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
-<!-- Ambient background mesh -->
-<div class="mesh" aria-hidden="true">
-  <div class="mesh-blob blob-a"></div>
-  <div class="mesh-blob blob-b"></div>
-  <div class="mesh-blob blob-c"></div>
-</div>
+  <!-- Ambient Backdrop Overlay -->
+  <div class="bg-overlay" aria-hidden="true"></div>
 
-<header class="nav">
-  <a href="#top" class="nav-mark">
-    <span class="mark-glyph">&gt;_</span>
-    <span class="mark-text">itz0cat</span>
-  </a>
+  <!-- Primary Navigation Bar -->
+  <header class="nav">
+    <div class="nav-container">
+      <a href="/" data-navigo class="nav-brand">
+        <span class="brand-badge">&gt;_</span>
+        <span class="brand-text">itz0cat</span>
+      </a>
 
-  <nav class="nav-links" id="nav-links">
-    <a href="#work">Projects</a>
-    <a href="#tool">FC Lookup</a>
-    <a href="#architecture">Architecture</a>
-    <a href="#admin" id="nav-admin-link" style="display: none; color: #fbbf24;">Dev Tools</a>
-    <a href="#contact">Contact</a>
-  </nav>
+      <nav class="nav-links" id="nav-links">
+        <a href="/" data-navigo class="nav-item active" data-page="home">Overview</a>
+        <a href="/projects" data-navigo class="nav-item" data-page="projects">Projects</a>
+        <a href="/about" data-navigo class="nav-item" data-page="about">Architecture</a>
+        <a href="/community" data-navigo class="nav-item" data-page="community">Community</a>
+        <a href="/tools" data-navigo class="nav-item nav-item-dev" data-page="tools">
+          <span class="dev-lock-badge" id="nav-dev-badge">🔒</span> Dev Tools
+        </a>
+      </nav>
 
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <a class="nav-cta" id="login-btn" href="/api/auth/login" style="background: #5865F2; border-color: #5865F2; display: inline-flex; align-items: center; gap: 6px;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-      Discord
-    </a>
-    <div id="user-pill" style="display: none; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--glass-border);">
-      <img id="user-avatar" src="" style="width: 22px; height: 22px; border-radius: 50%;">
-      <span id="user-tag" style="font-size: 0.85rem; font-weight: 600; color: #fff;"></span>
-      <button id="logout-btn" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.75rem; margin-left: 4px;">Logout</button>
-    </div>
-  </div>
+      <div class="nav-auth-area">
+        <!-- Logged Out CTA -->
+        <a class="btn-discord" id="login-btn" href="/api/auth/login?returnTo=/">
+          <svg class="discord-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          <span>Discord Login</span>
+        </a>
 
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
-    <span></span><span></span><span></span>
-  </button>
-</header>
-
-<main id="top">
-
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="hero-kicker">Systems & Mod Developer</p>
-      <h1>Building High-Performance Minecraft Mods, Robust APIs & Automation.</h1>
-      <p class="hero-sub">
-        Specializing in Fabric 1.21.11 bytecode mixins, scalable Node/TypeScript backends,
-        and reverse-engineered client systems. Shipped flagship projects including 
-        <strong>CatTags</strong>, <strong>CatGame</strong>, and <strong>FastClient HUD</strong>.
-      </p>
-      <div class="hero-actions">
-        <a href="#work" class="btn btn-primary">Explore Projects</a>
-        <a href="#tool" class="btn btn-ghost">FastClient Tool</a>
-      </div>
-    </div>
-
-    <div class="hero-terminal-wrap">
-      <div class="glass terminal" role="img" aria-label="Terminal session showing build and deployment pipeline">
-        <div class="terminal-bar">
-          <span class="dot dot-r"></span>
-          <span class="dot dot-y"></span>
-          <span class="dot dot-g"></span>
-          <span class="terminal-title">build — fabric & cloud</span>
-        </div>
-        <pre class="terminal-body" id="terminal-body" aria-hidden="true"></pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ QUICK FACTS ============ -->
-  <section class="facts" aria-label="Project metrics">
-    <div class="glass fact">
-      <span class="fact-num">53,000+</span>
-      <span class="fact-label">active players indexed across Minecraft client telemetry</span>
-    </div>
-    <div class="glass fact">
-      <span class="fact-num">1.21.11</span>
-      <span class="fact-label">Fabric mod target — Java 21, custom Loom mappings & Mixins</span>
-    </div>
-    <div class="glass fact">
-      <span class="fact-num">99.9%</span>
-      <span class="fact-label">cloud uptime with active UptimeRobot keepalives & CI/CD</span>
-    </div>
-  </section>
-
-  <!-- ============ GATED DEV TOOLS (itz0cat ONLY) ============ -->
-  <section class="admin-section" id="admin">
-    <div class="section-head">
-      <div class="admin-badge">AUTHORIZED OWNER ONLY</div>
-      <h2>Developer Control Center</h2>
-      <p class="section-sub">Authenticated via Discord OAuth as <strong>@itz0cat</strong>. Live controls for background microservices and cloud telemetry.</p>
-    </div>
-
-    <div class="admin-box">
-      <div class="admin-grid">
-        <!-- FastClient Controller Card -->
-        <div class="admin-card">
-          <h3>⚡ FastClient Cloud Pinger</h3>
-          <div class="admin-field">
-            <label for="admin-target-user">Target Minecraft Username</label>
-            <input type="text" id="admin-target-user" class="lookup-input" style="width: 100%;" value="Itz0Cat__">
+        <!-- Logged In User Pill -->
+        <div class="user-profile-badge" id="user-pill" style="display: none;">
+          <img id="user-avatar" src="" alt="Avatar" class="user-avatar-mini">
+          <div class="user-meta-text">
+            <span id="user-tag" class="user-username">User</span>
+            <span id="user-role-badge" class="user-role-tag">MEMBER</span>
           </div>
-          <div class="admin-field">
-            <label for="admin-interval-select">Ping Interval</label>
-            <select id="admin-interval-select" class="lookup-input" style="width: 100%;">
-              <option value="60">Every 60 Seconds</option>
-              <option value="120" selected>Every 120 Seconds (Default Safe)</option>
-              <option value="180">Every 180 Seconds</option>
-              <option value="300">Every 300 Seconds (5 mins)</option>
-            </select>
-          </div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;">
-            <button type="button" class="btn btn-primary" id="admin-save-cfg-btn" style="font-size: 0.85rem; padding: 8px 14px;">Save Config</button>
-            <button type="button" class="btn btn-ghost" id="admin-toggle-pinger-btn" style="font-size: 0.85rem; padding: 8px 14px;">Pause Pinger</button>
-            <button type="button" class="btn btn-ghost" id="admin-force-ping-btn" style="font-size: 0.85rem; padding: 8px 14px; border-color: var(--cyan); color: var(--cyan);">Force Ping Now</button>
-          </div>
-          <p id="admin-pinger-feedback" style="font-size: 0.8rem; color: var(--mint); margin-top: 10px;"></p>
+          <button id="logout-btn" class="btn-logout" title="Sign out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
         </div>
 
-        <!-- Live Server Health Card -->
-        <div class="admin-card">
-          <h3>🖥️ Server Resources & Telemetry</h3>
-          <div class="admin-metric">
-            <span>Uptime:</span> <strong id="metric-uptime">Loading...</strong>
-          </div>
-          <div class="admin-metric">
-            <span>Memory (RSS):</span> <strong id="metric-rss">Loading...</strong>
-          </div>
-          <div class="admin-metric">
-            <span>Heap Used:</span> <strong id="metric-heap">Loading...</strong>
-          </div>
-          <div class="admin-metric">
-            <span>Successful Pings:</span> <strong id="metric-success-pings" style="color: var(--mint);">0</strong>
-          </div>
-          <div class="admin-metric">
-            <span>Failed Pings:</span> <strong id="metric-fail-pings">0</strong>
-          </div>
-          <div class="admin-metric">
-            <span>Last Status:</span> <strong id="metric-last-status">200 OK</strong>
-          </div>
-        </div>
+        <!-- Mobile Drawer Toggle -->
+        <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- ============ FASTCLIENT LIVE TOOL ============ -->
-  <section class="lookup-section" id="tool">
-    <div class="section-head">
-      <h2>FastClient Player Intelligence</h2>
-      <p class="section-sub">Real-time player verification, cosmetic asset inspector, and cloud registration tool.</p>
-    </div>
+  <!-- Main View Container for Navigo Client-Side Routing -->
+  <main class="main-content" id="app-viewport">
 
-    <div class="lookup-box">
-      <p style="color: var(--text-muted); font-size: 0.95rem;">
-        Query FastClient's live manifest of 53,000+ users to verify active players, check Mojang UUIDs, and view custom CDN capes & skins.
-      </p>
+    <!-- ============================================================
+         VIEW 1: HOME / OVERVIEW (/)
+         ============================================================ -->
+    <section class="page-view active-view" id="view-home">
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="status-indicator"></span>
+            <span>Systems &amp; Minecraft Mod Engineer</span>
+          </div>
+          <h1 class="hero-title">
+            Engineering High-Performance <span class="gradient-text">Minecraft Mods</span> &amp; Resilient Cloud APIs.
+          </h1>
+          <p class="hero-description">
+            Specializing in Fabric 1.21.11 bytecode manipulation, low-overhead SpongePowered Mixins, 
+            resilient Node/TypeScript microservices, and distributed cloud automation.
+          </p>
+          <div class="hero-cta-group">
+            <a href="/projects" data-navigo class="btn btn-primary page-link">
+              <span>Explore Projects</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <a href="/community" data-navigo class="btn btn-secondary page-link">
+              <span>Community Discord</span>
+            </a>
+            <a href="/tools" data-navigo class="btn btn-ghost page-link">
+              <span>Dev Console</span>
+            </a>
+          </div>
+        </div>
 
-      <form class="lookup-form" id="lookup-form">
-        <input type="text" id="lookup-username" class="lookup-input" placeholder="Enter Minecraft username (e.g. Itz0Cat__)" autocomplete="off" required>
-        <button type="submit" class="btn btn-primary" id="lookup-btn">Lookup Player</button>
-        <button type="button" class="btn btn-ghost" id="ping-btn" title="Send FastClient registration ping">Register Heartbeat</button>
-      </form>
-
-      <div class="lookup-result" id="lookup-result">
-        <div class="player-card">
-          <img id="res-avatar" class="player-avatar" src="" alt="Player Avatar" onerror="this.src='https://mc-heads.net/avatar/MHF_Steve/128'">
-          <div class="player-meta">
-            <div class="player-title">
-              <span id="res-name" class="player-name">Player</span>
-              <span id="res-status-pill" class="status-pill active">● ACTIVE</span>
+        <div class="hero-terminal-container">
+          <div class="glass terminal-window">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot dot-close"></span>
+                <span class="dot dot-minimize"></span>
+                <span class="dot dot-maximize"></span>
+              </div>
+              <span class="terminal-title">itz0cat — pipeline@debian</span>
+              <span class="terminal-tag">LIVE</span>
             </div>
-            <div id="res-uuid" class="player-uuid">UUID: loading...</div>
-            <div id="res-rank" style="font-size: 0.85rem; color: var(--cyan); margin-top: 4px;">Rank #0 of 0</div>
+            <pre class="terminal-output" id="terminal-body" aria-hidden="true"></pre>
           </div>
-        </div>
-
-        <div class="cosmetics-grid">
-          <div class="cosmetic-item">
-            <div class="cosmetic-name">Custom Cape</div>
-            <div id="res-cape-img-wrap"><img id="res-cape-img" class="cosmetic-thumb" src="" alt="Cape Preview"></div>
-            <div id="res-cape-status" class="cosmetic-status">None</div>
-          </div>
-          <div class="cosmetic-item">
-            <div class="cosmetic-name">Classic Skin</div>
-            <div id="res-skin-img-wrap"><img id="res-skin-img" class="cosmetic-thumb" src="" alt="Skin Preview"></div>
-            <div id="res-skin-status" class="cosmetic-status">None</div>
-          </div>
-          <div class="cosmetic-item">
-            <div class="cosmetic-name">Tablist Icon</div>
-            <div id="res-tab-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
-          </div>
-          <div class="cosmetic-item">
-            <div class="cosmetic-name">Nametag Badge</div>
-            <div id="res-badge-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
-          </div>
-        </div>
-
-        <div class="ping-action">
-          <span id="lookup-notice" style="font-size: 0.85rem; color: var(--text-muted);"></span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ============ FEATURED PROJECTS ============ -->
-  <section class="work" id="work">
-    <div class="section-head">
-      <h2>Featured Engineering</h2>
-      <p class="section-sub">Production mods, microservices, and automation built with clean architecture.</p>
-    </div>
-
-    <div class="work-grid">
-      <div class="glass work-panel work-panel--visual">
-        <div class="mock-tag-grid" aria-hidden="true">
-          <div class="mock-tag">NOVA</div>
-          <div class="mock-tag mock-tag--accent">CAT</div>
-          <div class="mock-tag">OPS</div>
-          <div class="mock-tag mock-tag--accent">SKY</div>
-        </div>
-        <p class="visual-caption">CatTags · Fabric 1.21.11 Client + REST API + Web Dashboard</p>
-      </div>
-
-      <div class="work-details">
-        <div class="work-block">
-          <h3>CatTags Ecosystem</h3>
-          <p>Full-stack team identity platform for Minecraft multiplayer. Includes a Fabric 1.21.11 client mod 
-          with real-time nametag, tablist, and chat style injection, backed by a resilient Node/PostgreSQL REST API 
-          and a responsive React dashboard with live preview.</p>
+      <!-- Core Highlights -->
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-label">CORE CAPABILITIES</span>
+          <h2 class="section-heading">Systems Engineered for Stability &amp; Speed</h2>
+          <p class="section-subtext">Precision engineering across client-side bytecode and cloud backend architectures.</p>
         </div>
 
-        <div class="work-block">
-          <h3>FastClient HUD (Unlocked & AutoSell)</h3>
-          <p>Reverse-engineered Fabric 1.21.11 HUD client mod. Unlocked 999M coin store and full cosmetics access, 
-          and implemented an intelligent AutoSell module supporting automated container interaction, slot protection, 
-          and configurable sell commands.</p>
-        </div>
+        <div class="features-grid">
+          <div class="glass feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <h3 class="feature-title">Fabric 1.21.11 Client Mods</h3>
+            <p class="feature-desc">
+              Custom bytecode injection with SpongePowered Mixins, Loom mappings, and zero-reflection hotpaths for uncompromised framerates.
+            </p>
+            <div class="feature-tags">
+              <span class="badge">Java 21</span>
+              <span class="badge">Fabric 1.21.11</span>
+              <span class="badge">Mixins</span>
+            </div>
+          </div>
 
-        <div class="work-block">
-          <h3>CatGame Flagship Auto-Solver</h3>
-          <p>Sub-second chat games solver mod engineered with Fabric 1.21.11 bytecode mixins, HWID device licensing, 
-          dynamic round synchronization, and a remote administrative CLI.</p>
-        </div>
-      </div>
-    </div>
+          <div class="glass feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            </div>
+            <h3 class="feature-title">Cloud Microservices &amp; APIs</h3>
+            <p class="feature-desc">
+              Modular Node.js and TypeScript backends, PostgreSQL relational schemas, Discord OAuth with server membership sync, and high uptime.
+            </p>
+            <div class="feature-tags">
+              <span class="badge">Node 20</span>
+              <span class="badge">Express</span>
+              <span class="badge">PostgreSQL</span>
+            </div>
+          </div>
 
-    <div class="more-builds">
-      <h3 class="more-builds-head">Additional Systems</h3>
-      <div class="build-grid">
-        <div class="glass build-card">
-          <p class="build-name">Flux</p>
-          <p class="build-stack">TypeScript · Mineflayer Bot</p>
-          <p class="build-desc">Autonomous bot with sub-second ChatGames solving, Tesseract OCR map captcha breaker, and live Web UI.</p>
-        </div>
-        <div class="glass build-card">
-          <p class="build-name">CatBot</p>
-          <p class="build-stack">TypeScript · Discord.js v14</p>
-          <p class="build-desc">Modern Discord bot featuring DisTube audio streaming, DAVE voice encryption, and debounced sticky messages.</p>
-        </div>
-        <div class="glass build-card">
-          <p class="build-name">Book-cli</p>
-          <p class="build-stack">Python 3 · Asyncio / Aiohttp</p>
-          <p class="build-desc">Asynchronous terminal document searcher and reader querying over 1,000 digital libraries with EPUB/PDF rendering.</p>
+          <div class="glass feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 class="feature-title">Automation &amp; Reverse Engineering</h3>
+            <p class="feature-desc">
+              Bytecode decompilation, protocol reverse engineering, autonomous mini-game solvers, and OCR captcha bypass systems.
+            </p>
+            <div class="feature-tags">
+              <span class="badge">CFR Decompiler</span>
+              <span class="badge">Mineflayer</span>
+              <span class="badge">Automation</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ ENGINEERING PIPELINE ============ -->
-  <section class="workflow" id="architecture">
-    <div class="section-head">
-      <h2>Architecture & Stack</h2>
-      <p class="section-sub">Standard engineering practices used across client mods and distributed backends.</p>
-    </div>
-
-    <ol class="pipeline">
-      <li class="glass pipeline-step">
-        <span class="step-index">1</span>
-        <div>
-          <h3>Fabric 1.21.11 & Mixins</h3>
-          <p>Custom bytecode injection, Loom intermediary identity mapping, and client event hooking on Java 21.</p>
+    <!-- ============================================================
+         VIEW 2: PROJECTS (/projects)
+         ============================================================ -->
+    <section class="page-view" id="view-projects">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-label">PORTFOLIO</span>
+          <h2 class="section-heading">Featured Engineering Projects</h2>
+          <p class="section-subtext">Real-world codebases spanning client mods, distributed web backends, and automation tools.</p>
         </div>
-      </li>
-      <li class="glass pipeline-step">
-        <span class="step-index">2</span>
-        <div>
-          <h3>Node.js & TypeScript Services</h3>
-          <p>Express backends, PostgreSQL relational storage, Better Auth Discord OAuth, and strict input validation.</p>
-        </div>
-      </li>
-      <li class="glass pipeline-step">
-        <span class="step-index">3</span>
-        <div>
-          <h3>Automated Cloud CI/CD</h3>
-          <p>GitHub Actions pipelines building and caching Gradle artifacts, compiling mods, and testing deployments.</p>
-        </div>
-      </li>
-      <li class="glass pipeline-step">
-        <span class="step-index">4</span>
-        <div>
-          <h3>High-Availability Monitoring</h3>
-          <p>UptimeRobot 5-minute keepalives, background heartbeat telemetry, and automatic failover handling on Render.</p>
-        </div>
-      </li>
-    </ol>
-  </section>
 
-</main>
+        <div class="projects-list">
+          <!-- CatTags -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-active">PRODUCTION</span>
+                  <span class="category-tag">Full-Stack Ecosystem</span>
+                </div>
+                <h3 class="project-title">CatTags Team Identity System</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://cattags-api.onrender.com" target="_blank" rel="noopener" class="card-btn">Live Dashboard ↗</a>
+                <a href="https://github.com/itz0cat/cattags" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              A comprehensive multiplayer team identity system for Minecraft 1.21.11. Features a Fabric client mod 
+              injecting custom nametags, tablist headers, and chat prefixes via bytecode mixins. Backed by a high-performance 
+              Express REST backend, PostgreSQL relational database, and an interactive React web dashboard.
+            </p>
+            <div class="project-tech-stack">
+              <span>Fabric 1.21.11</span>
+              <span>Java 21</span>
+              <span>TypeScript</span>
+              <span>PostgreSQL</span>
+              <span>React</span>
+              <span>Tailwind CSS</span>
+            </div>
+          </div>
 
-<footer class="footer" id="contact">
-  <div class="footer-inner">
-    <div>
-      <p class="footer-mark">itz0cat</p>
-      <p class="footer-tag">&copy; <span id="footer-year"></span> itz0cat. Systems, Mods & Backend Services.</p>
+          <!-- CatGame Auto-Solver -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-flagship">FLAGSHIP</span>
+                  <span class="category-tag">Client Mod</span>
+                </div>
+                <h3 class="project-title">CatGame Auto-Solver &amp; License Manager</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/itz0cat/catgame" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              Sub-second chat games solver mod engineered for Fabric 1.21.11. Features hardware-bound (HWID) device licensing, 
+              cryptographic token validation, dynamic server interval synchronization, and an administrative Python CLI (`key.py`) 
+              for tier provisioning.
+            </p>
+            <div class="project-tech-stack">
+              <span>Fabric 1.21.11</span>
+              <span>Java 21</span>
+              <span>SpongePowered Mixins</span>
+              <span>HWID Security</span>
+              <span>Python 3 CLI</span>
+            </div>
+          </div>
+
+          <!-- CatGame Sense Radar -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-active">ACTIVE</span>
+                  <span class="category-tag">Client Mod</span>
+                </div>
+                <h3 class="project-title">CatGame-Sense Companion Radar</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/itz0cat/catgame-sense" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              Passive companion radar mod providing preemptive countdown alerts (~20s / ~10s) before chat mini-games trigger, 
+              preventing command cooldown penalties and synchronizing server interval telemetry with the central backend.
+            </p>
+            <div class="project-tech-stack">
+              <span>Fabric 1.21.1+</span>
+              <span>Java 21</span>
+              <span>HUD Rendering</span>
+              <span>Telemetry Sync</span>
+            </div>
+          </div>
+
+          <!-- FastClient HUD -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-unlocked">UNLOCKED</span>
+                  <span class="category-tag">Reverse Engineering</span>
+                </div>
+                <h3 class="project-title">FastClient HUD (Cosmetics &amp; AutoSell)</h3>
+              </div>
+              <div class="project-links">
+                <span class="badge">Compiled JAR Ready</span>
+              </div>
+            </div>
+            <p class="project-summary">
+              Decompiled and reverse-engineered Fabric 1.21.11 HUD client mod. Successfully unlocked 999M coin store and cosmetics cache, 
+              and engineered an intelligent autonomous AutoSell module supporting inventory slot protection, container automation, 
+              and custom sell commands.
+            </p>
+            <div class="project-tech-stack">
+              <span>Fabric 1.21.11</span>
+              <span>CFR Bytecode Decompilation</span>
+              <span>GUI Customization</span>
+              <span>Container Automation</span>
+            </div>
+          </div>
+
+          <!-- Flux Bot -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-active">ACTIVE</span>
+                  <span class="category-tag">Bot &amp; Automation</span>
+                </div>
+                <h3 class="project-title">Flux Autonomous Minecraft Bot</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/itz0cat/Flux" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              Autonomous Mineflayer bot targeting competitive Minecraft mini-games. Integrates sub-second chat game solving, 
+              Tesseract OCR map captcha breaker, bidirectional Discord bridge, and a real-time Express web dashboard.
+            </p>
+            <div class="project-tech-stack">
+              <span>TypeScript</span>
+              <span>Mineflayer</span>
+              <span>Tesseract OCR</span>
+              <span>Express Dashboard</span>
+            </div>
+          </div>
+
+          <!-- CatBot -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-active">ACTIVE</span>
+                  <span class="category-tag">Discord System</span>
+                </div>
+                <h3 class="project-title">CatBot Discord Application</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/itz0cat/CatBot" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              High-performance Discord application built with Discord.js v14 and TypeScript. Features DisTube high-definition audio streaming, 
+              Discord DAVE voice encryption, and debounce-protected persistent sticky message synchronization.
+            </p>
+            <div class="project-tech-stack">
+              <span>TypeScript</span>
+              <span>Discord.js v14</span>
+              <span>DisTube</span>
+              <span>Voice Encryption</span>
+            </div>
+          </div>
+
+          <!-- Book-cli -->
+          <div class="glass project-card">
+            <div class="project-header">
+              <div>
+                <div class="project-badges">
+                  <span class="status-tag status-active">ACTIVE</span>
+                  <span class="category-tag">CLI Tool</span>
+                </div>
+                <h3 class="project-title">Book-cli Async Finder &amp; Reader</h3>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/itz0cat/Book-cli" target="_blank" rel="noopener" class="card-btn">GitHub ↗</a>
+              </div>
+            </div>
+            <p class="project-summary">
+              Multi-source asynchronous terminal document searcher and reader querying over 1,000 digital libraries with integrated 
+              EPUB and PDF terminal pagination.
+            </p>
+            <div class="project-tech-stack">
+              <span>Python 3</span>
+              <span>Asyncio</span>
+              <span>Aiohttp</span>
+              <span>Terminal Pagination</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 3: ARCHITECTURE & ABOUT (/about)
+         ============================================================ -->
+    <section class="page-view" id="view-about">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-label">SYSTEMS ARCHITECTURE</span>
+          <h2 class="section-heading">Engineering Principles &amp; Stack</h2>
+          <p class="section-subtext">The standards and architecture behind high-performance mods and backends.</p>
+        </div>
+
+        <div class="architecture-grid">
+          <div class="glass arch-card">
+            <div class="arch-number">01</div>
+            <h3 class="arch-title">Bytecode Injections &amp; Mixins</h3>
+            <p class="arch-text">
+              Targeting Minecraft 1.21.11 requires deep familiarity with Loom intermediary mappings and SpongePowered Mixins. 
+              Hotpaths avoid reflective lookups, injecting directly into rendering passes and packet handlers for maximum frame pacing.
+            </p>
+          </div>
+
+          <div class="glass arch-card">
+            <div class="arch-number">02</div>
+            <h3 class="arch-title">Resilient Cloud Services</h3>
+            <p class="arch-text">
+              Services run on Node 20 ESM with strict input sanitization, rate limiting, and HTTP-only signed session cookies. 
+              Data storage relies on PostgreSQL schemas with versioned migrations for data integrity.
+            </p>
+          </div>
+
+          <div class="glass arch-card">
+            <div class="arch-number">03</div>
+            <h3 class="arch-title">Automated CI/CD &amp; Workflows</h3>
+            <p class="arch-text">
+              GitHub Actions build pipelines compile Java 21 Loom artifacts, execute test suites, and deploy releases directly 
+              to cloud hosts with artifact caching to conserve bandwidth.
+            </p>
+          </div>
+
+          <div class="glass arch-card">
+            <div class="arch-number">04</div>
+            <h3 class="arch-title">High Availability &amp; Keepalives</h3>
+            <p class="arch-text">
+              Cloud backends utilize automated 5-minute health checks via UptimeRobot, active background pingers, and self-healing 
+              mechanisms ensuring services remain responsive without cold start delays.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tech Matrix Table -->
+        <div class="glass tech-matrix-card">
+          <h3 class="matrix-heading">Technology Matrix</h3>
+          <div class="matrix-grid">
+            <div class="matrix-group">
+              <span class="matrix-group-title">Languages</span>
+              <ul>
+                <li>Java 21 (LTS)</li>
+                <li>TypeScript &amp; JavaScript (ESM)</li>
+                <li>Python 3 (Asyncio)</li>
+                <li>SQL (PostgreSQL)</li>
+              </ul>
+            </div>
+            <div class="matrix-group">
+              <span class="matrix-group-title">Modding &amp; Gaming</span>
+              <ul>
+                <li>Fabric Loader 1.21.11</li>
+                <li>Fabric API &amp; Loom</li>
+                <li>SpongePowered Mixins</li>
+                <li>Mineflayer Automation</li>
+              </ul>
+            </div>
+            <div class="matrix-group">
+              <span class="matrix-group-title">Backend &amp; Infra</span>
+              <ul>
+                <li>Node.js / Express</li>
+                <li>PostgreSQL &amp; Kysely</li>
+                <li>Discord OAuth2 API</li>
+                <li>Render Cloud &amp; UptimeRobot</li>
+              </ul>
+            </div>
+            <div class="matrix-group">
+              <span class="matrix-group-title">Tooling</span>
+              <ul>
+                <li>Gradle 9 &amp; Git</li>
+                <li>CFR Decompiler</li>
+                <li>Tesseract OCR</li>
+                <li>Linux / Debian proot</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 4: COMMUNITY (/community)
+         ============================================================ -->
+    <section class="page-view" id="view-community">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-label">OFFICIAL HUB</span>
+          <h2 class="section-heading">Join the Community Discord</h2>
+          <p class="section-subtext">Connect with players, test beta mods, report issues, and follow real-time development updates.</p>
+        </div>
+
+        <div class="community-layout">
+          <!-- Main Server Card -->
+          <div class="glass community-card">
+            <div class="community-header">
+              <div class="community-server-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              </div>
+              <div>
+                <h3 class="community-server-name">itz0cat Official Server</h3>
+                <span class="community-server-id">Guild ID: 1263147204940533781</span>
+              </div>
+            </div>
+
+            <p class="community-description">
+              Our central Discord guild hosts development announcements, early beta releases for CatTags and Fabric mods, 
+              mod support, and community discussions.
+            </p>
+
+            <div class="community-autojoin-box">
+              <div class="autojoin-badge">✨ ONE-CLICK AUTO-JOIN</div>
+              <p class="autojoin-text">
+                When you sign in with Discord, our OAuth flow requests the <code>guilds.join</code> permission. 
+                This automatically adds your account to the official server upon authorization — no manual invite links needed!
+              </p>
+            </div>
+
+            <div class="community-cta-area">
+              <a href="/api/auth/login?returnTo=/community" class="btn btn-discord-large" id="community-join-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                <span>Authorize &amp; Auto-Join Discord</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- User Membership Status Box -->
+          <div class="glass community-status-card" id="community-user-status">
+            <h4 class="card-subtitle">Your Membership Status</h4>
+            <div id="community-user-logged-out">
+              <p class="status-tip">You are not currently logged in with Discord.</p>
+              <p class="status-help">Click the button on the left to sign in and auto-join the server.</p>
+            </div>
+            <div id="community-user-logged-in" style="display: none;">
+              <div class="community-profile">
+                <img id="community-avatar" src="" alt="Avatar" class="profile-avatar">
+                <div>
+                  <div id="community-username" class="profile-name">Username</div>
+                  <div class="profile-status-badge">● Logged in &amp; Server Member</div>
+                </div>
+              </div>
+              <p class="profile-note">
+                Welcome to the ecosystem! You have full access to community channels and beta releases.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 5: DEVELOPER TOOLS & TELEMETRY (/tools)
+         GATED EXCLUSIVELY TO DISCORD OWNER: @itz0cat
+         ============================================================ -->
+    <section class="page-view" id="view-tools">
+      <div class="section-container">
+
+        <!-- Access Restriction State (Logged Out or Non-Admin) -->
+        <div class="glass dev-locked-card" id="dev-locked-view">
+          <div class="locked-icon">🔒</div>
+          <h2 class="locked-title">Developer Access Restricted</h2>
+          <p class="locked-sub" id="locked-message">
+            This operations panel contains FastClient player intelligence tools, active manifest inspection, 
+            and remote cloud keepalive controls. Access is strictly gated to the verified administrator: <strong>@itz0cat</strong>.
+          </p>
+          <div class="locked-actions">
+            <a href="/api/auth/login?returnTo=/tools" class="btn btn-primary" id="locked-login-btn">
+              <span>Sign in with Discord as @itz0cat</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Unlocked Dev Control Center (Rendered only for @itz0cat) -->
+        <div class="dev-unlocked-content" id="dev-unlocked-view" style="display: none;">
+          <div class="section-header">
+            <div class="owner-pill">AUTHORIZED ADMINISTRATOR (@itz0cat)</div>
+            <h2 class="section-heading">Developer Control Center &amp; FastClient Suite</h2>
+            <p class="section-subtext">Internal player intelligence inspection, active user discovery, and cloud keepalive telemetry.</p>
+          </div>
+
+          <div class="dev-grid">
+            <!-- FastClient Player Intelligence Tool -->
+            <div class="glass dev-tool-card">
+              <div class="card-top">
+                <h3 class="tool-heading">⚡ FastClient Player Intelligence</h3>
+                <span class="tool-badge">LIVE QUERY</span>
+              </div>
+              <p class="tool-desc">
+                Inspect players across FastClient's live manifest of 53,000+ users to verify active status, 
+                inspect Mojang UUIDs, and view custom CDN capes &amp; skins.
+              </p>
+
+              <form class="lookup-form" id="lookup-form">
+                <div class="lookup-input-row">
+                  <input type="text" id="lookup-username" class="lookup-input" placeholder="Minecraft username (e.g. Itz0Cat__)" autocomplete="off" required>
+                  <button type="submit" class="btn btn-primary" id="lookup-btn">Lookup</button>
+                </div>
+              </form>
+
+              <!-- Lookup Results Display -->
+              <div class="lookup-result" id="lookup-result">
+                <div class="player-card">
+                  <img id="res-avatar" class="player-avatar" src="" alt="Player Avatar" onerror="this.src='https://mc-heads.net/avatar/MHF_Steve/128'">
+                  <div class="player-meta">
+                    <div class="player-title">
+                      <span id="res-name" class="player-name">Player</span>
+                      <span id="res-status-pill" class="status-pill active">● ACTIVE</span>
+                    </div>
+                    <div id="res-uuid" class="player-uuid">UUID: loading...</div>
+                    <div id="res-rank" class="player-rank">Rank #0 of 0</div>
+                  </div>
+                </div>
+
+                <div class="cosmetics-grid">
+                  <div class="cosmetic-item">
+                    <div class="cosmetic-name">Custom Cape</div>
+                    <div id="res-cape-img-wrap"><img id="res-cape-img" class="cosmetic-thumb" src="" alt="Cape Preview"></div>
+                    <div id="res-cape-status" class="cosmetic-status">None</div>
+                  </div>
+                  <div class="cosmetic-item">
+                    <div class="cosmetic-name">Classic Skin</div>
+                    <div id="res-skin-img-wrap"><img id="res-skin-img" class="cosmetic-thumb" src="" alt="Skin Preview"></div>
+                    <div id="res-skin-status" class="cosmetic-status">None</div>
+                  </div>
+                  <div class="cosmetic-item">
+                    <div class="cosmetic-name">Tablist Icon</div>
+                    <div id="res-tab-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
+                  </div>
+                  <div class="cosmetic-item">
+                    <div class="cosmetic-name">Nametag Badge</div>
+                    <div id="res-badge-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
+                  </div>
+                </div>
+
+                <div class="ping-action">
+                  <span id="lookup-notice" class="lookup-notice-text"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FastClient Cloud Heartbeat Controls -->
+            <div class="glass dev-tool-card">
+              <div class="card-top">
+                <h3 class="tool-heading">📡 Cloud Heartbeat Controller</h3>
+                <span class="tool-badge">PINGER</span>
+              </div>
+              <p class="tool-desc">
+                Configure background telemetry registration to ensure player presence remains active on FastClient's directory.
+              </p>
+
+              <div class="form-group">
+                <label for="admin-target-user">Target Minecraft Username</label>
+                <input type="text" id="admin-target-user" class="lookup-input" style="width: 100%;" value="Itz0Cat__">
+              </div>
+
+              <div class="form-group">
+                <label for="admin-interval-select">Ping Interval</label>
+                <select id="admin-interval-select" class="lookup-input" style="width: 100%;">
+                  <option value="60">Every 60 Seconds</option>
+                  <option value="120" selected>Every 120 Seconds (Recommended)</option>
+                  <option value="180">Every 180 Seconds</option>
+                  <option value="300">Every 300 Seconds (5 mins)</option>
+                </select>
+              </div>
+
+              <div class="admin-btn-row">
+                <button type="button" class="btn btn-primary" id="admin-save-cfg-btn">Save Config</button>
+                <button type="button" class="btn btn-ghost" id="admin-toggle-pinger-btn">Pause Pinger</button>
+                <button type="button" class="btn btn-ghost btn-cyan" id="admin-force-ping-btn">Force Ping Now</button>
+              </div>
+              <p id="admin-pinger-feedback" class="admin-feedback"></p>
+
+              <hr class="dev-divider">
+
+              <!-- Telemetry Metrics -->
+              <h4 class="telemetry-subtitle">Runtime Telemetry</h4>
+              <div class="telemetry-grid">
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Server Uptime</span>
+                  <strong class="telemetry-val" id="metric-uptime">Loading...</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Memory (RSS)</span>
+                  <strong class="telemetry-val" id="metric-rss">Loading...</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Heap Memory</span>
+                  <strong class="telemetry-val" id="metric-heap">Loading...</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Success Pings</span>
+                  <strong class="telemetry-val text-mint" id="metric-success-pings">0</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Failed Pings</span>
+                  <strong class="telemetry-val" id="metric-fail-pings">0</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Last HTTP Code</span>
+                  <strong class="telemetry-val" id="metric-last-status">200 OK</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 6: 404 NOT FOUND
+         ============================================================ -->
+    <section class="page-view" id="view-404">
+      <div class="section-container" style="text-align: center; padding: 100px 20px;">
+        <h1 style="font-size: 5rem; margin-bottom: 12px; color: var(--text-dim);">404</h1>
+        <h2 style="font-size: 1.8rem; margin-bottom: 16px;">Page Not Found</h2>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">The route you navigated to does not exist.</p>
+        <a href="/" data-navigo class="btn btn-primary page-link">Return Home</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-info">
+        <span class="footer-logo">itz0cat</span>
+        <p class="footer-copy">&copy; <span id="footer-year">2026</span> itz0cat. Fabric mods, systems &amp; microservices.</p>
+      </div>
+      <div class="footer-nav">
+        <a href="/" data-navigo class="footer-link">Overview</a>
+        <a href="/projects" data-navigo class="footer-link">Projects</a>
+        <a href="/about" data-navigo class="footer-link">Architecture</a>
+        <a href="/community" data-navigo class="footer-link">Community</a>
+        <a href="/tools" data-navigo class="footer-link">Dev Tools</a>
+        <a href="https://github.com/itz0cat" target="_blank" rel="noopener" class="footer-link">GitHub ↗</a>
+        <a href="/health" target="_blank" class="footer-link">Health API ↗</a>
+      </div>
     </div>
-    <div class="footer-links">
-      <a href="https://github.com/itz0cat" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://cattags-api.onrender.com" target="_blank" rel="noopener">CatTags API</a>
-      <a href="/api/fastclient">Telemetry API</a>
-      <a href="/health">Health Status</a>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script src="script.js"></script>
+  <!-- Navigo Vendor Library & Application Script -->
+  <script src="/vendor/navigo.min.js"></script>
+  <script src="/script.js"></script>
 </body>
 </html>

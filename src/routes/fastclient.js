@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { fastClientService } from '../modules/fastclient.js';
+import { requireAdmin } from '../modules/auth.js';
 
 export const fastClientRouter = Router();
+
+// FastClient tools are developer-only, strictly gated to Discord @itz0cat
+fastClientRouter.use(requireAdmin);
 
 // GET /api/fastclient - Status & background telemetry
 fastClientRouter.get('/', (req, res) => {

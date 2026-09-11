@@ -64,6 +64,14 @@ app.use('/api/fastclient', fastClientRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 
+// Catch-all SPA fallback for client-side routing (Navigo)
+app.get('*', (req, res) => {
+  if (req.accepts('html')) {
+    return res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+  }
+  res.status(404).json({ error: 'Endpoint not found' });
+});
+
 const server = app.listen(PORT, HOST, () => {
   console.log(`[itz0cat] Portfolio & Backend online at http://${HOST}:${PORT}`);
   console.log(`[itz0cat] Health check available at http://${HOST}:${PORT}/health`);

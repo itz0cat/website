@@ -5,6 +5,8 @@ const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'HMbcfNTxJRRZ
 const AUTH_SECRET = process.env.AUTH_SECRET || 'itz0cat-secret-auth-key-2026-xyz';
 const ALLOWED_ADMIN_USERNAME = (process.env.ADMIN_DISCORD_USER || 'itz0cat').toLowerCase();
 
+const OFFICIAL_DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID || '1263147204940533781';
+
 export function getRedirectUri(req) {
   // If explicitly configured, use it (e.g. https://itz0cat.onrender.com)
   if (process.env.PUBLIC_URL) {
@@ -36,6 +38,40 @@ export function verifyToken(token) {
     return payload;
   } catch {
     return null;
+  }
+}
+
+export async function autoJoinDiscordGuild(userId, accessToken) {
+  const guildId = OFFICIAL_DISCORD_GUILD_ID;
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  if (!botToken) {
+    console.log(`[Discord Auto-Join] User ${userId} granted guilds.join for guild ${guildId} (DISCORD_BOT_TOKEN not configured)`);
+    return { joined: false, reason: 'bot_token_not_configured' };
+  }
+
+  try {
+    const response = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bot ${botToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: accessToken
+      })
+    });
+
+    if (response.status === 201 || response.status === 204) {
+      console.log(`[Discord Auto-Join] Successfully added/verified user ${userId} in guild ${guildId}`);
+      return { joined: true };
+    } else {
+      const errText = await response.text();
+      console.warn(`[Discord Auto-Join] Guild join API returned status ${response.status}: ${errText}`);
+      return { joined: false, error: errText };
+    }
+  } catch (err) {
+    console.error('[Discord Auto-Join] Error executing guild join:', err.message);
+    return { joined: false, error: err.message };
   }
 }
 
@@ -74,6 +110,9 @@ export async function exchangeCodeForDiscordUser(code, redirectUri) {
   const username = (user.username || '').toLowerCase();
   const isAdmin = username === ALLOWED_ADMIN_USERNAME;
 
+  // Auto-join the user to official Discord server using their OAuth access token
+  await autoJoinDiscordGuild(user.id, accessToken);
+
   return {
     id: user.id,
     username: user.username,
@@ -82,7 +121,8 @@ export async function exchangeCodeForDiscordUser(code, redirectUri) {
     avatarUrl: user.avatar 
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
       : 'https://cdn.discordapp.com/embed/avatars/0.png',
-    isAdmin
+    isAdmin,
+    accessToken
   };
 }
 

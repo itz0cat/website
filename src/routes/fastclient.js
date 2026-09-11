@@ -3,12 +3,25 @@ import { fastClientService } from '../modules/fastclient.js';
 
 export const fastClientRouter = Router();
 
-// GET /api/fastclient - Get current status & ping telemetry
+// GET /api/fastclient - Status & background telemetry
 fastClientRouter.get('/', (req, res) => {
   res.json(fastClientService.getStatus());
 });
 
-// POST /api/fastclient/ping - Trigger manual ping immediately
+// GET /api/fastclient/lookup/:username - Inspect any player, cosmetics & Mojang info
+fastClientRouter.get('/lookup/:username', async (req, res) => {
+  const result = await fastClientService.lookup(req.params.username);
+  res.json(result);
+});
+
+// GET /api/fastclient/search?q=... - Search players across active manifest
+fastClientRouter.get('/search', async (req, res) => {
+  const q = req.query.q || req.query.query || '';
+  const result = await fastClientService.search(q);
+  res.json(result);
+});
+
+// POST /api/fastclient/ping - Trigger immediate registration ping
 fastClientRouter.post('/ping', async (req, res) => {
   const { username } = req.body || {};
   const result = await fastClientService.sendPing(username);
@@ -32,11 +45,4 @@ fastClientRouter.post('/toggle', (req, res) => {
     message: `FastClient auto-ping ${fastClientService.enabled ? 'enabled' : 'disabled'}`,
     status: fastClientService.getStatus()
   });
-});
-
-// GET /api/fastclient/check - Check if username is present in active-users.txt
-fastClientRouter.get('/check', async (req, res) => {
-  const username = req.query.username || null;
-  const result = await fastClientService.checkActiveUsers(username);
-  res.json(result);
 });

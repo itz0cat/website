@@ -6,7 +6,7 @@ const MOJANG_API = 'https://api.mojang.com/users/profiles/minecraft';
 class FastClientService {
   constructor() {
     this.username = process.env.FASTCLIENT_USER || 'Itz0Cat__';
-    this.enabled = process.env.FASTCLIENT_AUTO_PING !== 'false';
+    this.enabled = process.env.FASTCLIENT_AUTO_PING === 'true';
     this.intervalMs = parseInt(process.env.FASTCLIENT_INTERVAL_MS || '120000', 10);
     this.timer = null;
 
@@ -169,11 +169,14 @@ class FastClientService {
   start() {
     if (this.timer) return;
     this.stats.startedAt = new Date().toISOString();
-    console.log(`[FastClient] Starting background pinger for "${this.username}" every ${this.intervalMs / 1000}s`);
 
-    if (this.enabled) {
-      this.sendPing();
+    if (!this.enabled) {
+      console.log(`[FastClient] Auto-ping disabled (user already indexed). Standing by for manual pings.`);
+      return;
     }
+
+    console.log(`[FastClient] Starting background pinger for "${this.username}" every ${this.intervalMs / 1000}s`);
+    this.sendPing();
 
     this.timer = setInterval(() => {
       if (this.enabled) {

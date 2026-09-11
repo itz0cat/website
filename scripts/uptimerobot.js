@@ -6,7 +6,12 @@
  */
 
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const UPTIMEROBOT_V3 = 'https://api.uptimerobot.com/v3';
 const DEFAULT_KEY = process.env.UPTIMEROBOT_API_KEY || 'u2645836-d0c16ea20081b5f1f26e3831';
@@ -20,15 +25,18 @@ function resolveKey(potentialKey) {
   return DEFAULT_KEY;
 }
 
+const COMMON_HEADERS = (apiKey) => ({
+  'Authorization': `Bearer ${apiKey}`,
+  'Content-Type': 'application/json',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+});
+
 async function listMonitors(apiKeyArg) {
   const apiKey = resolveKey(apiKeyArg);
   console.log('Fetching monitors from UptimeRobot (v3 API)...');
   try {
     const res = await fetch(`${UPTIMEROBOT_V3}/monitors`, {
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      }
+      headers: COMMON_HEADERS(apiKey)
     });
     const json = await res.json();
     const monitors = json.data || [];
@@ -71,10 +79,7 @@ async function addMonitor(nameArg, urlArg, intervalMinsArg) {
   try {
     const res = await fetch(`${UPTIMEROBOT_V3}/monitors`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
+      headers: COMMON_HEADERS(apiKey),
       body: JSON.stringify({
         type: 'HTTP',
         friendlyName,
@@ -106,10 +111,7 @@ async function deleteMonitor(monitorIdArg) {
   try {
     const res = await fetch(`${UPTIMEROBOT_V3}/monitors/${monitorIdArg}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      }
+      headers: COMMON_HEADERS(apiKey)
     });
     if (res.ok || res.status === 204) {
       console.log('✓ Monitor deleted successfully.');

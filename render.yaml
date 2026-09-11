@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: random-backend
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install --no-audit --no-fund
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: FASTCLIENT_USER
+        value: Itz0Cat__
+      - key: FASTCLIENT_AUTO_PING
+        value: "true"
+      - key: FASTCLIENT_INTERVAL_MS
+        value: "120000"

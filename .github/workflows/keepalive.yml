@@ -1,0 +1,29 @@
+name: Backend Keepalive Pinger
+
+on:
+  schedule:
+    # Run every 30 minutes to prevent Render free-tier spin-down
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Target URL to ping (defaults to configured secret or default URL)'
+        required: false
+        default: 'https://random-api-itz0cat.onrender.com/health'
+
+jobs:
+  ping:
+    name: Ping Random Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend
+        run: |
+          URL="${{ github.event.inputs.target_url || secrets.BACKEND_URL || 'https://random-api-itz0cat.onrender.com/health' }}"
+          echo "Pinging: $URL"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || true)
+          echo "HTTP Status: $STATUS"
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ]; then
+            echo "Backend is ALIVE and healthy!"
+          else
+            echo "Warning: Response code $STATUS"
+          fi

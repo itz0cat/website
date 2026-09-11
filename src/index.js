@@ -8,6 +8,7 @@ import { healthRouter } from './routes/health.js';
 import { fastClientRouter } from './routes/fastclient.js';
 import { authRouter } from './routes/auth.js';
 import { adminRouter } from './routes/admin.js';
+import { toolsRouter } from './routes/tools.js';
 import { fastClientService } from './modules/fastclient.js';
 
 dotenv.config();
@@ -63,6 +64,7 @@ app.use('/health', healthRouter);
 app.use('/api/fastclient', fastClientRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/tools', toolsRouter);
 
 // Catch-all SPA fallback for client-side routing (Navigo)
 app.get('*', (req, res) => {

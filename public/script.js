@@ -17,7 +17,7 @@ function initRouter() {
     .on('/about', () => switchView('about', 'Architecture & Stack — itz0cat'))
     .on('/community', () => switchView('community', 'Community & Discord — itz0cat'))
     .on('/tools', () => {
-      switchView('tools', 'Developer Tools — itz0cat');
+      switchView('tools', 'Minecraft Utilities & Tools — itz0cat');
       handleToolsAccess();
     })
     .notFound(() => switchView('404', '404 Not Found — itz0cat'));
@@ -49,10 +49,8 @@ function initRouter() {
 
 // 2. View Switching Handler
 function switchView(viewId, title) {
-  // Update document title
   if (title) document.title = title;
 
-  // Toggle active view container
   document.querySelectorAll('.page-view').forEach((el) => {
     el.classList.remove('active-view');
   });
@@ -79,56 +77,32 @@ function switchView(viewId, title) {
     if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
   }
 
-  // Reset scroll position to top
   window.scrollTo(0, 0);
 
-  // Trigger terminal animation on home
   if (viewId === 'home' && !terminalExecuted) {
     runTerminal();
   }
 }
 
-// 3. Dev Tools Access Gating
+// 3. Tools Access & Permission Gating
 function handleToolsAccess() {
-  const lockedView = document.getElementById('dev-locked-view');
-  const unlockedView = document.getElementById('dev-unlocked-view');
-  const lockedMsg = document.getElementById('locked-message');
-  const lockedBtn = document.getElementById('locked-login-btn');
+  const loggedOutView = document.getElementById('tools-logged-out-view');
+  const authView = document.getElementById('tools-authenticated-view');
+  const tabBtnAdmin = document.getElementById('tab-btn-admin');
 
   if (!currentUser || !currentUser.loggedIn) {
-    // Visitor is unauthenticated
-    if (lockedView) lockedView.style.display = 'block';
-    if (unlockedView) unlockedView.style.display = 'none';
-    if (lockedMsg) {
-      lockedMsg.innerHTML = 'This operations panel contains FastClient player intelligence tools, active manifest inspection, and remote cloud keepalive controls. Access is strictly gated to the verified administrator: <strong>@itz0cat</strong>.';
-    }
-    if (lockedBtn) {
-      lockedBtn.href = '/api/auth/login?returnTo=/tools';
-      lockedBtn.style.display = 'inline-flex';
-      lockedBtn.querySelector('span').textContent = 'Sign in with Discord as @itz0cat';
-    }
-  } else if (!currentUser.isAdmin) {
-    // Visitor is authenticated as another user (not itz0cat)
-    if (lockedView) lockedView.style.display = 'block';
-    if (unlockedView) unlockedView.style.display = 'none';
-    if (lockedMsg) {
-      lockedMsg.innerHTML = `Access Denied. You are signed in with Discord as <strong>@${currentUser.user.username}</strong>.<br>This developer control center is strictly restricted to administrator <strong>@itz0cat</strong>.`;
-    }
-    if (lockedBtn) {
-      lockedBtn.href = '#';
-      lockedBtn.style.display = 'inline-flex';
-      lockedBtn.querySelector('span').textContent = 'Sign Out to Switch Accounts';
-      lockedBtn.onclick = async (e) => {
-        e.preventDefault();
-        await fetch('/api/auth/logout', { method: 'POST' });
-        window.location.reload();
-      };
-    }
+    if (loggedOutView) loggedOutView.style.display = 'block';
+    if (authView) authView.style.display = 'none';
   } else {
-    // Visitor IS @itz0cat!
-    if (lockedView) lockedView.style.display = 'none';
-    if (unlockedView) unlockedView.style.display = 'block';
-    loadAdminTelemetry();
+    if (loggedOutView) loggedOutView.style.display = 'none';
+    if (authView) authView.style.display = 'block';
+
+    if (currentUser.isAdmin) {
+      if (tabBtnAdmin) tabBtnAdmin.style.display = 'inline-flex';
+      loadAdminTelemetry();
+    } else {
+      if (tabBtnAdmin) tabBtnAdmin.style.display = 'none';
+    }
   }
 }
 
@@ -153,7 +127,6 @@ async function checkAuth() {
     const commUsername = document.getElementById('community-username');
 
     if (data.loggedIn && data.user) {
-      // User is authenticated
       if (loginBtn) loginBtn.style.display = 'none';
       if (userPill) {
         userPill.style.display = 'flex';
@@ -171,10 +144,9 @@ async function checkAuth() {
       }
 
       if (navDevBadge) {
-        navDevBadge.textContent = data.isAdmin ? '⚡' : '🔒';
+        navDevBadge.textContent = data.isAdmin ? '⚡' : '🛠️';
       }
 
-      // Community card status
       if (commLoggedOut) commLoggedOut.style.display = 'none';
       if (commLoggedIn) {
         commLoggedIn.style.display = 'block';
@@ -182,18 +154,15 @@ async function checkAuth() {
         if (commUsername) commUsername.textContent = `${data.user.global_name || data.user.username} (@${data.user.username})`;
       }
     } else {
-      // Unauthenticated visitor
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (userPill) userPill.style.display = 'none';
-      if (navDevBadge) navDevBadge.textContent = '🔒';
+      if (navDevBadge) navDevBadge.textContent = '🛠️';
 
       if (commLoggedOut) commLoggedOut.style.display = 'block';
       if (commLoggedIn) commLoggedIn.style.display = 'none';
     }
 
-    // If currently on tools page, re-evaluate access
-    const currentPath = window.location.pathname;
-    if (currentPath === '/tools') {
+    if (window.location.pathname === '/tools') {
       handleToolsAccess();
     }
   } catch (err) {
@@ -201,7 +170,268 @@ async function checkAuth() {
   }
 }
 
-// 5. FastClient Player Lookup (Dev Only)
+// 5. Tools Suite Tab Switching
+function initToolTabs() {
+  document.querySelectorAll('.tools-nav-tabs .tool-tab').forEach((tabBtn) => {
+    tabBtn.addEventListener('click', () => {
+      const targetId = tabBtn.getAttribute('data-tab');
+      document.querySelectorAll('.tools-nav-tabs .tool-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tool-tab-panel').forEach(p => {
+        p.classList.remove('active-panel');
+        p.style.display = 'none';
+      });
+
+      tabBtn.classList.add('active');
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active-panel');
+        targetPanel.style.display = 'block';
+      }
+
+      if (targetId === 'tab-admin' && currentUser?.isAdmin) {
+        loadAdminTelemetry();
+      }
+    });
+  });
+}
+
+// 6. Player Profile & Skin Inspector
+function initPlayerInspector() {
+  const form = document.getElementById('player-inspector-form');
+  const input = document.getElementById('inspector-player-input');
+  const btn = document.getElementById('inspector-player-btn');
+  const result = document.getElementById('inspector-player-result');
+  const statusEl = document.getElementById('insp-player-status');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = (input.value || '').trim();
+    if (!query) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Querying...';
+    statusEl.textContent = 'Querying Mojang and Skin CDN...';
+
+    try {
+      const res = await fetch(`/api/tools/player/${encodeURIComponent(query)}`);
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        statusEl.textContent = `Error: ${data.error || 'Failed to inspect player'}`;
+        return;
+      }
+
+      document.getElementById('insp-name').textContent = data.username;
+      const pill = document.getElementById('insp-type-pill');
+      if (data.type === 'mojang_verified') {
+        pill.className = 'status-pill active';
+        pill.textContent = '● MOJANG VERIFIED';
+      } else {
+        pill.className = 'status-pill inactive';
+        pill.textContent = '○ OFFLINE / CUSTOM';
+      }
+
+      document.getElementById('insp-uuid-dashed').textContent = data.uuidDashed;
+      document.getElementById('insp-uuid-trimmed').textContent = data.uuidTrimmed;
+      document.getElementById('insp-body-img').src = data.body3dUrl;
+      document.getElementById('insp-download-skin').href = data.skinTextureUrl;
+
+      result.style.display = 'block';
+      statusEl.textContent = `✓ Successfully resolved ${data.username}.`;
+    } catch (err) {
+      statusEl.textContent = `Inspection error: ${err.message}`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Inspect Player';
+    }
+  });
+}
+
+// 7. Minecraft Server Status Checker
+function initServerChecker() {
+  const form = document.getElementById('server-checker-form');
+  const input = document.getElementById('checker-server-input');
+  const btn = document.getElementById('checker-server-btn');
+  const result = document.getElementById('checker-server-result');
+  const statusEl = document.getElementById('checker-server-status');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const address = (input.value || '').trim();
+    if (!address) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Pinging...';
+    statusEl.textContent = `Querying server ${address}...`;
+
+    try {
+      const res = await fetch(`/api/tools/server/${encodeURIComponent(address)}`);
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        statusEl.textContent = `Error: ${data.error || 'Failed to ping server'}`;
+        return;
+      }
+
+      document.getElementById('srv-host').textContent = data.host;
+      const pill = document.getElementById('srv-status-pill');
+      pill.className = data.online ? 'status-pill active' : 'status-pill inactive';
+      pill.textContent = data.online ? '● ONLINE' : '○ OFFLINE';
+
+      document.getElementById('srv-version').textContent = data.version;
+      document.getElementById('srv-players').textContent = `${data.players.online.toLocaleString()} / ${data.players.max.toLocaleString()}`;
+      document.getElementById('srv-ip').textContent = `${data.ip || data.host}:${data.port}`;
+
+      const iconImg = document.getElementById('srv-icon');
+      if (data.icon) {
+        iconImg.src = data.icon;
+        iconImg.style.display = 'block';
+      } else {
+        iconImg.style.display = 'none';
+      }
+
+      const motdBox = document.getElementById('srv-motd-html');
+      if (data.motd?.html) {
+        motdBox.innerHTML = data.motd.html;
+      } else {
+        motdBox.textContent = data.motd?.clean || 'A Minecraft Server';
+      }
+
+      result.style.display = 'block';
+      statusEl.textContent = `✓ Received ping response from ${data.host}.`;
+    } catch (err) {
+      statusEl.textContent = `Ping failed: ${err.message}`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Ping Server';
+    }
+  });
+}
+
+// 8. Minecraft Color & MOTD Formatter
+function initColorFormatter() {
+  const textarea = document.getElementById('color-input-text');
+  const preview = document.getElementById('color-preview-output');
+  const toast = document.getElementById('copy-toast');
+  if (!textarea || !preview) return;
+
+  const updatePreview = async () => {
+    const text = textarea.value;
+    try {
+      const res = await fetch('/api/tools/format', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        preview.innerHTML = data.html;
+        textarea.dataset.clean = data.clean;
+        textarea.dataset.section = data.section;
+        textarea.dataset.ampersand = data.ampersand;
+        textarea.dataset.json = data.json;
+      }
+    } catch {
+      preview.textContent = text;
+    }
+  };
+
+  textarea.addEventListener('input', updatePreview);
+  updatePreview();
+
+  // Palette swatch clicks
+  document.querySelectorAll('.palette-swatch').forEach((swatch) => {
+    swatch.addEventListener('click', () => {
+      const code = swatch.getAttribute('data-code');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const current = textarea.value;
+      textarea.value = current.substring(0, start) + code + current.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + code.length;
+      updatePreview();
+    });
+  });
+
+  // Copy buttons
+  const flashToast = (msg) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    setTimeout(() => { toast.textContent = ''; }, 2500);
+  };
+
+  const copySection = document.getElementById('copy-section-btn');
+  if (copySection) {
+    copySection.addEventListener('click', () => {
+      const val = textarea.dataset.section || textarea.value.replace(/&/g, '§');
+      navigator.clipboard.writeText(val);
+      flashToast('✓ Copied § format!');
+    });
+  }
+
+  const copyAmp = document.getElementById('copy-ampersand-btn');
+  if (copyAmp) {
+    copyAmp.addEventListener('click', () => {
+      const val = textarea.dataset.ampersand || textarea.value;
+      navigator.clipboard.writeText(val);
+      flashToast('✓ Copied & codes!');
+    });
+  }
+
+  const copyJson = document.getElementById('copy-json-btn');
+  if (copyJson) {
+    copyJson.addEventListener('click', () => {
+      const val = textarea.dataset.json || JSON.stringify({ text: textarea.value }, null, 2);
+      navigator.clipboard.writeText(val);
+      flashToast('✓ Copied Chat JSON!');
+    });
+  }
+}
+
+// 9. UUID Converter & Offline Generator
+function initUuidTool() {
+  const form = document.getElementById('uuid-tool-form');
+  const input = document.getElementById('uuid-tool-input');
+  const result = document.getElementById('uuid-tool-result');
+  const dashedEl = document.getElementById('res-uuid-dashed');
+  const trimmedEl = document.getElementById('res-uuid-trimmed');
+  const noteRow = document.getElementById('uuid-note-row');
+  const noteEl = document.getElementById('res-uuid-note');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = (input.value || '').trim();
+    if (!query) return;
+
+    try {
+      const res = await fetch(`/api/tools/uuid/${encodeURIComponent(query)}`);
+      const data = await res.json();
+
+      if (data.valid) {
+        dashedEl.textContent = data.dashed;
+        trimmedEl.textContent = data.trimmed;
+        noteRow.style.display = 'none';
+      } else if (data.offlineComputed) {
+        dashedEl.textContent = data.offlineComputed.dashed;
+        trimmedEl.textContent = data.offlineComputed.trimmed;
+        noteRow.style.display = 'flex';
+        noteEl.textContent = `Offline UUID for "${data.offlineComputed.username}" (RFC 4122 v3 MD5)`;
+      }
+
+      result.style.display = 'block';
+    } catch (err) {
+      alert('UUID conversion error: ' + err.message);
+    }
+  });
+}
+
+// 10. FastClient Player Lookup (Owner @itz0cat Only)
 const lookupForm = document.getElementById('lookup-form');
 const lookupInput = document.getElementById('lookup-username');
 const lookupBtn = document.getElementById('lookup-btn');
@@ -336,7 +566,7 @@ if (lookupForm) {
   });
 }
 
-// 6. Admin Telemetry & Cloud Pinger Controls
+// 11. Admin Telemetry & Cloud Pinger Controls (Owner Only)
 const adminTargetUser = document.getElementById('admin-target-user');
 const adminIntervalSelect = document.getElementById('admin-interval-select');
 const adminSaveCfgBtn = document.getElementById('admin-save-cfg-btn');
@@ -439,7 +669,7 @@ if (adminForcePingBtn) {
   });
 }
 
-// 7. Logout Handler
+// 12. Logout Handler
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async () => {
@@ -448,7 +678,7 @@ if (logoutBtn) {
   });
 }
 
-// 8. Mobile Navigation Toggle
+// 13. Mobile Navigation Toggle
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
 
@@ -459,7 +689,7 @@ if (navToggle && navLinks) {
   });
 }
 
-// 9. Hero Terminal Pipeline Animation
+// 14. Hero Terminal Pipeline Animation
 const terminalBody = document.getElementById('terminal-body');
 const terminalScript = [
   { type: 'prompt', text: '$ ./gradlew build --no-daemon' },
@@ -468,7 +698,7 @@ const terminalScript = [
   { type: 'success', text: 'BUILD SUCCESSFUL (1m 14s)' },
   { type: 'prompt', text: '$ npm start' },
   { type: 'out', text: '[itz0cat] Backend online at https://itz0cat.onrender.com' },
-  { type: 'out', text: '[FastClient] Heartbeat active for "Itz0Cat__"' },
+  { type: 'out', text: '[FastClient] Registered user "Itz0Cat__"' },
   { type: 'success', text: 'UptimeRobot: 5m Keepalive [UP 200 OK] ✓' }
 ];
 
@@ -498,15 +728,16 @@ async function runTerminal() {
   terminalBody.appendChild(cursor);
 }
 
-// 10. Bootstrap Application on DOM Ready
+// 15. Bootstrap Application on DOM Ready
 window.addEventListener('DOMContentLoaded', () => {
-  // Update footer copyright year
   const yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Initialize Navigo routing
   initRouter();
-
-  // Check auth state
+  initToolTabs();
+  initPlayerInspector();
+  initServerChecker();
+  initColorFormatter();
+  initUuidTool();
   checkAuth();
 });

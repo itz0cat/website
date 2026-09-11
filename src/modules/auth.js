@@ -126,6 +126,18 @@ export async function exchangeCodeForDiscordUser(code, redirectUri) {
   };
 }
 
+export function requireAuth(req, res, next) {
+  const token = req.cookies?.itz0cat_session;
+  const user = verifyToken(token);
+
+  if (!user) {
+    return res.status(401).json({ error: 'Authentication required. Please sign in with Discord.' });
+  }
+
+  req.user = user;
+  next();
+}
+
 export function requireAdmin(req, res, next) {
   const token = req.cookies?.itz0cat_session;
   const user = verifyToken(token);

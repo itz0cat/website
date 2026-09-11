@@ -32,8 +32,8 @@
         <a href="/projects" data-navigo class="nav-item" data-page="projects">Projects</a>
         <a href="/about" data-navigo class="nav-item" data-page="about">Architecture</a>
         <a href="/community" data-navigo class="nav-item" data-page="community">Community</a>
-        <a href="/tools" data-navigo class="nav-item nav-item-dev" data-page="tools">
-          <span class="dev-lock-badge" id="nav-dev-badge">🔒</span> Dev Tools
+        <a href="/tools" data-navigo class="nav-item" data-page="tools">
+          <span class="dev-lock-badge" id="nav-dev-badge">🛠️</span> Tools
         </a>
       </nav>
 
@@ -539,159 +539,360 @@
     </section>
 
     <!-- ============================================================
-         VIEW 5: DEVELOPER TOOLS & TELEMETRY (/tools)
-         GATED EXCLUSIVELY TO DISCORD OWNER: @itz0cat
+         VIEW 5: MINECRAFT UTILITY SUITE & DEV CONSOLE (/tools)
+         Open to any authenticated Discord user
          ============================================================ -->
     <section class="page-view" id="view-tools">
       <div class="section-container">
 
-        <!-- Access Restriction State (Logged Out or Non-Admin) -->
-        <div class="glass dev-locked-card" id="dev-locked-view">
-          <div class="locked-icon">🔒</div>
-          <h2 class="locked-title">Developer Access Restricted</h2>
-          <p class="locked-sub" id="locked-message">
-            This operations panel contains FastClient player intelligence tools, active manifest inspection, 
-            and remote cloud keepalive controls. Access is strictly gated to the verified administrator: <strong>@itz0cat</strong>.
+        <!-- Access Restriction Banner (Shown only when Logged Out) -->
+        <div class="glass dev-locked-card" id="tools-logged-out-view">
+          <div class="locked-icon">🔐</div>
+          <h2 class="locked-title">Discord Authentication Required</h2>
+          <p class="locked-sub">
+            The Minecraft Utility Suite (Player &amp; Skin Inspector, Server Status &amp; MOTD Ping, Color Formatter, and UUID tools) 
+            is available to all community members. Sign in with Discord to access the tools.
           </p>
           <div class="locked-actions">
-            <a href="/api/auth/login?returnTo=/tools" class="btn btn-primary" id="locked-login-btn">
-              <span>Sign in with Discord as @itz0cat</span>
+            <a href="/api/auth/login?returnTo=/tools" class="btn btn-primary">
+              <span>Sign in with Discord to Access Tools</span>
             </a>
           </div>
         </div>
 
-        <!-- Unlocked Dev Control Center (Rendered only for @itz0cat) -->
-        <div class="dev-unlocked-content" id="dev-unlocked-view" style="display: none;">
+        <!-- Authenticated Tools Suite (Shown when logged in as ANY Discord user) -->
+        <div class="tools-authenticated-wrapper" id="tools-authenticated-view" style="display: none;">
+          
           <div class="section-header">
-            <div class="owner-pill">AUTHORIZED ADMINISTRATOR (@itz0cat)</div>
-            <h2 class="section-heading">Developer Control Center &amp; FastClient Suite</h2>
-            <p class="section-subtext">Internal player intelligence inspection, active user discovery, and cloud keepalive telemetry.</p>
+            <span class="section-label">COMMUNITY &amp; DEVELOPER SUITE</span>
+            <h2 class="section-heading">Minecraft Utilities &amp; Tools</h2>
+            <p class="section-subtext">Real-time player skin inspection, multiplayer server ping, color code formatting, and UUID resolution.</p>
           </div>
 
-          <div class="dev-grid">
-            <!-- FastClient Player Intelligence Tool -->
-            <div class="glass dev-tool-card">
+          <!-- Utility Tabs -->
+          <div class="tools-nav-tabs">
+            <button type="button" class="tool-tab active" data-tab="tab-player">👤 Player Inspector</button>
+            <button type="button" class="tool-tab" data-tab="tab-server">🌐 Server Status</button>
+            <button type="button" class="tool-tab" data-tab="tab-formatter">🎨 Color Formatter</button>
+            <button type="button" class="tool-tab" data-tab="tab-uuid">🆔 UUID Converter</button>
+            <button type="button" class="tool-tab" data-tab="tab-admin" id="tab-btn-admin" style="display: none;">⚡ Dev Controls</button>
+          </div>
+
+          <!-- TAB 1: PLAYER & SKIN INSPECTOR -->
+          <div class="tool-tab-panel active-panel" id="tab-player">
+            <div class="glass tool-card-full">
               <div class="card-top">
-                <h3 class="tool-heading">⚡ FastClient Player Intelligence</h3>
-                <span class="tool-badge">LIVE QUERY</span>
+                <h3 class="tool-heading">Player Profile &amp; Skin Inspector</h3>
+                <span class="tool-badge">MOJANG &amp; SKIN CDN</span>
               </div>
               <p class="tool-desc">
-                Inspect players across FastClient's live manifest of 53,000+ users to verify active status, 
-                inspect Mojang UUIDs, and view custom CDN capes &amp; skins.
+                Lookup any Minecraft username or UUID to view verified status, 3D skin renders, UUIDs, and download raw skin textures.
               </p>
 
-              <form class="lookup-form" id="lookup-form">
+              <form class="tool-search-form" id="player-inspector-form">
                 <div class="lookup-input-row">
-                  <input type="text" id="lookup-username" class="lookup-input" placeholder="Minecraft username (e.g. Itz0Cat__)" autocomplete="off" required>
-                  <button type="submit" class="btn btn-primary" id="lookup-btn">Lookup</button>
+                  <input type="text" id="inspector-player-input" class="lookup-input" placeholder="Enter username or UUID (e.g. Notch, Itz0Cat__)" required>
+                  <button type="submit" class="btn btn-primary" id="inspector-player-btn">Inspect Player</button>
                 </div>
               </form>
 
-              <!-- Lookup Results Display -->
-              <div class="lookup-result" id="lookup-result">
-                <div class="player-card">
-                  <img id="res-avatar" class="player-avatar" src="" alt="Player Avatar" onerror="this.src='https://mc-heads.net/avatar/MHF_Steve/128'">
-                  <div class="player-meta">
+              <div id="inspector-player-result" class="inspector-result-box" style="display: none;">
+                <div class="player-profile-layout">
+                  <div class="player-3d-render-wrap">
+                    <img id="insp-body-img" class="player-3d-body" src="" alt="3D Skin Render">
+                  </div>
+                  <div class="player-profile-details">
                     <div class="player-title">
-                      <span id="res-name" class="player-name">Player</span>
-                      <span id="res-status-pill" class="status-pill active">● ACTIVE</span>
+                      <h4 id="insp-name" class="profile-username">Player</h4>
+                      <span id="insp-type-pill" class="status-pill active">VERIFIED</span>
                     </div>
-                    <div id="res-uuid" class="player-uuid">UUID: loading...</div>
-                    <div id="res-rank" class="player-rank">Rank #0 of 0</div>
-                  </div>
-                </div>
+                    
+                    <div class="detail-row">
+                      <span class="detail-label">Dashed UUID:</span>
+                      <code id="insp-uuid-dashed" class="code-copyable">loading...</code>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">Trimmed UUID:</span>
+                      <code id="insp-uuid-trimmed" class="code-copyable">loading...</code>
+                    </div>
 
-                <div class="cosmetics-grid">
-                  <div class="cosmetic-item">
-                    <div class="cosmetic-name">Custom Cape</div>
-                    <div id="res-cape-img-wrap"><img id="res-cape-img" class="cosmetic-thumb" src="" alt="Cape Preview"></div>
-                    <div id="res-cape-status" class="cosmetic-status">None</div>
+                    <div class="profile-actions-row">
+                      <a id="insp-download-skin" href="#" target="_blank" class="btn btn-secondary btn-sm" download>
+                        <span>Download Raw Skin PNG</span>
+                      </a>
+                    </div>
                   </div>
-                  <div class="cosmetic-item">
-                    <div class="cosmetic-name">Classic Skin</div>
-                    <div id="res-skin-img-wrap"><img id="res-skin-img" class="cosmetic-thumb" src="" alt="Skin Preview"></div>
-                    <div id="res-skin-status" class="cosmetic-status">None</div>
-                  </div>
-                  <div class="cosmetic-item">
-                    <div class="cosmetic-name">Tablist Icon</div>
-                    <div id="res-tab-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
-                  </div>
-                  <div class="cosmetic-item">
-                    <div class="cosmetic-name">Nametag Badge</div>
-                    <div id="res-badge-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
-                  </div>
-                </div>
-
-                <div class="ping-action">
-                  <span id="lookup-notice" class="lookup-notice-text"></span>
                 </div>
               </div>
+              <p id="insp-player-status" class="tool-status-text"></p>
             </div>
+          </div>
 
-            <!-- FastClient Cloud Heartbeat Controls -->
-            <div class="glass dev-tool-card">
+          <!-- TAB 2: SERVER STATUS CHECKER -->
+          <div class="tool-tab-panel" id="tab-server" style="display: none;">
+            <div class="glass tool-card-full">
               <div class="card-top">
-                <h3 class="tool-heading">📡 Cloud Heartbeat Controller</h3>
-                <span class="tool-badge">PINGER</span>
+                <h3 class="tool-heading">Minecraft Server Ping &amp; MOTD Checker</h3>
+                <span class="tool-badge">SLP PROTOCOL</span>
               </div>
               <p class="tool-desc">
-                Configure background telemetry registration to ensure player presence remains active on FastClient's directory.
+                Query any Minecraft Java server to inspect online latency, player counts, server versions, and colored MOTD banners.
+              </p>
+
+              <form class="tool-search-form" id="server-checker-form">
+                <div class="lookup-input-row">
+                  <input type="text" id="checker-server-input" class="lookup-input" placeholder="Server address (e.g. play.cubecraft.net, play.blockfun.gg)" required>
+                  <button type="submit" class="btn btn-primary" id="checker-server-btn">Ping Server</button>
+                </div>
+              </form>
+
+              <div id="checker-server-result" class="server-result-box" style="display: none;">
+                <div class="server-header-row">
+                  <img id="srv-icon" class="server-icon" src="" alt="Server Icon" style="display: none;">
+                  <div class="server-title-group">
+                    <h4 id="srv-host" class="server-hostname">server.address</h4>
+                    <span id="srv-status-pill" class="status-pill active">ONLINE</span>
+                  </div>
+                </div>
+
+                <div class="server-metrics-grid">
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Version</span>
+                    <strong class="telemetry-val" id="srv-version">1.21.x</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Players Online</span>
+                    <strong class="telemetry-val text-mint" id="srv-players">0 / 0</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">IP &amp; Port</span>
+                    <strong class="telemetry-val" id="srv-ip">0.0.0.0:25565</strong>
+                  </div>
+                </div>
+
+                <div class="motd-preview-box">
+                  <div class="motd-label">MOTD BANNER</div>
+                  <div id="srv-motd-html" class="minecraft-motd">Loading MOTD...</div>
+                </div>
+              </div>
+              <p id="checker-server-status" class="tool-status-text"></p>
+            </div>
+          </div>
+
+          <!-- TAB 3: COLOR & MOTD FORMATTER -->
+          <div class="tool-tab-panel" id="tab-formatter" style="display: none;">
+            <div class="glass tool-card-full">
+              <div class="card-top">
+                <h3 class="tool-heading">Minecraft Color &amp; Text Formatter</h3>
+                <span class="tool-badge">CHAT &amp; MOTD</span>
+              </div>
+              <p class="tool-desc">
+                Compose messages using &amp; or § color codes. Preview formatted text live and copy legacy codes or modern JSON chat components.
               </p>
 
               <div class="form-group">
-                <label for="admin-target-user">Target Minecraft Username</label>
-                <input type="text" id="admin-target-user" class="lookup-input" style="width: 100%;" value="Itz0Cat__">
+                <label for="color-input-text">Input Text with &amp; Codes</label>
+                <textarea id="color-input-text" class="lookup-input" rows="3" style="width: 100%; resize: vertical;" placeholder="&amp;bWelcome &amp;fto &amp;6&amp;lServer &amp;a[1.21]">&amp;bWelcome &amp;fto &amp;6&amp;lServer &amp;a[1.21]</textarea>
               </div>
 
-              <div class="form-group">
-                <label for="admin-interval-select">Ping Interval</label>
-                <select id="admin-interval-select" class="lookup-input" style="width: 100%;">
-                  <option value="60">Every 60 Seconds</option>
-                  <option value="120" selected>Every 120 Seconds (Recommended)</option>
-                  <option value="180">Every 180 Seconds</option>
-                  <option value="300">Every 300 Seconds (5 mins)</option>
-                </select>
+              <div class="quick-palette-row">
+                <button type="button" class="palette-swatch" data-code="&amp;0" style="background: #000000;" title="Black (&amp;0)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;1" style="background: #0000aa;" title="Dark Blue (&amp;1)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;2" style="background: #00aa00;" title="Dark Green (&amp;2)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;3" style="background: #00aaaa;" title="Dark Aqua (&amp;3)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;4" style="background: #aa0000;" title="Dark Red (&amp;4)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;5" style="background: #aa00aa;" title="Dark Purple (&amp;5)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;6" style="background: #ffaa00;" title="Gold (&amp;6)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;7" style="background: #aaaaaa;" title="Gray (&amp;7)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;8" style="background: #555555;" title="Dark Gray (&amp;8)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;9" style="background: #5555ff;" title="Blue (&amp;9)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;a" style="background: #55ff55;" title="Green (&amp;a)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;b" style="background: #55ffff;" title="Aqua (&amp;b)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;c" style="background: #ff5555;" title="Red (&amp;c)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;d" style="background: #ff55ff;" title="Light Purple (&amp;d)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;e" style="background: #ffff55;" title="Yellow (&amp;e)"></button>
+                <button type="button" class="palette-swatch" data-code="&amp;f" style="background: #ffffff;" title="White (&amp;f)"></button>
+                <button type="button" class="palette-swatch text-btn" data-code="&amp;l" title="Bold (&amp;l)">B</button>
+                <button type="button" class="palette-swatch text-btn" data-code="&amp;o" title="Italic (&amp;o)">I</button>
+                <button type="button" class="palette-swatch text-btn" data-code="&amp;n" title="Underline (&amp;n)">U</button>
+                <button type="button" class="palette-swatch text-btn" data-code="&amp;r" title="Reset (&amp;r)">R</button>
               </div>
 
-              <div class="admin-btn-row">
-                <button type="button" class="btn btn-primary" id="admin-save-cfg-btn">Save Config</button>
-                <button type="button" class="btn btn-ghost" id="admin-toggle-pinger-btn">Pause Pinger</button>
-                <button type="button" class="btn btn-ghost btn-cyan" id="admin-force-ping-btn">Force Ping Now</button>
+              <div class="motd-preview-box" style="margin-top: 16px;">
+                <div class="motd-label">LIVE PREVIEW</div>
+                <div id="color-preview-output" class="minecraft-motd">Welcome to Server [1.21]</div>
               </div>
-              <p id="admin-pinger-feedback" class="admin-feedback"></p>
 
-              <hr class="dev-divider">
+              <div class="copy-actions-row">
+                <button type="button" class="btn btn-secondary btn-sm" id="copy-section-btn">Copy Legacy (§)</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="copy-ampersand-btn">Copy Codes (&amp;)</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="copy-json-btn">Copy Chat JSON</button>
+                <span id="copy-toast" class="copy-toast-msg"></span>
+              </div>
+            </div>
+          </div>
 
-              <!-- Telemetry Metrics -->
-              <h4 class="telemetry-subtitle">Runtime Telemetry</h4>
-              <div class="telemetry-grid">
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Server Uptime</span>
-                  <strong class="telemetry-val" id="metric-uptime">Loading...</strong>
+          <!-- TAB 4: UUID UTILITY -->
+          <div class="tool-tab-panel" id="tab-uuid" style="display: none;">
+            <div class="glass tool-card-full">
+              <div class="card-top">
+                <h3 class="tool-heading">Minecraft UUID Converter &amp; Offline Generator</h3>
+                <span class="tool-badge">RFC 4122</span>
+              </div>
+              <p class="tool-desc">
+                Convert between trimmed and dashed UUIDs, or calculate the exact offline/cracked UUID used by Spigot, Paper, and Fabric servers.
+              </p>
+
+              <form class="tool-search-form" id="uuid-tool-form">
+                <div class="lookup-input-row">
+                  <input type="text" id="uuid-tool-input" class="lookup-input" placeholder="Enter username or 32-hex UUID (e.g. Itz0Cat__)" required>
+                  <button type="submit" class="btn btn-primary" id="uuid-tool-btn">Convert / Generate</button>
                 </div>
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Memory (RSS)</span>
-                  <strong class="telemetry-val" id="metric-rss">Loading...</strong>
+              </form>
+
+              <div id="uuid-tool-result" class="inspector-result-box" style="display: none; margin-top: 16px;">
+                <div class="detail-row">
+                  <span class="detail-label">Formatted (Dashed):</span>
+                  <code id="res-uuid-dashed" class="code-copyable">loading...</code>
                 </div>
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Heap Memory</span>
-                  <strong class="telemetry-val" id="metric-heap">Loading...</strong>
+                <div class="detail-row">
+                  <span class="detail-label">Trimmed (No hyphens):</span>
+                  <code id="res-uuid-trimmed" class="code-copyable">loading...</code>
                 </div>
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Success Pings</span>
-                  <strong class="telemetry-val text-mint" id="metric-success-pings">0</strong>
-                </div>
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Failed Pings</span>
-                  <strong class="telemetry-val" id="metric-fail-pings">0</strong>
-                </div>
-                <div class="telemetry-item">
-                  <span class="telemetry-label">Last HTTP Code</span>
-                  <strong class="telemetry-val" id="metric-last-status">200 OK</strong>
+                <div class="detail-row" id="uuid-note-row" style="display: none;">
+                  <span class="detail-label">Mode:</span>
+                  <span id="res-uuid-note" style="font-size: 0.85rem; color: var(--accent-mint);"></span>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- TAB 5: DEVELOPER ONLY (Owner @itz0cat) -->
+          <div class="tool-tab-panel" id="tab-admin" style="display: none;">
+            <div class="dev-grid">
+              <!-- FastClient Player Intelligence Tool -->
+              <div class="glass dev-tool-card">
+                <div class="card-top">
+                  <h3 class="tool-heading">⚡ FastClient Player Intelligence</h3>
+                  <span class="tool-badge">LIVE QUERY</span>
+                </div>
+                <p class="tool-desc">
+                  Inspect players across FastClient's manifest of 53,000+ users to verify active status, 
+                  inspect Mojang UUIDs, and view custom CDN capes &amp; skins.
+                </p>
+
+                <form class="lookup-form" id="lookup-form">
+                  <div class="lookup-input-row">
+                    <input type="text" id="lookup-username" class="lookup-input" placeholder="Minecraft username (e.g. Itz0Cat__)" autocomplete="off" required>
+                    <button type="submit" class="btn btn-primary" id="lookup-btn">Lookup</button>
+                  </div>
+                </form>
+
+                <div class="lookup-result" id="lookup-result">
+                  <div class="player-card">
+                    <img id="res-avatar" class="player-avatar" src="" alt="Player Avatar" onerror="this.src='https://mc-heads.net/avatar/MHF_Steve/128'">
+                    <div class="player-meta">
+                      <div class="player-title">
+                        <span id="res-name" class="player-name">Player</span>
+                        <span id="res-status-pill" class="status-pill active">● ACTIVE</span>
+                      </div>
+                      <div id="res-uuid" class="player-uuid">UUID: loading...</div>
+                      <div id="res-rank" class="player-rank">Rank #0 of 0</div>
+                    </div>
+                  </div>
+
+                  <div class="cosmetics-grid">
+                    <div class="cosmetic-item">
+                      <div class="cosmetic-name">Custom Cape</div>
+                      <div id="res-cape-img-wrap"><img id="res-cape-img" class="cosmetic-thumb" src="" alt="Cape Preview"></div>
+                      <div id="res-cape-status" class="cosmetic-status">None</div>
+                    </div>
+                    <div class="cosmetic-item">
+                      <div class="cosmetic-name">Classic Skin</div>
+                      <div id="res-skin-img-wrap"><img id="res-skin-img" class="cosmetic-thumb" src="" alt="Skin Preview"></div>
+                      <div id="res-skin-status" class="cosmetic-status">None</div>
+                    </div>
+                    <div class="cosmetic-item">
+                      <div class="cosmetic-name">Tablist Icon</div>
+                      <div id="res-tab-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
+                    </div>
+                    <div class="cosmetic-item">
+                      <div class="cosmetic-name">Nametag Badge</div>
+                      <div id="res-badge-status" class="cosmetic-status found" style="margin-top: 24px;">Active</div>
+                    </div>
+                  </div>
+
+                  <div class="ping-action">
+                    <span id="lookup-notice" class="lookup-notice-text"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FastClient Cloud Heartbeat Controls -->
+              <div class="glass dev-tool-card">
+                <div class="card-top">
+                  <h3 class="tool-heading">📡 Cloud Heartbeat Controller</h3>
+                  <span class="tool-badge">PINGER</span>
+                </div>
+                <p class="tool-desc">
+                  Background telemetry pinger status and manual registration controls.
+                </p>
+
+                <div class="form-group">
+                  <label for="admin-target-user">Target Minecraft Username</label>
+                  <input type="text" id="admin-target-user" class="lookup-input" style="width: 100%;" value="Itz0Cat__">
+                </div>
+
+                <div class="form-group">
+                  <label for="admin-interval-select">Ping Interval</label>
+                  <select id="admin-interval-select" class="lookup-input" style="width: 100%;">
+                    <option value="60">Every 60 Seconds</option>
+                    <option value="120" selected>Every 120 Seconds (Safe)</option>
+                    <option value="180">Every 180 Seconds</option>
+                    <option value="300">Every 300 Seconds (5 mins)</option>
+                  </select>
+                </div>
+
+                <div class="admin-btn-row">
+                  <button type="button" class="btn btn-primary" id="admin-save-cfg-btn">Save Config</button>
+                  <button type="button" class="btn btn-ghost" id="admin-toggle-pinger-btn">Resume Pinger</button>
+                  <button type="button" class="btn btn-ghost btn-cyan" id="admin-force-ping-btn">Force Ping Now</button>
+                </div>
+                <p id="admin-pinger-feedback" class="admin-feedback"></p>
+
+                <hr class="dev-divider">
+
+                <h4 class="telemetry-subtitle">Runtime Telemetry</h4>
+                <div class="telemetry-grid">
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Server Uptime</span>
+                    <strong class="telemetry-val" id="metric-uptime">Loading...</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Memory (RSS)</span>
+                    <strong class="telemetry-val" id="metric-rss">Loading...</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Heap Memory</span>
+                    <strong class="telemetry-val" id="metric-heap">Loading...</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Success Pings</span>
+                    <strong class="telemetry-val text-mint" id="metric-success-pings">0</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Failed Pings</span>
+                    <strong class="telemetry-val" id="metric-fail-pings">0</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Last HTTP Code</span>
+                    <strong class="telemetry-val" id="metric-last-status">200 OK</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>

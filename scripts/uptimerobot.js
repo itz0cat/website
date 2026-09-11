@@ -1,103 +1,129 @@
 #!/usr/bin/env node
 
 /**
- * UptimeRobot CLI Controller & Backend Keepalive Helper
+ * UptimeRobot CLI Controller (v3 API)
  * Manage UptimeRobot monitors directly from your terminal.
  */
 
-const UPTIMEROBOT_API = 'https://api.uptimerobot.com/v2';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const UPTIMEROBOT_V3 = 'https://api.uptimerobot.com/v3';
+const DEFAULT_KEY = process.env.UPTIMEROBOT_API_KEY || 'u2645836-d0c16ea20081b5f1f26e3831';
 
 const [,, command, ...args] = process.argv;
 
-async function listMonitors(apiKey) {
-  if (!apiKey) {
-    console.error('Usage: uptimerobot list <API_KEY>');
-    process.exit(1);
+function resolveKey(potentialKey) {
+  if (potentialKey && potentialKey.startsWith('u')) {
+    return potentialKey;
   }
-  console.log('Fetching monitors from UptimeRobot...');
+  return DEFAULT_KEY;
+}
+
+async function listMonitors(apiKeyArg) {
+  const apiKey = resolveKey(apiKeyArg);
+  console.log('Fetching monitors from UptimeRobot (v3 API)...');
   try {
-    const res = await fetch(`${UPTIMEROBOT_API}/getMonitors`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ api_key: apiKey, format: 'json' })
+    const res = await fetch(`${UPTIMEROBOT_V3}/monitors`, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
     });
-    const data = await res.json();
-    if (data.stat !== 'ok') {
-      console.error('Error from UptimeRobot:', data.error);
-      return;
-    }
-    console.log(`\nFound ${data.monitors.length} monitor(s):`);
-    console.log('------------------------------------------------------------');
-    data.monitors.forEach(m => {
-      const statusMap = { 0: 'Paused', 1: 'Not checked yet', 2: 'UP', 8: 'Seems down', 9: 'DOWN' };
-      console.log(`• ID: ${m.id} | Name: "${m.friendly_name}"`);
-      console.log(`  URL: ${m.url}`);
-      console.log(`  Status: ${statusMap[m.status] || m.status} | Interval: ${m.interval / 60} minutes`);
-      console.log('------------------------------------------------------------');
+    const json = await res.json();
+    const monitors = json.data || [];
+    console.log(`\nFound ${monitors.length} active monitor(s):`);
+    console.log('================================================================');
+    monitors.forEach(m => {
+      console.log(`• ID: ${m.id} | Name: "${m.friendlyName}"`);
+      console.log(`  URL:      ${m.url}`);
+      console.log(`  Status:   [${m.status}] | Interval: ${m.interval / 60}m | Method: ${m.httpMethodType}`);
+      console.log('----------------------------------------------------------------');
     });
   } catch (err) {
     console.error('Request failed:', err.message);
   }
 }
 
-async function addMonitor(apiKey, friendlyName, url, intervalMinutes = 30) {
-  if (!apiKey || !friendlyName || !url) {
-    console.error('Usage: uptimerobot add <API_KEY> <FriendlyName> <URL> [intervalMinutes=30]');
-    console.error('Example: uptimerobot add u12345-abcdef "Random Backend" "https://random-api.onrender.com/health" 30');
+async function addMonitor(nameArg, urlArg, intervalMinsArg) {
+  let apiKey = DEFAULT_KEY;
+  let friendlyName = nameArg;
+  let url = urlArg;
+  let interval = intervalMinsArg || 5;
+
+  // Handle if user passes apiKey first
+  if (nameArg && nameArg.startsWith('u264')) {
+    apiKey = nameArg;
+    friendlyName = urlArg;
+    url = intervalMinsArg;
+    interval = args[3] || 5;
+  }
+
+  if (!friendlyName || !url) {
+    console.error('Usage: uptimerobot add <FriendlyName> <URL> [intervalMinutes=5]');
+    console.error('Example: uptimerobot add "My Service" "https://my-app.onrender.com/health" 5');
     process.exit(1);
   }
-  const intervalSeconds = Math.max(300, parseInt(intervalMinutes, 10) * 60);
-  console.log(`Creating monitor "${friendlyName}" for ${url} (interval: ${intervalSeconds / 60} mins)...`);
+
+  const intervalSeconds = parseInt(interval, 10) * 60;
+  console.log(`Creating monitor "${friendlyName}" -> ${url} (${intervalSeconds / 60} min interval)...`);
 
   try {
-    const res = await fetch(`${UPTIMEROBOT_API}/newMonitor`, {
+    const res = await fetch(`${UPTIMEROBOT_V3}/monitors`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        api_key: apiKey,
-        format: 'json',
-        type: '1', // HTTP(s)
-        friendly_name: friendlyName,
-        url: url,
-        interval: intervalSeconds.toString()
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        type: 'HTTP',
+        friendlyName,
+        url,
+        interval: intervalSeconds,
+        timeout: 30,
+        httpMethodType: 'GET',
+        assignedAlertContacts: [{ alertContactId: 6567908, threshold: 0, recurrence: 0 }]
       })
     });
     const data = await res.json();
-    if (data.stat !== 'ok') {
-      console.error('Failed to create monitor:', data.error);
-      return;
+    if (data.id) {
+      console.log(`✓ Monitor created successfully! ID: ${data.id} (Status: ${data.status})`);
+    } else {
+      console.error('Failed to create monitor:', data);
     }
-    console.log(`Monitor created successfully! Monitor ID: ${data.monitor.id}`);
   } catch (err) {
     console.error('Request failed:', err.message);
   }
 }
 
-async function deleteMonitor(apiKey, monitorId) {
-  if (!apiKey || !monitorId) {
-    console.error('Usage: uptimerobot delete <API_KEY> <MonitorID>');
+async function deleteMonitor(monitorIdArg) {
+  const apiKey = DEFAULT_KEY;
+  if (!monitorIdArg) {
+    console.error('Usage: uptimerobot delete <MonitorID>');
     process.exit(1);
   }
-  console.log(`Deleting monitor ID ${monitorId}...`);
+  console.log(`Deleting monitor ID ${monitorIdArg}...`);
   try {
-    const res = await fetch(`${UPTIMEROBOT_API}/deleteMonitor`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ api_key: apiKey, format: 'json', id: monitorId })
+    const res = await fetch(`${UPTIMEROBOT_V3}/monitors/${monitorIdArg}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
     });
-    const data = await res.json();
-    if (data.stat !== 'ok') {
-      console.error('Failed to delete monitor:', data.error);
-      return;
+    if (res.ok || res.status === 204) {
+      console.log('✓ Monitor deleted successfully.');
+    } else {
+      const data = await res.json().catch(() => ({}));
+      console.error(`Failed to delete monitor (HTTP ${res.status}):`, data);
     }
-    console.log('Monitor deleted successfully.');
   } catch (err) {
     console.error('Request failed:', err.message);
   }
 }
 
 async function testPing(targetUrl) {
-  const url = targetUrl || 'http://localhost:3000/health';
+  const url = targetUrl || process.env.BACKEND_URL || 'https://random-itz0cat.onrender.com/health';
   console.log(`Pinging ${url}...`);
   const start = Date.now();
   try {
@@ -117,25 +143,30 @@ async function testPing(targetUrl) {
 
 function showHelp() {
   console.log(`
-UptimeRobot & Keepalive CLI Controller
-======================================
-Usage:
-  uptimerobot list <API_KEY>                       List all existing monitors
-  uptimerobot add <API_KEY> <Name> <URL> [mins=30] Create a new HTTP monitor
-  uptimerobot delete <API_KEY> <MonitorID>         Delete a monitor
-  uptimerobot ping [URL]                           Test ping a URL
+UptimeRobot CLI Controller (v3 API)
+===================================
+Default API Key is automatically loaded from .env!
+
+Commands:
+  uptimerobot list                       List all active monitors
+  uptimerobot add <Name> <URL> [mins=5]  Create a new HTTP monitor (5m default)
+  uptimerobot delete <MonitorID>         Delete a monitor by ID
+  uptimerobot ping [URL]                 Test ping your Render backend
 `);
 }
 
 switch (command) {
   case 'list':
+  case 'ls':
     listMonitors(args[0]);
     break;
   case 'add':
-    addMonitor(args[0], args[1], args[2], args[3] || 30);
+  case 'create':
+    addMonitor(args[0], args[1], args[2]);
     break;
   case 'delete':
-    deleteMonitor(args[0], args[1]);
+  case 'rm':
+    deleteMonitor(args[0]);
     break;
   case 'ping':
   case 'test':

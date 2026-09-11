@@ -1,7 +1,7 @@
 {
-  "name": "random-backend",
+  "name": "itz0cat-website",
   "version": "1.0.0",
-  "description": "Modular micro-services backend for utility tasks and keepalives",
+  "description": "Personal developer portfolio website and random utility backend hub",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "ping": "node scripts/ping.js",
     "uptimerobot": "node scripts/uptimerobot.js"
   },
-  "keywords": ["microservices", "keepalive", "fastclient", "utility"],
+  "keywords": ["portfolio", "microservices", "keepalive", "fastclient", "utility"],
   "author": "itz0cat",
   "license": "MIT",
   "dependencies": {

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: random-backend
+    name: itz0cat
     runtime: node
     plan: free
     region: oregon

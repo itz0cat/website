@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<!-- Moving gradient ambient backdrop -->
+<!-- Ambient background mesh -->
 <div class="mesh" aria-hidden="true">
   <div class="mesh-blob blob-a"></div>
   <div class="mesh-blob blob-b"></div>
@@ -30,10 +30,21 @@
     <a href="#work">Projects</a>
     <a href="#tool">FC Lookup</a>
     <a href="#architecture">Architecture</a>
+    <a href="#admin" id="nav-admin-link" style="display: none; color: #fbbf24;">Dev Tools</a>
     <a href="#contact">Contact</a>
   </nav>
 
-  <a class="nav-cta" href="https://github.com/itz0cat" target="_blank" rel="noopener">GitHub</a>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <a class="nav-cta" id="login-btn" href="/api/auth/login" style="background: #5865F2; border-color: #5865F2; display: inline-flex; align-items: center; gap: 6px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      Discord
+    </a>
+    <div id="user-pill" style="display: none; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--glass-border);">
+      <img id="user-avatar" src="" style="width: 22px; height: 22px; border-radius: 50%;">
+      <span id="user-tag" style="font-size: 0.85rem; font-weight: 600; color: #fff;"></span>
+      <button id="logout-btn" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.75rem; margin-left: 4px;">Logout</button>
+    </div>
+  </div>
 
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
     <span></span><span></span><span></span>
@@ -84,6 +95,66 @@
     <div class="glass fact">
       <span class="fact-num">99.9%</span>
       <span class="fact-label">cloud uptime with active UptimeRobot keepalives & CI/CD</span>
+    </div>
+  </section>
+
+  <!-- ============ GATED DEV TOOLS (itz0cat ONLY) ============ -->
+  <section class="admin-section" id="admin">
+    <div class="section-head">
+      <div class="admin-badge">AUTHORIZED OWNER ONLY</div>
+      <h2>Developer Control Center</h2>
+      <p class="section-sub">Authenticated via Discord OAuth as <strong>@itz0cat</strong>. Live controls for background microservices and cloud telemetry.</p>
+    </div>
+
+    <div class="admin-box">
+      <div class="admin-grid">
+        <!-- FastClient Controller Card -->
+        <div class="admin-card">
+          <h3>⚡ FastClient Cloud Pinger</h3>
+          <div class="admin-field">
+            <label for="admin-target-user">Target Minecraft Username</label>
+            <input type="text" id="admin-target-user" class="lookup-input" style="width: 100%;" value="Itz0Cat__">
+          </div>
+          <div class="admin-field">
+            <label for="admin-interval-select">Ping Interval</label>
+            <select id="admin-interval-select" class="lookup-input" style="width: 100%;">
+              <option value="60">Every 60 Seconds</option>
+              <option value="120" selected>Every 120 Seconds (Default Safe)</option>
+              <option value="180">Every 180 Seconds</option>
+              <option value="300">Every 300 Seconds (5 mins)</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;">
+            <button type="button" class="btn btn-primary" id="admin-save-cfg-btn" style="font-size: 0.85rem; padding: 8px 14px;">Save Config</button>
+            <button type="button" class="btn btn-ghost" id="admin-toggle-pinger-btn" style="font-size: 0.85rem; padding: 8px 14px;">Pause Pinger</button>
+            <button type="button" class="btn btn-ghost" id="admin-force-ping-btn" style="font-size: 0.85rem; padding: 8px 14px; border-color: var(--cyan); color: var(--cyan);">Force Ping Now</button>
+          </div>
+          <p id="admin-pinger-feedback" style="font-size: 0.8rem; color: var(--mint); margin-top: 10px;"></p>
+        </div>
+
+        <!-- Live Server Health Card -->
+        <div class="admin-card">
+          <h3>🖥️ Server Resources & Telemetry</h3>
+          <div class="admin-metric">
+            <span>Uptime:</span> <strong id="metric-uptime">Loading...</strong>
+          </div>
+          <div class="admin-metric">
+            <span>Memory (RSS):</span> <strong id="metric-rss">Loading...</strong>
+          </div>
+          <div class="admin-metric">
+            <span>Heap Used:</span> <strong id="metric-heap">Loading...</strong>
+          </div>
+          <div class="admin-metric">
+            <span>Successful Pings:</span> <strong id="metric-success-pings" style="color: var(--mint);">0</strong>
+          </div>
+          <div class="admin-metric">
+            <span>Failed Pings:</span> <strong id="metric-fail-pings">0</strong>
+          </div>
+          <div class="admin-metric">
+            <span>Last Status:</span> <strong id="metric-last-status">200 OK</strong>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

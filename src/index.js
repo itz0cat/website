@@ -1,10 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { healthRouter } from './routes/health.js';
 import { fastClientRouter } from './routes/fastclient.js';
+import { authRouter } from './routes/auth.js';
+import { adminRouter } from './routes/admin.js';
 import { fastClientService } from './modules/fastclient.js';
 
 dotenv.config();
@@ -17,8 +20,9 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '10000', 10);
 const HOST = '0.0.0.0';
 
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Serve static portfolio frontend
 app.use(express.static(PUBLIC_DIR));
@@ -32,18 +36,22 @@ app.get('/api', (req, res) => {
     endpoints: {
       portfolio: 'GET /',
       health: 'GET /health',
+      authLogin: 'GET /api/auth/login',
+      authMe: 'GET /api/auth/me',
+      authLogout: 'POST /api/auth/logout',
       fastclientStatus: 'GET /api/fastclient',
+      fastclientLookup: 'GET /api/fastclient/lookup/:username',
+      fastclientSearch: 'GET /api/fastclient/search?q=...',
       fastclientPing: 'POST /api/fastclient/ping',
-      fastclientToggle: 'POST /api/fastclient/toggle',
-      fastclientCheckUser: 'GET /api/fastclient/check?username=Itz0Cat__'
+      adminStatus: 'GET /api/admin/status (Discord @itz0cat only)',
+      adminConfig: 'POST /api/admin/fastclient/config (Discord @itz0cat only)'
     },
     fastclient: fastClientService.getStatus()
   });
 });
 
-// If browser asks for root, static index.html is served automatically.
-// If client specifically asks for application/json at root, serve JSON.
-app.get('/', (req, res, next) => {
+// Root route handler
+app.get('/', (req, res) => {
   if (req.accepts('html')) {
     return res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
   }
@@ -53,6 +61,8 @@ app.get('/', (req, res, next) => {
 // Mount modular routes
 app.use('/health', healthRouter);
 app.use('/api/fastclient', fastClientRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
 
 const server = app.listen(PORT, HOST, () => {
   console.log(`[itz0cat] Portfolio & Backend online at http://${HOST}:${PORT}`);

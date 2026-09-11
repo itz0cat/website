@@ -10,10 +10,17 @@
     "ping": "node scripts/ping.js",
     "uptimerobot": "node scripts/uptimerobot.js"
   },
-  "keywords": ["portfolio", "microservices", "keepalive", "fastclient", "utility"],
+  "keywords": [
+    "portfolio",
+    "microservices",
+    "keepalive",
+    "fastclient",
+    "utility"
+  ],
   "author": "itz0cat",
   "license": "MIT",
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2"

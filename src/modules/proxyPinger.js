@@ -66,6 +66,7 @@ class UsernameLedger {
   constructor(filePath) {
     this.filePath = filePath;
     this.currentIndex = 0n;
+    this.retryQueue = [];
     this.load();
   }
 
@@ -84,21 +85,39 @@ class UsernameLedger {
     } catch {}
   }
 
+  acquireNext() {
+    if (this.retryQueue.length > 0) {
+      return this.retryQueue.shift();
+    }
+    const name = indexToUsername(this.currentIndex);
+    this.currentIndex++;
+    if (this.currentIndex % 5n === 0n) {
+      this.save();
+    }
+    return name;
+  }
+
+  requeueFailed(name) {
+    if (name && !this.retryQueue.includes(name)) {
+      this.retryQueue.unshift(name);
+    }
+  }
+
+  markSuccess() {
+    this.save();
+  }
+
   getCurrentUsername() {
+    if (this.retryQueue.length > 0) return this.retryQueue[0];
     return indexToUsername(this.currentIndex);
   }
 
   advanceOnSuccess() {
-    this.currentIndex++;
-    this.save();
-    return indexToUsername(this.currentIndex);
+    return this.acquireNext();
   }
 
   next() {
-    const name = indexToUsername(this.currentIndex);
-    this.currentIndex++;
-    this.save();
-    return name;
+    return this.acquireNext();
   }
 }
 
@@ -120,12 +139,13 @@ class ProxyNode {
     this.cooldownUntil = 0;
     this.consecutiveFailures = 0;
     this.isDead = false;
+    this.inUse = false;
     this.successCount = 0;
     this.rateLimitedCount = 0;
   }
 
   get isReady() {
-    return !this.isDead && Date.now() >= this.cooldownUntil;
+    return !this.isDead && !this.inUse && Date.now() >= this.cooldownUntil;
   }
 
   get remainingCooldownSec() {
@@ -206,6 +226,7 @@ class BatchProxyPool {
       const idx = (start + i) % n;
       const candidate = this.proxies[idx];
       if (candidate.isReady) {
+        candidate.inUse = true;
         this.currentIndex = (idx + 1) % n;
         return candidate;
       }
@@ -339,11 +360,13 @@ class ProxyPingerService {
   constructor() {
     this.pool = new BatchProxyPool();
     this.enabled = process.env.FASTCLIENT_PROXY_PINGER !== 'false';
+    this.concurrency = parseInt(process.env.PROXY_PING_CONCURRENCY || '10', 10);
     this.intervalMs = parseInt(process.env.PROXY_PING_INTERVAL_MS || '1500', 10);
     this.running = false;
-    this.loopPromise = null;
+    this.workerPromises = [];
 
     this.stats = {
+      concurrency: this.concurrency,
       totalRequests: 0,
       successfulRequests: 0,
       rateLimitedRequests: 0,
@@ -432,129 +455,114 @@ class ProxyPingerService {
     });
   }
 
-  async runLoop() {
-    console.log('[ProxyPinger] 24/7 background proxy ping loop started.');
-    this.stats.statusMessage = 'RUNNING';
+  async runWorker(workerId) {
+    // Stagger worker boot slightly so they don't all contend at the exact same millisecond
+    await new Promise(r => setTimeout(r, (workerId - 1) * 200));
 
-    // Startup harvest if pool has fewer than 5 proxies
-    if (this.pool.readyCount < 5) {
-      console.log('[ProxyPinger] Startup: Harvesting initial proxy pool...');
-      await this.pool.scrapeAndValidateBatch(250, msg => {
-        this.stats.statusMessage = msg;
-      });
-    }
-
-    let cycleCount = 0;
     while (this.running) {
+      let proxy = null;
+      let username = null;
+
       try {
-        let proxy = this.pool.getReadyProxy();
-
-        // THE IF STATEMENT: All proxies in cooldown?
-        if (!proxy) {
-          const firstProxy = this.pool.getFirstCooldownProxy();
-
-          // Check: Is cooldown for first proxy up?
-          if (firstProxy && firstProxy.remainingCooldownSec <= 1) {
-            const waitMs = Math.max(100, Math.floor(firstProxy.remainingCooldownSec * 1000));
-            this.stats.statusMessage = `Reusing proxy (${(waitMs / 1000).toFixed(1)}s cooldown left)...`;
-            await new Promise(r => setTimeout(r, waitMs));
-            continue;
-          } else {
-            // Cooldown is NOT up -> Scrape 250 new proxies immediately!
-            const remSec = firstProxy ? firstProxy.remainingCooldownSec.toFixed(0) : 'N/A';
-            console.log(`[ProxyPinger] All proxies in cooldown or dead (${remSec}s remaining). Scraping fresh batch...`);
-            this.stats.statusMessage = `All proxies busy (${remSec}s). Scraping 250 fresh candidates...`;
-
-            await this.pool.scrapeAndValidateBatch(250, msg => {
-              this.stats.statusMessage = msg;
-            });
-
-            // If still no ready proxy after scraping, wait for earliest cooldown
-            if (this.pool.readyCount === 0) {
-              const earliest = this.pool.getFirstCooldownProxy();
-              const sleepSec = earliest ? Math.min(30, earliest.remainingCooldownSec) : 10;
-              this.stats.statusMessage = `Waiting ${sleepSec.toFixed(1)}s for proxy cooldown...`;
-              await new Promise(r => setTimeout(r, sleepSec * 1000));
-            }
-            continue;
-          }
-        }
-
-        // Keep pool supplied: if fewer than 5 ready proxies, trigger background scrape
-        if (this.pool.readyCount < 5 && !this.pool.isScraping) {
+        // Auto-replenish pool if ready proxies < 10
+        if (this.pool.readyCount < 10 && !this.pool.isScraping) {
           this.pool.scrapeAndValidateBatch(150, msg => {
             this.stats.statusMessage = msg;
           }).catch(() => {});
         }
 
-        // Active ready proxy found: get CURRENT username without advancing
-        const username = usernameLedger.getCurrentUsername();
+        proxy = this.pool.getReadyProxy();
+
+        if (!proxy) {
+          const earliest = this.pool.getFirstCooldownProxy();
+          const sleepMs = earliest && earliest.remainingCooldownSec <= 1
+            ? Math.max(100, Math.floor(earliest.remainingCooldownSec * 1000))
+            : 250;
+          await new Promise(r => setTimeout(r, sleepMs));
+          continue;
+        }
+
+        // Acquire next sequential username (or retry queue item)
+        username = usernameLedger.acquireNext();
         this.stats.lastTarget = username;
         this.stats.lastProxyMasked = proxy.masked;
-        this.stats.statusMessage = `Pinging "${username}" via ${proxy.masked}...`;
 
         const res = await this.sendPingRequest(proxy, username);
         this.stats.totalRequests++;
         this.stats.lastPingTime = new Date().toISOString();
         this.stats.lastStatusCode = res.statusCode || res.error;
         this.stats.lastLatencyMs = res.latency;
-        cycleCount++;
 
         if (res.statusCode === 200) {
           this.stats.successfulRequests++;
           proxy.successCount++;
           proxy.consecutiveFailures = 0;
-          this.stats.statusMessage = `OK (200) for "${username}" via ${proxy.masked} (${res.latency}ms)`;
-          console.log(`[ProxyPinger] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Total: ${this.stats.totalRequests}, Success: ${this.stats.successfulRequests}, 429: ${this.stats.rateLimitedRequests}`);
+          this.stats.statusMessage = `[W${workerId}] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms)`;
+          console.log(`[ProxyPinger W${workerId}] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Total: ${this.stats.totalRequests}, OK: ${this.stats.successfulRequests}, 429s: ${this.stats.rateLimitedRequests}`);
+          usernameLedger.markSuccess();
 
-          // CRITICAL: Advance ledger ONLY on confirmed 200 OK!
-          usernameLedger.advanceOnSuccess();
-
+          // Wait polite per-worker pause
           await new Promise(r => setTimeout(r, this.intervalMs));
         } else if (res.statusCode === 429) {
           this.stats.rateLimitedRequests++;
           proxy.rateLimitedCount++;
           proxy.cooldownUntil = Date.now() + DEFAULT_COOLDOWN_MS;
-          this.stats.statusMessage = `429 Rate Limit on ${proxy.masked} -> Cooldown 300s (Retrying "${username}")`;
-          console.log(`[ProxyPinger] 429 RateLimit on ${proxy.masked} -> Cooldown 300s. Retrying "${username}" on next proxy.`);
-          // Do NOT advance ledger! Rotate immediately to next proxy to retry the SAME username!
+          this.stats.statusMessage = `[W${workerId}] 429 on ${proxy.masked} -> Cooldown 300s (Requeuing "${username}")`;
+          console.log(`[ProxyPinger W${workerId}] 429 RateLimit on ${proxy.masked}. Requeuing "${username}"`);
+          usernameLedger.requeueFailed(username);
         } else {
-          // Dead / failing proxy: cull it immediately so it NEVER causes another failed ping!
+          // Dead / failing proxy: cull it immediately so it doesn't cause more failed pings
           this.stats.otherErrors++;
-          proxy.consecutiveFailures++;
-          proxy.isDead = true; // Drop dead proxy immediately
-          this.stats.statusMessage = `Culled dead proxy ${proxy.masked} (${res.error || res.statusCode}). Retrying "${username}"...`;
-          // Do NOT advance ledger! The SAME username will be attempted on the next proxy!
+          proxy.isDead = true;
+          this.stats.statusMessage = `[W${workerId}] Culled dead proxy ${proxy.masked} (${res.error || res.statusCode}). Requeuing "${username}"...`;
+          usernameLedger.requeueFailed(username);
           await new Promise(r => setTimeout(r, 50));
         }
       } catch (err) {
-        console.error('[ProxyPinger] Loop error:', err.message);
-        await new Promise(r => setTimeout(r, 2000));
+        if (username) usernameLedger.requeueFailed(username);
+        await new Promise(r => setTimeout(r, 500));
+      } finally {
+        if (proxy) {
+          proxy.inUse = false; // Always release proxy lock
+        }
       }
     }
-
-    this.stats.statusMessage = 'STOPPED';
-    console.log('[ProxyPinger] Background loop stopped.');
   }
 
   start() {
     if (this.running) return;
     this.running = true;
     this.stats.startedAt = new Date().toISOString();
-    this.loopPromise = this.runLoop();
+    console.log(`[ProxyPinger] Starting 24/7 background proxy pinging with ${this.concurrency} parallel workers...`);
+
+    // Startup harvest if pool has fewer than 10 proxies
+    if (this.pool.readyCount < 10) {
+      console.log('[ProxyPinger] Startup: Harvesting initial proxy pool for parallel workers...');
+      this.pool.scrapeAndValidateBatch(200, msg => {
+        this.stats.statusMessage = msg;
+      }).catch(() => {});
+    }
+
+    this.workerPromises = [];
+    for (let i = 1; i <= this.concurrency; i++) {
+      this.workerPromises.push(this.runWorker(i));
+    }
   }
 
   stop() {
     this.running = false;
+    console.log('[ProxyPinger] Stopping all workers...');
   }
 
   getStatus() {
     return {
       service: 'FastClient 24/7 Proxy Pinger',
       running: this.running,
+      concurrency: this.concurrency,
       ledger: {
         currentIndex: usernameLedger.currentIndex.toString(),
-        nextUsername: indexToUsername(usernameLedger.currentIndex)
+        nextUsername: usernameLedger.getCurrentUsername(),
+        retryQueueLength: usernameLedger.retryQueue.length
       },
       stats: this.stats,
       pool: {

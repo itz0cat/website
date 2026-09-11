@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { fastClientService } from '../modules/fastclient.js';
+import { proxyPingerService } from '../modules/proxyPinger.js';
 import { requireAdmin } from '../modules/auth.js';
 
 export const fastClientRouter = Router();
@@ -9,7 +10,38 @@ fastClientRouter.use(requireAdmin);
 
 // GET /api/fastclient - Status & background telemetry
 fastClientRouter.get('/', (req, res) => {
-  res.json(fastClientService.getStatus());
+  res.json({
+    legacy: fastClientService.getStatus(),
+    proxyPinger: proxyPingerService.getStatus()
+  });
+});
+
+// GET /api/fastclient/proxy-pinger - 24/7 Proxy Pinger Live Telemetry
+fastClientRouter.get('/proxy-pinger', (req, res) => {
+  res.json(proxyPingerService.getStatus());
+});
+
+// POST /api/fastclient/proxy-pinger/toggle - Start/Stop 24/7 Proxy Pinger
+fastClientRouter.post('/proxy-pinger/toggle', (req, res) => {
+  if (proxyPingerService.running) {
+    proxyPingerService.stop();
+  } else {
+    proxyPingerService.start();
+  }
+  res.json({
+    message: `Proxy Pinger ${proxyPingerService.running ? 'started' : 'stopped'}`,
+    status: proxyPingerService.getStatus()
+  });
+});
+
+// POST /api/fastclient/proxy-pinger/scrape - Trigger immediate 250 candidate proxy harvest
+fastClientRouter.post('/proxy-pinger/scrape', async (req, res) => {
+  const batchSize = parseInt(req.body?.batchSize || '250', 10);
+  proxyPingerService.pool.scrapeAndValidateBatch(batchSize);
+  res.json({
+    message: `Scrape batch of ${batchSize} triggered in background`,
+    status: proxyPingerService.getStatus()
+  });
 });
 
 // GET /api/fastclient/lookup/:username - Inspect any player, cosmetics & Mojang info
@@ -50,3 +82,4 @@ fastClientRouter.post('/toggle', (req, res) => {
     status: fastClientService.getStatus()
   });
 });
+

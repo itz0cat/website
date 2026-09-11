@@ -10,6 +10,7 @@ import { authRouter } from './routes/auth.js';
 import { adminRouter } from './routes/admin.js';
 import { toolsRouter } from './routes/tools.js';
 import { fastClientService } from './modules/fastclient.js';
+import { proxyPingerService } from './modules/proxyPinger.js';
 
 dotenv.config();
 
@@ -80,11 +81,13 @@ const server = app.listen(PORT, HOST, () => {
 
   // Start background services
   fastClientService.start();
+  proxyPingerService.start();
 });
 
 const shutdown = (signal) => {
   console.log(`[itz0cat] Received ${signal}, gracefully shutting down...`);
   fastClientService.stop();
+  proxyPingerService.stop();
   server.close(() => {
     console.log('[itz0cat] Server shut down gracefully.');
     process.exit(0);

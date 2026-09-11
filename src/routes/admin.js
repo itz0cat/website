@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireAdmin } from '../modules/auth.js';
 import { fastClientService } from '../modules/fastclient.js';
+import { proxyPingerService } from '../modules/proxyPinger.js';
 
 export const adminRouter = Router();
 
@@ -13,6 +14,7 @@ adminRouter.get('/status', (req, res) => {
   res.json({
     admin: req.user.username,
     fastclient: fastClientService.getStatus(),
+    proxyPinger: proxyPingerService.getStatus(),
     system: {
       uptimeSeconds: Math.floor(process.uptime()),
       nodeVersion: process.version,
@@ -86,3 +88,27 @@ adminRouter.post('/fastclient/ping', async (req, res) => {
     status: fastClientService.getStatus()
   });
 });
+
+// POST /api/admin/proxy-pinger/toggle - Start/Stop 24/7 Proxy Pinger
+adminRouter.post('/proxy-pinger/toggle', (req, res) => {
+  if (proxyPingerService.running) {
+    proxyPingerService.stop();
+  } else {
+    proxyPingerService.start();
+  }
+  res.json({
+    message: `24/7 Proxy Pinger ${proxyPingerService.running ? 'started' : 'stopped'}`,
+    status: proxyPingerService.getStatus()
+  });
+});
+
+// POST /api/admin/proxy-pinger/scrape - Trigger immediate candidate proxy harvest
+adminRouter.post('/proxy-pinger/scrape', (req, res) => {
+  const batchSize = parseInt(req.body?.batchSize || '250', 10);
+  proxyPingerService.pool.scrapeAndValidateBatch(batchSize);
+  res.json({
+    message: `Batch proxy scrape (${batchSize}) started in background`,
+    status: proxyPingerService.getStatus()
+  });
+});
+

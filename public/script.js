@@ -606,9 +606,75 @@ async function loadAdminTelemetry() {
         ? `HTTP ${data.fastclient.stats.lastStatusCode}`
         : 'Pending';
     }
+
+    // 24/7 Proxy Pinger Telemetry
+    if (data.proxyPinger) {
+      const p = data.proxyPinger;
+      const elReady = document.getElementById('proxy-metric-ready');
+      const elTotal = document.getElementById('proxy-metric-total');
+      const elCd = document.getElementById('proxy-metric-cooldown');
+      const elSuccess = document.getElementById('proxy-metric-success');
+      const el429 = document.getElementById('proxy-metric-429');
+      const elIp = document.getElementById('proxy-metric-ip');
+      const elStatus = document.getElementById('proxy-status-msg');
+      const elBadge = document.getElementById('proxy-badge-status');
+      const btnToggle = document.getElementById('btn-toggle-proxy-pinger');
+
+      if (elReady) elReady.textContent = `${p.pool?.ready || 0} ready`;
+      if (elTotal) elTotal.textContent = `${p.pool?.total || 0} total`;
+      if (elCd) elCd.textContent = `${p.pool?.inCooldown || 0} in cooldown`;
+      if (elSuccess) elSuccess.textContent = p.stats?.successfulRequests || 0;
+      if (el429) el429.textContent = p.stats?.rateLimitedRequests || 0;
+      if (elIp) elIp.textContent = p.stats?.lastProxyMasked || 'NONE';
+      if (elStatus) elStatus.textContent = p.stats?.statusMessage || 'Standby';
+      if (elBadge) {
+        elBadge.textContent = p.running ? 'RUNNING' : 'PAUSED';
+        elBadge.className = p.running ? 'tool-badge' : 'tool-badge bg-red';
+      }
+      if (btnToggle) {
+        btnToggle.textContent = p.running ? 'Pause Proxy Pinger' : 'Resume Proxy Pinger';
+      }
+    }
   } catch (err) {
     console.error('Admin telemetry fetch error:', err);
   }
+}
+
+// 24/7 Proxy Pinger Button Handlers
+const btnToggleProxy = document.getElementById('btn-toggle-proxy-pinger');
+const btnScrapeProxy = document.getElementById('btn-scrape-proxies');
+const proxyFeedback = document.getElementById('proxy-pinger-feedback');
+
+if (btnToggleProxy) {
+  btnToggleProxy.addEventListener('click', async () => {
+    if (proxyFeedback) proxyFeedback.textContent = 'Updating proxy pinger state...';
+    try {
+      const res = await fetch('/api/admin/proxy-pinger/toggle', { method: 'POST' });
+      const json = await res.json();
+      if (proxyFeedback) proxyFeedback.textContent = json.message || 'Updated';
+      loadAdminTelemetry();
+    } catch (e) {
+      if (proxyFeedback) proxyFeedback.textContent = `Error: ${e.message}`;
+    }
+  });
+}
+
+if (btnScrapeProxy) {
+  btnScrapeProxy.addEventListener('click', async () => {
+    if (proxyFeedback) proxyFeedback.textContent = 'Batch harvest started in background...';
+    try {
+      const res = await fetch('/api/admin/proxy-pinger/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ batchSize: 250 })
+      });
+      const json = await res.json();
+      if (proxyFeedback) proxyFeedback.textContent = json.message || 'Scraping started.';
+      loadAdminTelemetry();
+    } catch (e) {
+      if (proxyFeedback) proxyFeedback.textContent = `Error: ${e.message}`;
+    }
+  });
 }
 
 if (adminSaveCfgBtn) {
@@ -668,6 +734,7 @@ if (adminForcePingBtn) {
     }
   });
 }
+
 
 // 12. Logout Handler
 const logoutBtn = document.getElementById('logout-btn');

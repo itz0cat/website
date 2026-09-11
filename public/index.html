@@ -890,8 +890,56 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 24/7 Rotating Proxy Pinger Controller -->
+              <div class="glass dev-tool-card" style="grid-column: 1 / -1;">
+                <div class="card-top">
+                  <h3 class="tool-heading">🔄 24/7 Rotating Proxy Pinger</h3>
+                  <span class="tool-badge" id="proxy-badge-status">RUNNING</span>
+                </div>
+                <p class="tool-desc">
+                  Autonomous background loop utilizing dynamic proxy pools with per-IP rate limit isolation (5 req / 300s). Automatically checks cooldowns and harvests fresh proxy batches when needed.
+                </p>
+
+                <div class="admin-btn-row" style="margin-bottom: 20px;">
+                  <button type="button" class="btn btn-primary" id="btn-toggle-proxy-pinger">Pause Proxy Pinger</button>
+                  <button type="button" class="btn btn-ghost btn-cyan" id="btn-scrape-proxies">Harvest 250 Proxies</button>
+                  <span id="proxy-pinger-feedback" class="admin-feedback" style="margin-left: 12px; align-self: center;"></span>
+                </div>
+
+                <div class="telemetry-grid">
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Proxy Pool Ready</span>
+                    <strong class="telemetry-val text-mint" id="proxy-metric-ready">0 ready</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Total Proxies</span>
+                    <strong class="telemetry-val" id="proxy-metric-total">0 total</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">In Cooldown</span>
+                    <strong class="telemetry-val" id="proxy-metric-cooldown">0 in cooldown</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Successful Pings</span>
+                    <strong class="telemetry-val text-mint" id="proxy-metric-success">0</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Rate Limits (429)</span>
+                    <strong class="telemetry-val text-red" id="proxy-metric-429">0</strong>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Current Proxy IP</span>
+                    <strong class="telemetry-val" id="proxy-metric-ip">DIRECT</strong>
+                  </div>
+                </div>
+                <div style="margin-top: 14px; font-size: 0.85rem; color: var(--text-muted);">
+                  <strong>Active State:</strong> <span id="proxy-status-msg" style="color: var(--accent-cyan);">Initializing loop...</span>
+                </div>
+              </div>
             </div>
           </div>
+
 
         </div>
 

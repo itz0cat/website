@@ -245,3 +245,13 @@ toolsRouter.get('/uuid/:query', (req, res) => {
     }
   });
 });
+
+// 5. GET /api/tools/proxy-pinger - FastClient 24/7 Proxy Pinger Live Telemetry
+toolsRouter.get('/proxy-pinger', async (req, res) => {
+  const { proxyPingerService } = await import('../modules/proxyPinger.js');
+  res.json({
+    success: true,
+    telemetry: proxyPingerService.getStatus()
+  });
+});
+

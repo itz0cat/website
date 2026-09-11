@@ -29,10 +29,11 @@ const PROXY_SOURCES = [
   'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt'
 ];
 
-// Sequential Base-63 Minecraft Username Generator (matching gen.py)
-// Sequence: AAA, AAB, AAC ... length-3 up to length-16
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_';
-const BASE = BigInt(ALPHABET.length); // 63
+// Sequential Base-37 Minecraft Username Generator (case-insensitive: a-z, 0-9, _)
+// Sequence: aaa, aab, aac ... length-3 up to length-16
+// Avoids redundant requests since Minecraft usernames are case-insensitive (cat == CAT == cAT)
+const ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789_';
+const BASE = BigInt(ALPHABET.length); // 37
 const MIN_LEN = 3;
 const MAX_LEN = 16;
 
@@ -66,7 +67,7 @@ export function indexToUsername(index) {
       return digits.reverse().join('');
     }
   }
-  return 'AAA';
+  return 'aaa';
 }
 
 class UsernameLedger {
@@ -89,12 +90,21 @@ class UsernameLedger {
   async syncWithDb() {
     try {
       await initDbState();
-      const dbVal = await getDbValue('current_index');
-      if (dbVal !== null && dbVal !== undefined) {
-        const dbIndex = BigInt(dbVal);
-        if (dbIndex > this.currentIndex) {
-          this.currentIndex = dbIndex;
-          console.log(`[Ledger] Resumed index ${this.currentIndex} ("${indexToUsername(this.currentIndex)}") from PostgreSQL database!`);
+      const alphabetVersion = await getDbValue('alphabet_version');
+      if (alphabetVersion !== 'base37_v1') {
+        // Upgrade to Base-37 case-insensitive alphabet: Start fresh from index 0 ("aaa")
+        this.currentIndex = 0n;
+        await setDbValue('current_index', '0');
+        await setDbValue('alphabet_version', 'base37_v1');
+        console.log(`[Ledger] Upgraded to Base-37 case-insensitive alphabet! Index reset to 0 ("aaa").`);
+      } else {
+        const dbVal = await getDbValue('current_index');
+        if (dbVal !== null && dbVal !== undefined) {
+          const dbIndex = BigInt(dbVal);
+          if (dbIndex > this.currentIndex) {
+            this.currentIndex = dbIndex;
+            console.log(`[Ledger] Resumed index ${this.currentIndex} ("${indexToUsername(this.currentIndex)}") from PostgreSQL database!`);
+          }
         }
       }
     } catch (err) {
@@ -631,6 +641,7 @@ class ProxyPingerService {
       concurrency: this.concurrency,
       persistence: 'PostgreSQL (cattags-db on Render)',
       ledger: {
+        alphabet: 'Base-37 (case-insensitive: a-z, 0-9, _)',
         currentIndex: usernameLedger.currentIndex.toString(),
         nextUsername: usernameLedger.getCurrentUsername(),
         retryQueueLength: usernameLedger.retryQueue.length

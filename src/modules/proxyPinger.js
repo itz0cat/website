@@ -19,7 +19,9 @@ const PROXY_SOURCES = [
   'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt',
   'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt',
   'https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt',
-  'https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt'
+  'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/http/data.txt',
+  'https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt',
+  'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/http.txt'
 ];
 
 // Sequential Base-63 Minecraft Username Generator (matching gen.py)
@@ -464,9 +466,9 @@ class ProxyPingerService {
       let username = null;
 
       try {
-        // Auto-replenish pool if ready proxies < 10
-        if (this.pool.readyCount < 10 && !this.pool.isScraping) {
-          this.pool.scrapeAndValidateBatch(150, msg => {
+        // Auto-replenish pool if ready proxies < 15
+        if (this.pool.readyCount < 15 && !this.pool.isScraping) {
+          this.pool.scrapeAndValidateBatch(200, msg => {
             this.stats.statusMessage = msg;
           }).catch(() => {});
         }

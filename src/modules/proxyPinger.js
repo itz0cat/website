@@ -17,20 +17,30 @@ const REQUEST_TIMEOUT_MS = 4000;
 const DEFAULT_COOLDOWN_MS = 300000; // 5 minutes
 
 const PROXY_SOURCES = [
-  'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt',
-  'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt',
-  'https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt',
-  'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/http/data.txt',
-  'https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt',
-  'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/http.txt',
-  'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/http.txt',
-  'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt',
-  'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt',
-  'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt',
-  'https://raw.githubusercontent.com/sunny9577/proxy-scraper/master/generated/http_proxies.txt',
-  'https://raw.githubusercontent.com/prxchk/proxy-list/main/http.txt',
-  'https://raw.githubusercontent.com/officialputuid/KangProxy/KangProxy/http/http.txt',
-  'https://raw.githubusercontent.com/ErcinDedeoglu/proxies/main/proxies/http.txt'
+  // HTTP / HTTPS Feeds
+  { url: 'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/http/data.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/sunny9577/proxy-scraper/master/generated/http_proxies.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/prxchk/proxy-list/main/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/officialputuid/KangProxy/KangProxy/http/http.txt', protocol: 'http' },
+  { url: 'https://raw.githubusercontent.com/ErcinDedeoglu/proxies/main/proxies/http.txt', protocol: 'http' },
+  // Fast SOCKS5 & SOCKS4 Feeds
+  { url: 'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks5.txt', protocol: 'socks5' },
+  { url: 'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks4.txt', protocol: 'socks4' },
+  { url: 'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks5.txt', protocol: 'socks5' },
+  { url: 'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks4.txt', protocol: 'socks4' },
+  { url: 'https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt', protocol: 'socks5' },
+  { url: 'https://raw.githubusercontent.com/sunny9577/proxy-scraper/master/generated/socks5_proxies.txt', protocol: 'socks5' },
+  { url: 'https://raw.githubusercontent.com/sunny9577/proxy-scraper/master/generated/socks4_proxies.txt', protocol: 'socks4' },
+  { url: 'https://raw.githubusercontent.com/roosterkid/openproxylist/main/SOCKS5_RAW.txt', protocol: 'socks5' }
 ];
 
 // Sequential Base-37 Minecraft Username Generator (case-insensitive: a-z, 0-9, _)
@@ -296,20 +306,22 @@ class BatchProxyPool {
     return alive.reduce((earliest, p) => (p.cooldownUntil < earliest.cooldownUntil ? p : earliest), alive[0]);
   }
 
-  async scrapeAndValidateBatch(batchSize = 250, onProgress = null) {
+  async scrapeAndValidateBatch(batchSize = 350, onProgress = null) {
     if (this.isScraping) return 0;
     this.isScraping = true;
 
     try {
-      if (onProgress) onProgress(`Scraping fresh candidate proxies across ${PROXY_SOURCES.length} sources...`);
+      if (onProgress) onProgress(`Scraping fresh candidate proxies across ${PROXY_SOURCES.length} HTTP/SOCKS feeds...`);
       const candidates = new Set();
-      const perSourceCap = Math.ceil(batchSize / PROXY_SOURCES.length) + 15;
+      const perSourceCap = Math.ceil(batchSize / PROXY_SOURCES.length) + 20;
 
       // Fetch all sources concurrently
       await Promise.allSettled(
         PROXY_SOURCES.map(async src => {
           try {
-            const res = await fetch(src, { signal: AbortSignal.timeout(5000) });
+            const feedUrl = typeof src === 'string' ? src : src.url;
+            const proto = typeof src === 'string' ? 'http' : (src.protocol || 'http');
+            const res = await fetch(feedUrl, { signal: AbortSignal.timeout(5000) });
             if (res.ok) {
               const text = await res.text();
               const lines = text.split('\n');
@@ -317,7 +329,7 @@ class BatchProxyPool {
               for (const raw of lines) {
                 const line = raw.trim();
                 if (line && !line.startsWith('#') && /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}$/.test(line)) {
-                  const pUrl = `http://${line}`;
+                  const pUrl = `${proto}://${line}`;
                   if (!this.testedCandidates.has(pUrl)) {
                     candidates.add(pUrl);
                     taken++;
@@ -337,12 +349,12 @@ class BatchProxyPool {
         return 0;
       }
 
-      if (onProgress) onProgress(`Validating ${list.length} candidates against FastClient API...`);
+      if (onProgress) onProgress(`Validating ${list.length} candidate proxies (HTTP & SOCKS)...`);
       let found = 0;
       let tested = 0;
 
-      // Validate in parallel chunks of 25 with 2000ms timeout
-      const CHUNK_SIZE = 25;
+      // Validate in parallel chunks of 30 with 2000ms timeout
+      const CHUNK_SIZE = 30;
       for (let i = 0; i < list.length; i += CHUNK_SIZE) {
         if (!this.isScraping) break;
         const chunk = list.slice(i, i + CHUNK_SIZE);
@@ -425,8 +437,8 @@ class ProxyPingerService {
   constructor() {
     this.pool = new BatchProxyPool();
     this.enabled = process.env.FASTCLIENT_PROXY_PINGER !== 'false';
-    this.concurrency = parseInt(process.env.PROXY_PING_CONCURRENCY || '10', 10);
-    this.intervalMs = parseInt(process.env.PROXY_PING_INTERVAL_MS || '1500', 10);
+    this.concurrency = parseInt(process.env.PROXY_PING_CONCURRENCY || '18', 10);
+    this.intervalMs = parseInt(process.env.PROXY_PING_INTERVAL_MS || '300', 10);
     this.running = false;
     this.workerPromises = [];
 
@@ -531,9 +543,9 @@ class ProxyPingerService {
       let username = null;
 
       try {
-        // Auto-replenish pool if ready proxies < 20
-        if (this.pool.readyCount < 20 && !this.pool.isScraping) {
-          this.pool.scrapeAndValidateBatch(250, msg => {
+        // Auto-replenish pool if ready proxies < 50
+        if (this.pool.readyCount < 50 && !this.pool.isScraping) {
+          this.pool.scrapeAndValidateBatch(350, msg => {
             this.stats.statusMessage = msg;
           }).catch(() => {});
         }
@@ -543,15 +555,15 @@ class ProxyPingerService {
         if (!proxy) {
           // Pool starved: trigger scraper immediately if idle
           if (!this.pool.isScraping) {
-            this.pool.scrapeAndValidateBatch(250, msg => {
+            this.pool.scrapeAndValidateBatch(350, msg => {
               this.stats.statusMessage = msg;
             }).catch(() => {});
           }
 
           const earliest = this.pool.getFirstCooldownProxy();
           const sleepMs = earliest && earliest.remainingCooldownSec <= 1
-            ? Math.max(100, Math.floor(earliest.remainingCooldownSec * 1000))
-            : 350;
+            ? Math.max(50, Math.floor(earliest.remainingCooldownSec * 1000))
+            : 200;
           await new Promise(r => setTimeout(r, sleepMs));
           continue;
         }
@@ -623,16 +635,16 @@ class ProxyPingerService {
     console.log('[ProxyPinger] Continuous background proxy harvester active.');
     while (this.running) {
       try {
-        // Keep pool flooded with ready proxies (target >= 40 ready)
-        if (this.pool.readyCount < 40 && !this.pool.isScraping) {
-          await this.pool.scrapeAndValidateBatch(250, msg => {
+        // Keep pool flooded with ready proxies (target >= 65 ready)
+        if (this.pool.readyCount < 65 && !this.pool.isScraping) {
+          await this.pool.scrapeAndValidateBatch(350, msg => {
             this.stats.statusMessage = msg;
           });
         }
       } catch (err) {
         console.warn('[Harvester] Scrape error:', err.message);
       }
-      await new Promise(r => setTimeout(r, 10000));
+      await new Promise(r => setTimeout(r, 7000));
     }
   }
 

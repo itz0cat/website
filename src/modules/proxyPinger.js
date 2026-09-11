@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { SocksProxyAgent } from 'socks-proxy-agent';
+import { initDbState, getDbValue, setDbValue, saveWorkingProxiesToDb, getWorkingProxiesFromDb } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +22,11 @@ const PROXY_SOURCES = [
   'https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt',
   'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/http/data.txt',
   'https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt',
-  'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/http.txt'
+  'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/http.txt',
+  'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/http.txt',
+  'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt',
+  'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt',
+  'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt'
 ];
 
 // Sequential Base-63 Minecraft Username Generator (matching gen.py)
@@ -69,10 +74,10 @@ class UsernameLedger {
     this.filePath = filePath;
     this.currentIndex = 0n;
     this.retryQueue = [];
-    this.load();
+    this.loadFromDisk();
   }
 
-  load() {
+  loadFromDisk() {
     try {
       if (fs.existsSync(this.filePath)) {
         const raw = fs.readFileSync(this.filePath, 'utf-8').trim();
@@ -81,10 +86,27 @@ class UsernameLedger {
     } catch {}
   }
 
+  async syncWithDb() {
+    try {
+      await initDbState();
+      const dbVal = await getDbValue('current_index');
+      if (dbVal !== null && dbVal !== undefined) {
+        const dbIndex = BigInt(dbVal);
+        if (dbIndex > this.currentIndex) {
+          this.currentIndex = dbIndex;
+          console.log(`[Ledger] Resumed index ${this.currentIndex} ("${indexToUsername(this.currentIndex)}") from PostgreSQL database!`);
+        }
+      }
+    } catch (err) {
+      console.warn('[Ledger] DB sync warning:', err.message);
+    }
+  }
+
   save() {
     try {
       fs.writeFileSync(this.filePath, this.currentIndex.toString(), 'utf-8');
     } catch {}
+    setDbValue('current_index', this.currentIndex.toString()).catch(() => {});
   }
 
   acquireNext() {
@@ -182,10 +204,28 @@ class BatchProxyPool {
     } catch {}
   }
 
+  async syncWithDb() {
+    try {
+      const dbProxies = await getWorkingProxiesFromDb();
+      if (Array.isArray(dbProxies) && dbProxies.length > 0) {
+        let added = 0;
+        for (const p of dbProxies) {
+          if (this.addProxy(p)) added++;
+        }
+        if (added > 0) {
+          console.log(`[ProxyPool] Restored ${added} working proxies from PostgreSQL database!`);
+        }
+      }
+    } catch (err) {
+      console.warn('[ProxyPool] DB sync warning:', err.message);
+    }
+  }
+
   saveToDisk() {
     try {
       const active = this.proxies.filter(p => !p.isDead).map(p => p.url);
       fs.writeFileSync(PROXIES_FILE, active.join('\n') + '\n', 'utf-8');
+      saveWorkingProxiesToDb(active).catch(() => {});
     } catch {}
   }
 
@@ -371,6 +411,8 @@ class ProxyPingerService {
       concurrency: this.concurrency,
       totalRequests: 0,
       successfulRequests: 0,
+      cumulativeSuccessfulRequests: 0,
+      cumulativeTotalRequests: 0,
       rateLimitedRequests: 0,
       otherErrors: 0,
       lastPingTime: null,
@@ -466,9 +508,9 @@ class ProxyPingerService {
       let username = null;
 
       try {
-        // Auto-replenish pool if ready proxies < 15
-        if (this.pool.readyCount < 15 && !this.pool.isScraping) {
-          this.pool.scrapeAndValidateBatch(200, msg => {
+        // Auto-replenish pool if ready proxies < 20
+        if (this.pool.readyCount < 20 && !this.pool.isScraping) {
+          this.pool.scrapeAndValidateBatch(250, msg => {
             this.stats.statusMessage = msg;
           }).catch(() => {});
         }
@@ -497,11 +539,18 @@ class ProxyPingerService {
 
         if (res.statusCode === 200) {
           this.stats.successfulRequests++;
+          this.stats.cumulativeSuccessfulRequests++;
           proxy.successCount++;
           proxy.consecutiveFailures = 0;
           this.stats.statusMessage = `[W${workerId}] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms)`;
-          console.log(`[ProxyPinger W${workerId}] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Total: ${this.stats.totalRequests}, OK: ${this.stats.successfulRequests}, 429s: ${this.stats.rateLimitedRequests}`);
+          console.log(`[ProxyPinger W${workerId}] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Session: ${this.stats.successfulRequests}, Cumulative DB: ${this.stats.cumulativeSuccessfulRequests}`);
           usernameLedger.markSuccess();
+
+          // Persist cumulative counts to DB every 5 successful pings
+          if (this.stats.successfulRequests % 5 === 0) {
+            setDbValue('cumulative_successful_pings', this.stats.cumulativeSuccessfulRequests.toString()).catch(() => {});
+            setDbValue('cumulative_total_requests', (this.stats.cumulativeTotalRequests + this.stats.totalRequests).toString()).catch(() => {});
+          }
 
           // Wait polite per-worker pause
           await new Promise(r => setTimeout(r, this.intervalMs));
@@ -531,16 +580,35 @@ class ProxyPingerService {
     }
   }
 
-  start() {
+  async start() {
     if (this.running) return;
     this.running = true;
     this.stats.startedAt = new Date().toISOString();
+
+    // 1. Sync state with PostgreSQL so redeploys NEVER reset progress
+    try {
+      await usernameLedger.syncWithDb();
+      await this.pool.syncWithDb();
+
+      const dbSuccess = await getDbValue('cumulative_successful_pings');
+      if (dbSuccess) {
+        this.stats.cumulativeSuccessfulRequests = parseInt(dbSuccess, 10);
+      }
+      const dbTotal = await getDbValue('cumulative_total_requests');
+      if (dbTotal) {
+        this.stats.cumulativeTotalRequests = parseInt(dbTotal, 10);
+      }
+      console.log(`[ProxyPinger] PostgreSQL state loaded: Cumulative Success = ${this.stats.cumulativeSuccessfulRequests}, Ledger Index = ${usernameLedger.currentIndex}`);
+    } catch (err) {
+      console.warn('[ProxyPinger] DB init warning:', err.message);
+    }
+
     console.log(`[ProxyPinger] Starting 24/7 background proxy pinging with ${this.concurrency} parallel workers...`);
 
-    // Startup harvest if pool has fewer than 10 proxies
-    if (this.pool.readyCount < 10) {
+    // 2. Startup harvest if pool has fewer than 15 proxies
+    if (this.pool.readyCount < 15) {
       console.log('[ProxyPinger] Startup: Harvesting initial proxy pool for parallel workers...');
-      this.pool.scrapeAndValidateBatch(200, msg => {
+      this.pool.scrapeAndValidateBatch(250, msg => {
         this.stats.statusMessage = msg;
       }).catch(() => {});
     }
@@ -561,12 +629,16 @@ class ProxyPingerService {
       service: 'FastClient 24/7 Proxy Pinger',
       running: this.running,
       concurrency: this.concurrency,
+      persistence: 'PostgreSQL (cattags-db on Render)',
       ledger: {
         currentIndex: usernameLedger.currentIndex.toString(),
         nextUsername: usernameLedger.getCurrentUsername(),
         retryQueueLength: usernameLedger.retryQueue.length
       },
-      stats: this.stats,
+      stats: {
+        ...this.stats,
+        totalCompletedPings: this.stats.cumulativeSuccessfulRequests
+      },
       pool: {
         total: this.pool.totalCount,
         ready: this.pool.readyCount,

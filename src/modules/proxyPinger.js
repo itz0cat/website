@@ -12,7 +12,7 @@ const PROXIES_FILE = path.join(__dirname, '../../proxies.txt');
 
 const PING_ENDPOINT = 'https://api.fastclient.net/api/fastclient/ping';
 const USER_AGENT = 'FastClient/1.21.11';
-const REQUEST_TIMEOUT_MS = 8000;
+const REQUEST_TIMEOUT_MS = 4000;
 const DEFAULT_COOLDOWN_MS = 300000; // 5 minutes
 
 const PROXY_SOURCES = [
@@ -82,6 +82,16 @@ class UsernameLedger {
     try {
       fs.writeFileSync(this.filePath, this.currentIndex.toString(), 'utf-8');
     } catch {}
+  }
+
+  getCurrentUsername() {
+    return indexToUsername(this.currentIndex);
+  }
+
+  advanceOnSuccess() {
+    this.currentIndex++;
+    this.save();
+    return indexToUsername(this.currentIndex);
   }
 
   next() {
@@ -289,9 +299,9 @@ class BatchProxyPool {
       };
 
       const timer = setTimeout(() => {
-        try { req.destroy(); } catch {}
+        try { if (req) req.destroy(); } catch {}
         finish(false);
-      }, 5000);
+      }, 3000);
 
       let req;
       try {
@@ -470,11 +480,18 @@ class ProxyPingerService {
           }
         }
 
-        // Active ready proxy found (sequential base-63 username: AAA, AAB, AAC...)
-        const username = usernameLedger.next();
+        // Keep pool supplied: if fewer than 5 ready proxies, trigger background scrape
+        if (this.pool.readyCount < 5 && !this.pool.isScraping) {
+          this.pool.scrapeAndValidateBatch(150, msg => {
+            this.stats.statusMessage = msg;
+          }).catch(() => {});
+        }
+
+        // Active ready proxy found: get CURRENT username without advancing
+        const username = usernameLedger.getCurrentUsername();
         this.stats.lastTarget = username;
         this.stats.lastProxyMasked = proxy.masked;
-        this.stats.statusMessage = `Pinging via ${proxy.masked}...`;
+        this.stats.statusMessage = `Pinging "${username}" via ${proxy.masked}...`;
 
         const res = await this.sendPingRequest(proxy, username);
         this.stats.totalRequests++;
@@ -487,27 +504,28 @@ class ProxyPingerService {
           this.stats.successfulRequests++;
           proxy.successCount++;
           proxy.consecutiveFailures = 0;
-          this.stats.statusMessage = `OK (200) via ${proxy.masked} (${res.latency}ms)`;
+          this.stats.statusMessage = `OK (200) for "${username}" via ${proxy.masked} (${res.latency}ms)`;
           console.log(`[ProxyPinger] OK (200) -> "${username}" via ${proxy.masked} (${res.latency}ms) | Total: ${this.stats.totalRequests}, Success: ${this.stats.successfulRequests}, 429: ${this.stats.rateLimitedRequests}`);
+
+          // CRITICAL: Advance ledger ONLY on confirmed 200 OK!
+          usernameLedger.advanceOnSuccess();
+
           await new Promise(r => setTimeout(r, this.intervalMs));
         } else if (res.statusCode === 429) {
           this.stats.rateLimitedRequests++;
           proxy.rateLimitedCount++;
           proxy.cooldownUntil = Date.now() + DEFAULT_COOLDOWN_MS;
-          this.stats.statusMessage = `429 Rate Limit on ${proxy.masked} -> Cooldown 300s`;
-          console.log(`[ProxyPinger] 429 RateLimit on ${proxy.masked} -> Cooldown 300s`);
-          // Rotate immediately to next proxy without pause
+          this.stats.statusMessage = `429 Rate Limit on ${proxy.masked} -> Cooldown 300s (Retrying "${username}")`;
+          console.log(`[ProxyPinger] 429 RateLimit on ${proxy.masked} -> Cooldown 300s. Retrying "${username}" on next proxy.`);
+          // Do NOT advance ledger! Rotate immediately to next proxy to retry the SAME username!
         } else {
+          // Dead / failing proxy: cull it immediately so it NEVER causes another failed ping!
           this.stats.otherErrors++;
           proxy.consecutiveFailures++;
-          if (proxy.consecutiveFailures >= 3) {
-            proxy.isDead = true;
-          }
-          this.stats.statusMessage = `Error (${res.error || res.statusCode}) on ${proxy.masked}`;
-          if (cycleCount % 10 === 0) {
-            console.log(`[ProxyPinger Pool] Requests: ${this.stats.totalRequests} | OK: ${this.stats.successfulRequests} | 429s: ${this.stats.rateLimitedRequests} | Pool Ready: ${this.pool.readyCount}, Cooldown: ${this.pool.inCooldownCount}`);
-          }
-          await new Promise(r => setTimeout(r, 200));
+          proxy.isDead = true; // Drop dead proxy immediately
+          this.stats.statusMessage = `Culled dead proxy ${proxy.masked} (${res.error || res.statusCode}). Retrying "${username}"...`;
+          // Do NOT advance ledger! The SAME username will be attempted on the next proxy!
+          await new Promise(r => setTimeout(r, 50));
         }
       } catch (err) {
         console.error('[ProxyPinger] Loop error:', err.message);

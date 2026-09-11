@@ -80,8 +80,8 @@ const server = app.listen(PORT, HOST, () => {
   console.log(`[itz0cat] Portfolio & Backend online at http://${HOST}:${PORT}`);
   console.log(`[itz0cat] Health check available at http://${HOST}:${PORT}/health`);
 
-  // Start background services
-  fastClientService.start();
+  // Start background services (direct Itz0Cat__ pinger disabled per user request)
+  // fastClientService.start();
   proxyPingerService.start();
 });
 

@@ -6,7 +6,7 @@ const MOJANG_API = 'https://api.mojang.com/users/profiles/minecraft';
 class FastClientService {
   constructor() {
     this.username = process.env.FASTCLIENT_USER || 'Itz0Cat__';
-    this.enabled = process.env.FASTCLIENT_AUTO_PING === 'true';
+    this.enabled = false; // Disabled per user request
     this.intervalMs = parseInt(process.env.FASTCLIENT_INTERVAL_MS || '120000', 10);
     this.timer = null;
 

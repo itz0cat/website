@@ -255,3 +255,13 @@ toolsRouter.get('/proxy-pinger', async (req, res) => {
   });
 });
 
+// 6. GET /api/tools/afkbot - 24/7 Minecraft AFK Bot Live Telemetry
+toolsRouter.get('/afkbot', async (req, res) => {
+  const { afkBotService } = await import('../modules/afkbot.js');
+  res.json({
+    success: true,
+    telemetry: afkBotService.getStatus()
+  });
+});
+
+

@@ -11,6 +11,7 @@ import { adminRouter } from './routes/admin.js';
 import { toolsRouter } from './routes/tools.js';
 import { fastClientService } from './modules/fastclient.js';
 import { proxyPingerService } from './modules/proxyPinger.js';
+import { afkBotService } from './modules/afkbot.js';
 
 dotenv.config();
 
@@ -49,7 +50,8 @@ app.get('/api', (req, res) => {
       adminConfig: 'POST /api/admin/fastclient/config (Discord @itz0cat only)'
     },
     fastclient: fastClientService.getStatus(),
-    proxyPinger: proxyPingerService.getStatus()
+    proxyPinger: proxyPingerService.getStatus(),
+    afkBot: afkBotService.getStatus()
   });
 });
 
@@ -83,12 +85,14 @@ const server = app.listen(PORT, HOST, () => {
   // Start background services (direct Itz0Cat__ pinger disabled per user request)
   // fastClientService.start();
   proxyPingerService.start();
+  afkBotService.start();
 });
 
 const shutdown = (signal) => {
   console.log(`[itz0cat] Received ${signal}, gracefully shutting down...`);
   fastClientService.stop();
   proxyPingerService.stop();
+  afkBotService.stop();
   server.close(() => {
     console.log('[itz0cat] Server shut down gracefully.');
     process.exit(0);

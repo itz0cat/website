@@ -188,7 +188,15 @@ function initToolTabs() {
         targetPanel.style.display = 'block';
       }
 
-      if (targetId === 'tab-admin' && currentUser?.isAdmin) {
+      if (afkBotPollTimer) {
+        clearInterval(afkBotPollTimer);
+        afkBotPollTimer = null;
+      }
+
+      if (targetId === 'tab-afkbot') {
+        loadAfkBotTelemetry();
+        afkBotPollTimer = setInterval(loadAfkBotTelemetry, 4000);
+      } else if (targetId === 'tab-admin' && currentUser?.isAdmin) {
         loadAdminTelemetry();
       }
     });
@@ -635,6 +643,10 @@ async function loadAdminTelemetry() {
         btnToggle.textContent = p.running ? 'Pause Proxy Pinger' : 'Resume Proxy Pinger';
       }
     }
+
+    if (data.afkBot) {
+      loadAfkBotTelemetry();
+    }
   } catch (err) {
     console.error('Admin telemetry fetch error:', err);
   }
@@ -795,7 +807,134 @@ async function runTerminal() {
   terminalBody.appendChild(cursor);
 }
 
-// 15. Bootstrap Application on DOM Ready
+// 15. 24/7 Minecraft AFK Bot Telemetry & Controls
+let afkBotPollTimer = null;
+
+async function loadAfkBotTelemetry() {
+  try {
+    const res = await fetch('/api/tools/afkbot');
+    if (!res.ok) return;
+    const json = await res.json();
+    const data = json.telemetry || json;
+
+    const elBadge = document.getElementById('afkbot-badge-status');
+    const elStatus = document.getElementById('afkbot-val-status');
+    const elServer = document.getElementById('afkbot-val-server');
+    const elUser = document.getElementById('afkbot-val-username');
+    const elVer = document.getElementById('afkbot-val-version');
+    const elPos = document.getElementById('afkbot-val-pos');
+    const elUptime = document.getElementById('afkbot-val-uptime');
+    const elHp = document.getElementById('afkbot-val-hp');
+    const elPulses = document.getElementById('afkbot-val-pulses');
+    const elRecon = document.getElementById('afkbot-val-reconnects');
+    const elLogs = document.getElementById('afkbot-log-console');
+    const adminControls = document.getElementById('afkbot-admin-controls');
+    const btnToggle = document.getElementById('afkbot-btn-toggle');
+
+    if (currentUser?.isAdmin && adminControls) {
+      adminControls.style.display = 'block';
+    }
+
+    if (elBadge) {
+      const isOnline = data.status === 'online';
+      elBadge.textContent = (data.status || 'OFFLINE').toUpperCase();
+      elBadge.className = isOnline ? 'tool-badge' : (data.status === 'connecting' ? 'tool-badge' : 'tool-badge bg-red');
+    }
+    if (elStatus) {
+      elStatus.textContent = data.status ? (data.status.charAt(0).toUpperCase() + data.status.slice(1)) : 'Offline';
+    }
+    if (elServer) elServer.textContent = `${data.host || 'lab.mcsh.io'}:${data.port || 25565}`;
+    if (elUser) elUser.textContent = data.username || 'Itz0Cat_AFK';
+    if (elVer) elVer.textContent = data.version || '1.21.11';
+    if (elPos) {
+      elPos.textContent = data.spawnPosition ? `(${data.spawnPosition.x}, ${data.spawnPosition.y}, ${data.spawnPosition.z})` : 'Awaiting spawn';
+    }
+    if (elUptime) {
+      const up = data.uptimeSeconds || 0;
+      elUptime.textContent = `${Math.floor(up / 3600)}h ${Math.floor((up % 3600) / 60)}m ${up % 60}s`;
+    }
+    if (elHp) elHp.textContent = `${data.health ?? 20} / ${data.food ?? 20}`;
+    if (elPulses) elPulses.textContent = data.stats?.antiAfkPulses || 0;
+    if (elRecon) elRecon.textContent = `${data.stats?.reconnects || 0} / ${data.stats?.kicks || 0}`;
+
+    if (btnToggle) {
+      btnToggle.textContent = data.running ? 'Pause Bot' : 'Resume Bot';
+    }
+
+    if (elLogs && Array.isArray(data.logs) && data.logs.length > 0) {
+      elLogs.innerHTML = '';
+      data.logs.forEach((line) => {
+        const lineEl = document.createElement('div');
+        lineEl.style.padding = '2px 0';
+        lineEl.textContent = line;
+        elLogs.appendChild(lineEl);
+      });
+      elLogs.scrollTop = elLogs.scrollHeight;
+    }
+  } catch (err) {
+    console.error('AFK Bot telemetry error:', err);
+  }
+}
+
+function initAfkBotTool() {
+  const btnToggle = document.getElementById('afkbot-btn-toggle');
+  const btnReconnect = document.getElementById('afkbot-btn-reconnect');
+  const chatForm = document.getElementById('afkbot-chat-form');
+  const chatInput = document.getElementById('afkbot-chat-input');
+  const feedback = document.getElementById('afkbot-feedback');
+
+  if (btnToggle) {
+    btnToggle.addEventListener('click', async () => {
+      if (feedback) feedback.textContent = 'Updating bot state...';
+      try {
+        const res = await fetch('/api/admin/afkbot/toggle', { method: 'POST' });
+        const json = await res.json();
+        if (feedback) feedback.textContent = json.message || 'Updated';
+        loadAfkBotTelemetry();
+      } catch (e) {
+        if (feedback) feedback.textContent = `Error: ${e.message}`;
+      }
+    });
+  }
+
+  if (btnReconnect) {
+    btnReconnect.addEventListener('click', async () => {
+      if (feedback) feedback.textContent = 'Reconnecting...';
+      try {
+        const res = await fetch('/api/admin/afkbot/reconnect', { method: 'POST' });
+        const json = await res.json();
+        if (feedback) feedback.textContent = json.message || 'Reconnecting...';
+        loadAfkBotTelemetry();
+      } catch (e) {
+        if (feedback) feedback.textContent = `Error: ${e.message}`;
+      }
+    });
+  }
+
+  if (chatForm && chatInput) {
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      if (feedback) feedback.textContent = 'Sending message...';
+      try {
+        const res = await fetch('/api/admin/afkbot/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+        const json = await res.json();
+        if (feedback) feedback.textContent = json.message || (json.success ? 'Message sent!' : 'Failed');
+        chatInput.value = '';
+        loadAfkBotTelemetry();
+      } catch (err) {
+        if (feedback) feedback.textContent = `Error: ${err.message}`;
+      }
+    });
+  }
+}
+
+// 16. Bootstrap Application on DOM Ready
 window.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -806,5 +945,6 @@ window.addEventListener('DOMContentLoaded', () => {
   initServerChecker();
   initColorFormatter();
   initUuidTool();
+  initAfkBotTool();
   checkAuth();
 });

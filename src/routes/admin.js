@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireAdmin } from '../modules/auth.js';
 import { fastClientService } from '../modules/fastclient.js';
 import { proxyPingerService } from '../modules/proxyPinger.js';
+import { afkBotService } from '../modules/afkbot.js';
 
 export const adminRouter = Router();
 
@@ -15,6 +16,7 @@ adminRouter.get('/status', (req, res) => {
     admin: req.user.username,
     fastclient: fastClientService.getStatus(),
     proxyPinger: proxyPingerService.getStatus(),
+    afkBot: afkBotService.getStatus(),
     system: {
       uptimeSeconds: Math.floor(process.uptime()),
       nodeVersion: process.version,
@@ -111,4 +113,41 @@ adminRouter.post('/proxy-pinger/scrape', (req, res) => {
     status: proxyPingerService.getStatus()
   });
 });
+
+// POST /api/admin/afkbot/toggle - Start/Stop 24/7 Minecraft AFK Bot
+adminRouter.post('/afkbot/toggle', (req, res) => {
+  if (afkBotService.running) {
+    afkBotService.stop();
+  } else {
+    afkBotService.start();
+  }
+  res.json({
+    message: `AFK Bot ${afkBotService.running ? 'started' : 'stopped'}`,
+    status: afkBotService.getStatus()
+  });
+});
+
+// POST /api/admin/afkbot/reconnect - Force reconnect
+adminRouter.post('/afkbot/reconnect', (req, res) => {
+  afkBotService.reconnect();
+  res.json({
+    message: 'AFK Bot reconnect sequence triggered',
+    status: afkBotService.getStatus()
+  });
+});
+
+// POST /api/admin/afkbot/chat - Send in-game chat packet
+adminRouter.post('/afkbot/chat', (req, res) => {
+  const { message } = req.body || {};
+  if (!message || typeof message !== 'string') {
+    return res.status(400).json({ error: 'Message text is required' });
+  }
+  const sent = afkBotService.chat(message.trim());
+  res.json({
+    success: sent,
+    message: sent ? 'Chat packet sent' : 'Bot is offline or not spawned',
+    status: afkBotService.getStatus()
+  });
+});
+
 

@@ -575,6 +575,7 @@
             <button type="button" class="tool-tab" data-tab="tab-server">🌐 Server Status</button>
             <button type="button" class="tool-tab" data-tab="tab-formatter">🎨 Color Formatter</button>
             <button type="button" class="tool-tab" data-tab="tab-uuid">🆔 UUID Converter</button>
+            <button type="button" class="tool-tab" data-tab="tab-afkbot">🤖 AFK Bot</button>
             <button type="button" class="tool-tab" data-tab="tab-admin" id="tab-btn-admin" style="display: none;">⚡ Dev Controls</button>
           </div>
 
@@ -767,7 +768,81 @@
             </div>
           </div>
 
-          <!-- TAB 5: DEVELOPER ONLY (Owner @itz0cat) -->
+          <!-- TAB 5: 24/7 MINECRAFT AFK BOT -->
+          <div class="tool-tab-panel" id="tab-afkbot" style="display: none;">
+            <div class="glass tool-card-full">
+              <div class="card-top">
+                <h3 class="tool-heading">🤖 24/7 Minecraft AFK Bot</h3>
+                <span class="tool-badge" id="afkbot-badge-status">ONLINE</span>
+              </div>
+              <p class="tool-desc">
+                Ultra-lightweight headless Mineflayer bot running 24/7 on Render alongside rotating proxy pinger. Permanently connected to <strong style="color: var(--accent-cyan);">lab.mcsh.io</strong> on Minecraft <strong style="color: var(--accent-mint);">1.21.11</strong> with infinite auto-reconnect and 30s anti-AFK pulses.
+              </p>
+
+              <!-- Telemetry Metrics Grid -->
+              <div class="telemetry-grid" style="margin-top: 20px; margin-bottom: 24px;">
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Connection Status</span>
+                  <strong class="telemetry-val" id="afkbot-val-status">Online</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Target Server</span>
+                  <strong class="telemetry-val" id="afkbot-val-server">lab.mcsh.io:25565</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Bot Username</span>
+                  <strong class="telemetry-val text-mint" id="afkbot-val-username">Itz0Cat_AFK</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Minecraft Version</span>
+                  <strong class="telemetry-val" id="afkbot-val-version">1.21.11</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Spawn Coordinates</span>
+                  <strong class="telemetry-val" id="afkbot-val-pos">(9.5, 65.0, -5.5)</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Uptime</span>
+                  <strong class="telemetry-val text-mint" id="afkbot-val-uptime">0s</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Health / Food</span>
+                  <strong class="telemetry-val" id="afkbot-val-hp">20 / 20</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Anti-AFK Pulses</span>
+                  <strong class="telemetry-val text-cyan" id="afkbot-val-pulses">0</strong>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Reconnects / Kicks</span>
+                  <strong class="telemetry-val" id="afkbot-val-reconnects">0 / 0</strong>
+                </div>
+              </div>
+
+              <!-- Admin Controls (Shown if Admin) -->
+              <div id="afkbot-admin-controls" style="display: none; margin-bottom: 24px;">
+                <h4 class="telemetry-subtitle">Admin Bot Controls</h4>
+                <div class="admin-btn-row" style="margin-bottom: 16px;">
+                  <button type="button" class="btn btn-primary" id="afkbot-btn-toggle">Pause Bot</button>
+                  <button type="button" class="btn btn-ghost btn-cyan" id="afkbot-btn-reconnect">Force Reconnect</button>
+                  <span id="afkbot-feedback" class="admin-feedback" style="margin-left: 12px; align-self: center;"></span>
+                </div>
+
+                <form id="afkbot-chat-form" style="display: flex; gap: 10px; max-width: 600px; flex-wrap: wrap;">
+                  <input type="text" id="afkbot-chat-input" class="lookup-input" placeholder="Send in-game chat message..." style="flex: 1; min-width: 240px;">
+                  <button type="submit" class="btn btn-secondary" id="afkbot-chat-btn">Send Chat</button>
+                </form>
+              </div>
+
+              <!-- Live Log Output -->
+              <h4 class="telemetry-subtitle">Live Activity Feed</h4>
+              <div id="afkbot-log-console" style="background: rgba(10, 15, 25, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #a0aec0; max-height: 200px; overflow-y: auto;">
+                <div>[AFKBot] Telemetry initializing...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 6: DEVELOPER ONLY (Owner @itz0cat) -->
           <div class="tool-tab-panel" id="tab-admin" style="display: none;">
             <div class="dev-grid">
               <!-- FastClient Player Intelligence Tool -->

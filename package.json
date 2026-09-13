@@ -27,6 +27,7 @@
     "https-proxy-agent": "^9.1.0",
     "navigo": "^8.11.1",
     "pg": "^8.23.0",
+    "mineflayer": "^4.27.0",
     "socks-proxy-agent": "^10.1.0",
     "undici": "^6.21.1"
   }

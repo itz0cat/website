@@ -911,6 +911,21 @@ function initAfkBotTool() {
     });
   }
 
+  const btnAuth = document.getElementById('afkbot-btn-auth');
+  if (btnAuth) {
+    btnAuth.addEventListener('click', async () => {
+      if (feedback) feedback.textContent = 'Dispatching auth commands...';
+      try {
+        const res = await fetch('/api/admin/afkbot/auth', { method: 'POST' });
+        const json = await res.json();
+        if (feedback) feedback.textContent = json.message || 'Auth dispatched';
+        loadAfkBotTelemetry();
+      } catch (e) {
+        if (feedback) feedback.textContent = `Error: ${e.message}`;
+      }
+    });
+  }
+
   if (chatForm && chatInput) {
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();

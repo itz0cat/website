@@ -150,4 +150,14 @@ adminRouter.post('/afkbot/chat', (req, res) => {
   });
 });
 
+// POST /api/admin/afkbot/auth - Manually trigger /register and /login sequence
+adminRouter.post('/afkbot/auth', (req, res) => {
+  afkBotService.executeAuth();
+  res.json({
+    message: 'Auto-auth sequence dispatched (/register & /login)',
+    status: afkBotService.getStatus()
+  });
+});
+
+
 

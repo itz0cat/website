@@ -1,4 +1,5 @@
 import mineflayer from 'mineflayer';
+import { createAuthPlugin } from './mcAuth.js';
 
 class AFKBotService {
   constructor() {
@@ -6,6 +7,7 @@ class AFKBotService {
     this.port = parseInt(process.env.MC_AFK_PORT || '25565', 10);
     this.username = process.env.MC_AFK_USERNAME || 'Itz0Cat_AFK';
     this.version = process.env.MC_AFK_VERSION || '1.21.11';
+    this.password = process.env.MC_AFK_PASSWORD || 'proboyz';
     this.auth = 'offline';
 
     this.bot = null;
@@ -15,6 +17,7 @@ class AFKBotService {
     this.antiAfkTimer = null;
     this.joinedAt = null;
     this.spawnPosition = null;
+    this.lastAuthAttempt = 0;
     this.health = 20;
     this.food = 20;
     this.stats = {
@@ -69,6 +72,12 @@ class AFKBotService {
     this.start();
   }
 
+  executeAuth() {
+    if (this.bot && typeof this.bot.executeAuth === 'function') {
+      this.bot.executeAuth('manual-api');
+    }
+  }
+
   connect() {
     if (!this.running) return;
     this.status = 'connecting';
@@ -86,6 +95,13 @@ class AFKBotService {
         checkTimeoutInterval: 60000,
         hideErrors: false
       });
+
+      // Load modular SimpleLogin / AuthMe authentication plugin
+      this.bot.loadPlugin(createAuthPlugin({
+        password: this.password,
+        delayMs: 1200,
+        logger: (msg) => this.log(msg)
+      }));
     } catch (err) {
       this.log(`Bot instantiation error: ${err.message}`);
       this.scheduleReconnect();

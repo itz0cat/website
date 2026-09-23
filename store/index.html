@@ -3,13 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cat Game — Mod Key Store</title>
-  <meta name="description" content="Unlock the full Cat Game experience. Get exclusive Minecraft mod keys, automated cloud solvers, custom delays, and in-game perks.">
+  <title>Cat Game Store — Mod Key Portal</title>
+  <meta name="description" content="Official store for CatGame and CatFlip Minecraft Fabric mods. Choose your key, unlock cloud solvers, and dominate your servers.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/material.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235c93d6%22><ellipse cx=%2212%22 cy=%2215%22 rx=%225%22 ry=%224%22/><circle cx=%226.5%22 cy=%229.5%22 r=%222%22/><circle cx=%2210%22 cy=%226.5%22 r=%222%22/><circle cx=%2214%22 cy=%226.5%22 r=%222%22/><circle cx=%2217.5%22 cy=%229.5%22 r=%222%22/></svg>">
+  <style>
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media (min-width: 860px) {
+      .hub-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .hub-card {
+      background-color: var(--md-surface);
+      border: 1px solid #e5e7eb;
+      border-radius: 28px;
+      padding: 2.75rem 2.25rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: var(--md-transition);
+      box-shadow: var(--md-elevation-1);
+    }
+    .hub-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--md-elevation-3);
+      border-color: var(--md-primary-container);
+    }
+    .hub-card-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background-color: var(--md-primary-container);
+      color: var(--md-primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .hub-card-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--md-primary);
+      margin-bottom: 0.5rem;
+    }
+    .hub-card-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+    }
+    .hub-card-desc {
+      font-size: 0.975rem;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+    .hub-feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 2.25rem;
+      flex-grow: 1;
+    }
+    .hub-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.925rem;
+      color: #374151;
+      line-height: 1.45;
+    }
+    .hub-card-footer {
+      border-top: 1px dashed #e5e7eb;
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hub-price-callout {
+      display: flex;
+      flex-direction: column;
+    }
+    .hub-price-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+    .hub-price-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #111827;
+    }
+    .bundle-banner {
+      background: linear-gradient(135deg, var(--md-surface-container-low) 0%, var(--md-primary-container) 100%);
+      border: 1px solid var(--md-surface-container-highest);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      margin: 4rem auto 0;
+      max-width: 900px;
+      box-shadow: var(--md-elevation-1);
+    }
+  </style>
 </head>
 <body>
 
@@ -31,17 +145,15 @@
 
       <nav>
         <ul class="nav-links">
-          <li><a href="#store" class="nav-link">Store</a></li>
-          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-          <li><a href="#features" class="nav-link">Features</a></li>
-          <li><a href="#commands" class="nav-link">Commands</a></li>
-          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="/store" class="nav-link active">Store Hub</a></li>
+          <li><a href="/store/catgame" class="nav-link">CatGame Keys</a></li>
+          <li><a href="/store/catflip" class="nav-link">CatFlip Keys</a></li>
+          <li><a href="/download" class="nav-link">Downloads</a></li>
           <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
         </ul>
       </nav>
 
       <div class="nav-actions">
-        <!-- Accent Palette Switcher -->
         <button id="openDrawerBtn" class="icon-btn" aria-label="Customize accent color" title="Theme Settings">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
@@ -51,7 +163,6 @@
             <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
           </svg>
         </button>
-        <!-- Mobile Menu Toggle -->
         <button id="mobileMenuToggle" class="icon-btn menu-toggle" aria-label="Toggle navigation">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"/>
@@ -66,11 +177,10 @@
   <!-- Mobile Nav Menu -->
   <div id="mobileNav" class="mobile-nav">
     <ul class="mobile-nav-links">
-      <li><a href="#store" class="mobile-nav-link">Store</a></li>
-      <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
-      <li><a href="#features" class="mobile-nav-link">Features</a></li>
-      <li><a href="#commands" class="mobile-nav-link">Commands</a></li>
-      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+      <li><a href="/store" class="mobile-nav-link">Store Hub</a></li>
+      <li><a href="/store/catgame" class="mobile-nav-link">CatGame Keys</a></li>
+      <li><a href="/store/catflip" class="mobile-nav-link">CatFlip Keys</a></li>
+      <li><a href="/download" class="mobile-nav-link">Downloads</a></li>
       <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
       <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
       <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Join Discord</a></li>
@@ -85,511 +195,139 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2-1.5 1.5 2 2L13 10l-2-2-1.5 1.5 2 2L9 14l-2-2L2 17l5 5 12-12-2-2z"/>
           </svg>
-          <span>Cat Game Mod Keys</span>
+          <span>Official Mod Key Store</span>
         </div>
 
-        <h1 class="hero-title">Unlock the full Cat Game experience.</h1>
+        <h1 class="hero-title">Pick Your Mod Experience.</h1>
 
         <p class="hero-description">
-          A Cat Game key gives you exclusive tags, cosmetics, and in-game perks across our Minecraft mods. Pick a tier, redeem instantly, and start using your perks the same session.
+          Choose between <strong>CatGame</strong> for high-speed chat game auto-solving or <strong>CatFlip</strong> for mathematical bankroll automation on DeluxeCoinflip servers.
         </p>
-
-        <div class="hero-cta-group">
-          <a href="#store" class="btn btn-primary">Get a key</a>
-          <a href="#how-it-works" class="btn btn-outlined">How it works</a>
-        </div>
 
         <p class="hero-footnote">
-          Instant delivery · One-time purchase & flexible subscriptions · Redeem via Discord
+          Instant key generation · Secure Discord delivery · Minecraft Fabric 1.21.x
         </p>
       </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="section section-alt">
+    <!-- Two Main Cards Section -->
+    <section class="section" style="padding-top: 1rem;">
       <div class="container">
-        <div class="section-header">
-          <span class="section-badge">Simple 3-Step Process</span>
-          <h2 class="section-title">How it works</h2>
-          <p class="section-subtitle">Three steps, no waiting around.</p>
-        </div>
-
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Pick a tier</h3>
-            <p>Iron, Gold, or Diamond — each tier is tailored with precision delays, device allocations, and cloud queue priorities.</p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Checkout</h3>
-            <p>Click Buy on any tier to open a private ticket on our official Discord. Pay securely, then get your key delivered straight to your Discord DMs.</p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Redeem</h3>
-            <p>Drop the Fabric mod JAR into your mods folder, run <code>/cat key &lt;your-key&gt;</code> in chat, and your perks activate instantly.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Store Section: Side-by-Side 3 Cards on Desktop -->
-    <section id="store" class="section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">Official Subscriptions</span>
-          <h2 class="section-title">Choose your key</h2>
-          <p class="section-subtitle">Each tier includes everything from the tier below it.</p>
-        </div>
-
-        <div class="tiers-grid">
-          <!-- Iron Key -->
-          <div class="tier-card">
-            <div class="tier-header">
-              <span class="tier-badge iron">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                Iron Tier
-              </span>
-              <h3 class="tier-name">Iron Key</h3>
-              <p class="tier-desc">Casual players looking for a safe, reliable auto-solver that looks 100% human and avoids moderator suspicion.</p>
-            </div>
-
-            <div class="tier-price-box">
-              <span class="tier-price">₹20 / $0.25</span>
-              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹70 / $0.85 Monthly)</small></span>
-            </div>
-
-            <ul class="tier-features">
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>4.0s Fixed Safe Delay</strong> (+0.2s–0.6s natural human jitter)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>1 HWID Device</strong> (Bound cryptographically via SHA-256)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>All 6 Core Solvers</strong> (Math, Trivia, Gaps, Anagrams, Reverse, Quotes)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Anti-Cheat Safe</strong> (Zero chat spam flags; skips Guess The Number)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Standard Cloud Queue</strong> processing</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Custom tag color</strong> & 1 nametag badge</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>Iron Discord role & 1 HWID reset every 30 days</span>
-              </li>
-            </ul>
-
-            <div class="tier-action">
-              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-iron">
-                Buy Iron
-              </a>
-            </div>
-          </div>
-
-          <!-- Gold Key (Featured) -->
-          <div class="tier-card featured">
-            <div class="popular-badge">Most Popular</div>
-            <div class="tier-header">
-              <span class="tier-badge gold">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-                Gold Tier
-              </span>
-              <h3 class="tier-name">Gold Key</h3>
-              <p class="tier-desc">Competitive players wanting an ~80% win rate by beating fast manual typists on active servers.</p>
-            </div>
-
-            <div class="tier-price-box">
-              <span class="tier-price">₹40 / $0.49</span>
-              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹140 / $1.69 Monthly)</small></span>
-            </div>
-
-            <ul class="tier-features">
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Everything in Iron</strong></span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>2.5s Default Rapid Delay</strong> (Down to 2.0s with <code>/cat delay</code>)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>In-Game Delay Control Enabled</strong> (Allowed 2.0s – 10.0s)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>2 HWID Devices</strong> (Play on PC + Phone/Alt simultaneously)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>High-Priority Cloud Queue</strong> on backend solver</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Custom server trivia requests</strong> allowed</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>Gold Discord role, nametag animations & 2 HWID resets/period</span>
-              </li>
-            </ul>
-
-            <div class="tier-action">
-              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-gold">
-                Buy Gold
-              </a>
-            </div>
-          </div>
-
-          <!-- Diamond Key -->
-          <div class="tier-card">
-            <div class="tier-header">
-              <span class="tier-badge diamond">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 3h12l4 6-10 12L2 9l4-6z"/>
-                </svg>
-                Diamond Tier
-              </span>
-              <h3 class="tier-name">Diamond Key</h3>
-              <p class="tier-desc">The ultimate VIP tier for leaderboard grinders, rich-list players, and clans demanding total dominance.</p>
-            </div>
-
-            <div class="tier-price-box">
-              <span class="tier-price">₹70 / $0.85</span>
-              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹250 / $2.99 Monthly)</small></span>
-            </div>
-
-            <ul class="tier-features">
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Everything in Gold</strong></span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>0.8s Sub-Second Speed</strong> (Unrestricted down to 0.1s!)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Full Delay Freedom</strong> (<code>/cat delay 0.1</code>)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>5 HWID Devices</strong> (Share across clan, friends, or alts)</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Zero-Delay VIP Queue</strong> dedicated non-blocking thread workers</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Priority 24/7 Custom Trivia</strong> additions within 1 hour</span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>🔄 <strong>Unlimited instant self-service HWID resets</strong></span>
-              </li>
-              <li class="tier-feature">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>Diamond Discord role, tab highlight, particle trail & VIP support</span>
-              </li>
-            </ul>
-
-            <div class="tier-action">
-              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-diamond">
-                Buy Diamond
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mod Architecture & Solvers Showcase -->
-    <section id="features" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">Built For Dominance</span>
-          <h2 class="section-title">What Cat Game Does</h2>
-          <p class="section-subtitle">Engineered specifically for Minecraft Fabric 1.21.x to detect and win every chat game cleanly.</p>
-        </div>
-
-        <div class="features-grid">
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7"/>
-                <rect x="14" y="3" width="7" height="7"/>
-                <rect x="14" y="14" width="7" height="7"/>
-                <rect x="3" y="14" width="7" height="7"/>
-              </svg>
-            </div>
-            <h4>Fill-In-The-Blank Matcher</h4>
-            <p>Indexes 2,466+ official Minecraft item, block, and mob registry names. Instantly decodes patterns like <code>_rown Co_cret_ ___d__</code> into <code>Brown Concrete Powder</code>.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="hub-grid">
+          <!-- Card 1: CatGame Keys -->
+          <div class="hub-card">
+            <div class="hub-card-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
             </div>
-            <h4>Instant Anagram Unscrambler</h4>
-            <p>High-speed letter-frequency algorithm solves scrambled words (e.g. <code>Onraeg loWo</code> → <code>Orange Wool</code>) in single-digit milliseconds.</p>
-          </div>
+            <span class="hub-card-tag">ChatGame Auto-Solver</span>
+            <h2 class="hub-card-title">CatGame Keys</h2>
+            <p class="hub-card-desc">
+              High-performance Minecraft Fabric mod engineered to detect, solve, and win chat games on BananaSMP, Lifesteal, and custom SMP networks.
+            </p>
 
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="2" width="16" height="20" rx="2"/>
-                <line x1="8" y1="6" x2="16" y2="6"/>
-                <line x1="16" y1="14" x2="16" y2="18"/>
-                <path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01"/>
-              </svg>
+            <ul class="hub-feature-list">
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>6 Cloud Solvers:</strong> Math, Trivia, Gaps, Anagrams, Reverse & Literal Quotes</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Human Delays:</strong> Fixed 4.0s safe delay down to near-instant 0.8s</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Predictive Radar:</strong> 20-second heads-up warning in Action Bar</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Anti-Cheat Safe:</strong> Randomized typing jitter & 0-leak SHA-256 HWID</span>
+              </li>
+            </ul>
+
+            <div class="hub-card-footer">
+              <div class="hub-price-callout">
+                <span class="hub-price-label">Starting From</span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.8rem; color: #6b7280; font-weight: normal;">/wk</small></span>
+              </div>
+              <a href="/store/catgame" class="btn btn-primary" style="padding: 12px 22px;">
+                Explore CatGame Keys →
+              </a>
             </div>
-            <h4>Complex Equation Solver</h4>
-            <p>Handles negative numbers, nested operator precedence, and arithmetic equations with 100% precision before human players can calculate them.</p>
           </div>
 
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Card 2: CatFlip Keys -->
+          <div class="hub-card">
+            <div class="hub-card-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="12" r="6"/>
-                <circle cx="12" cy="12" r="2"/>
-                <line x1="12" y1="12" x2="19" y2="5"/>
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                <path d="M12 18V6"/>
               </svg>
             </div>
-            <h4>Predictive Cooldown Radar</h4>
-            <p>Constantly monitors server timing patterns and gives you a 20-second warning in your Action Bar so you never get caught on chat cooldown when a game drops.</p>
-          </div>
+            <span class="hub-card-tag">CoinFlip Automation</span>
+            <h2 class="hub-card-title">CatFlip Keys</h2>
+            <p class="hub-card-desc">
+              Autonomous coinflip manager combining isolated bankroll budgeting, the Kuro Mathematical Odds Engine, and hard risk cutoffs for DeluxeCoinflip.
+            </p>
 
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-            </div>
-            <h4>Human Jitter Anti-Cheat</h4>
-            <p>Engineered with micro-delays and randomized typing jitter to keep your answers within natural human timing windows and protect against detection.</p>
-          </div>
+            <ul class="hub-feature-list">
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Isolated Vault:</strong> Allocate $50k or $1M without risking your wallet</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Kuro Math Engine:</strong> 100% deterministic probability calculations</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Hard Risk Engine:</strong> 5-loss cutoff and 50% stop-loss protection</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Real-Time HUD:</strong> Live vault balance, session profit/loss, and winrate %</span>
+              </li>
+            </ul>
 
-          <div class="feature-box">
-            <div class="feature-box-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
+            <div class="hub-card-footer">
+              <div class="hub-price-callout">
+                <span class="hub-price-label">Starting From</span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.8rem; color: #6b7280; font-weight: normal;">/wk</small></span>
+              </div>
+              <a href="/store/catflip" class="btn btn-primary" style="padding: 12px 22px;">
+                Explore CatFlip Keys →
+              </a>
             </div>
-            <h4>SHA-256 HWID Security</h4>
-            <p>Hardware IDs are cryptographically hashed locally before communicating with our cloud API. Zero leaked credentials and zero server-side impersonation.</p>
           </div>
         </div>
 
-        <!-- In-Game Command Demo -->
-        <div id="commands" class="command-demo-card">
-          <div class="command-demo-header">
-            <div class="terminal-dots">
-              <span class="terminal-dot dot-red"></span>
-              <span class="terminal-dot dot-yellow"></span>
-              <span class="terminal-dot dot-green"></span>
-            </div>
-            <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Minecraft In-Game Commands</span>
-          </div>
-
-          <div class="command-list">
-            <div class="command-item">
-              <div>
-                <div class="command-code">/cat key &lt;your-key&gt;</div>
-                <div class="command-desc">Authenticates your license key and binds your tier perks.</div>
-              </div>
-              <button class="copy-btn" data-copy="/cat key ">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                </svg>
-                Copy
-              </button>
-            </div>
-
-            <div class="command-item">
-              <div>
-                <div class="command-code">/cat delay &lt;seconds&gt;</div>
-                <div class="command-desc">Adjusts answer delay in-game (Gold: 2.0s–10s, Diamond: down to 0.1s).</div>
-              </div>
-              <button class="copy-btn" data-copy="/cat delay ">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                </svg>
-                Copy
-              </button>
-            </div>
-
-            <div class="command-item">
-              <div>
-                <div class="command-code">/cat status</div>
-                <div class="command-desc">Displays your active tier, allowed device slots, and connection health.</div>
-              </div>
-              <button class="copy-btn" data-copy="/cat status">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                </svg>
-                Copy
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">Got Questions?</span>
-          <h2 class="section-title">Frequently Asked Questions</h2>
-          <p class="section-subtitle">Everything you need to know about keys, tiers, and setup.</p>
-        </div>
-
-        <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>How do I purchase and receive my key?</span>
-              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner">
-                Simply click "Buy" on any tier card to be directed to our official Discord server (<a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 600;">discord.gg/Ga6y7rzd5u</a>). Open a ticket in the ticket channel, choose your payment method, and your unique <code>CAT-XXXX-XXXX-XXXX-XXXX</code> key will be delivered directly to your ticket.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>What Minecraft versions and loaders are supported?</span>
-              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner">
-                Cat Game is built for <strong>Fabric Loader (0.16+)</strong> running on Minecraft universal range <strong>1.21.x</strong> (Java 21). It works seamlessly on popular servers such as BananaSMP, Lifesteal, and custom SMP networks.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>Can I switch PCs or reset my Hardware ID (HWID)?</span>
-              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner">
-                Yes! Iron Tier includes 1 monthly reset, Gold Tier includes 2 resets per subscription cycle, and Diamond Tier includes unlimited instant resets. Just send a message in your Discord ticket to update your device.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>Will I get flagged or banned by server anti-cheat?</span>
-              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner">
-                Iron Tier uses a fixed 4.0-second delay with randomized human typing jitter, making it indistinguishable from a normal player. Gold Tier allows down to 2.0s which is within fast human typing speed. Diamond Tier allows down to 0.1s for players who want absolute dominance.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>How do subscription renewals and upgrades work?</span>
-              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner">
-                You can upgrade your tier or renew your weekly/monthly subscription anytime through your Discord ticket. Our admin tools can upgrade your existing key without requiring you to re-download the mod.
-              </div>
-            </div>
-          </div>
+        <!-- Dual Product Bundle Callout -->
+        <div class="bundle-banner">
+          <h3 style="font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem;">Need Both Mods?</h3>
+          <p style="font-size: 0.95rem; color: #4b5563; max-width: 620px; margin: 0 auto 1.5rem; line-height: 1.6;">
+            We offer unified Diamond bundle keys with both <code>CATGAME</code> and <code>CATFLIP</code> products enabled on a single key. Open a ticket on Discord to get the all-in-one suite.
+          </p>
+          <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Request Dual Bundle on Discord
+          </a>
         </div>
       </div>
     </section>
@@ -615,6 +353,9 @@
       </div>
 
       <div class="footer-links">
+        <a href="/store/catgame" class="footer-link">CatGame Keys</a>
+        <a href="/store/catflip" class="footer-link">CatFlip Keys</a>
+        <a href="/download" class="footer-link">Downloads</a>
         <a href="/terms" class="footer-link">Terms</a>
         <a href="/refunds" class="footer-link">Refunds</a>
         <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="footer-link">Discord</a>
@@ -634,15 +375,12 @@
       </button>
     </div>
 
-    <!-- Accent Color -->
     <div class="drawer-section">
       <span class="drawer-label">Accent Color</span>
-
       <div class="custom-picker-row">
         <input type="color" id="customColorPicker" class="custom-color-input" value="#6ba4e8" title="Choose custom color">
         <label for="customColorPicker" class="custom-picker-label">Pick any color</label>
       </div>
-
       <div class="palette-swatches">
         <button class="swatch-btn" data-color="#2563eb" style="background-color: #2563eb;" title="Deep Blue"></button>
         <button class="swatch-btn" data-color="#3b82f6" style="background-color: #3b82f6;" title="Electric Blue"></button>
@@ -655,7 +393,6 @@
       </div>
     </div>
 
-    <!-- Strictly Material Design Note -->
     <div class="drawer-section">
       <span class="drawer-label">Design System</span>
       <div style="padding: 12px 16px; border-radius: 12px; background-color: var(--md-surface-container); border: 1px solid var(--md-surface-container-highest); font-size: 0.875rem; color: #475569;">

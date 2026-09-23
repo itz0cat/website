@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=/download">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to Downloads...</title>
+  <script>
+    window.location.replace('/download');
+  </script>
+  <link rel="stylesheet" href="/css/material.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .redirect-card {
+      background: var(--md-surface-container-low);
+      border: 1px solid var(--md-surface-container-highest);
+      padding: 2.5rem 2rem;
+      border-radius: var(--md-radius-xl);
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--md-elevation-2);
+    }
+  </style>
+</head>
+<body>
+  <div class="redirect-card">
+    <div style="margin-bottom: 1rem;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="#5c93d6">
+        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+      </svg>
+    </div>
+    <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Redirecting to Downloads...</h1>
+    <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem;">If you are not automatically redirected, please click the button below.</p>
+    <a href="/download" class="btn btn-primary" style="text-decoration: none;">Go to Downloads</a>
+  </div>
+</body>
+</html>

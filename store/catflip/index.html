@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CatFlip Keys — Autonomous AI & Kuro Math CoinFlip Manager</title>
+  <meta name="description" content="Unlock CatFlip. Autonomous bankroll management, Kuro mathematical odds engine, isolated vault budgeting, and real-time HUD for DeluxeCoinflip.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/material.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235c93d6%22><ellipse cx=%2212%22 cy=%2215%22 rx=%225%22 ry=%224%22/><circle cx=%226.5%22 cy=%229.5%22 r=%222%22/><circle cx=%2210%22 cy=%226.5%22 r=%222%22/><circle cx=%2214%22 cy=%226.5%22 r=%222%22/><circle cx=%2217.5%22 cy=%229.5%22 r=%222%22/></svg>">
+</head>
+<body>
+
+  <!-- Top App Bar (Header) -->
+  <header class="app-bar">
+    <div class="container app-bar-inner">
+      <a href="/store" class="brand-link">
+        <span class="brand-svg">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <span>Cat Game</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/store" class="nav-link">Store Hub</a></li>
+          <li><a href="/store/catgame" class="nav-link">CatGame Keys</a></li>
+          <li><a href="/store/catflip" class="nav-link active">CatFlip Keys</a></li>
+          <li><a href="/download" class="nav-link">Downloads</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="openDrawerBtn" class="icon-btn" aria-label="Customize accent color" title="Theme Settings">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
+          </svg>
+        </button>
+        <button id="mobileMenuToggle" class="icon-btn menu-toggle" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Menu -->
+  <div id="mobileNav" class="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="/store" class="mobile-nav-link">Store Hub</a></li>
+      <li><a href="/store/catgame" class="mobile-nav-link">CatGame Keys</a></li>
+      <li><a href="/store/catflip" class="mobile-nav-link">CatFlip Keys</a></li>
+      <li><a href="/download" class="mobile-nav-link">Downloads</a></li>
+      <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
+      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+      <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
+      <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
+      <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Join Discord</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <!-- Breadcrumb -->
+    <div class="container" style="padding-top: 1.5rem;">
+      <div style="font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 8px;">
+        <a href="/store" style="color: var(--md-primary); text-decoration: none; font-weight: 600;">Store</a>
+        <span>›</span>
+        <span>CatFlip Mod Keys</span>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" style="padding-top: 2.5rem;">
+      <div class="container">
+        <div class="badge-pill">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+            <path d="M12 18V6"/>
+          </svg>
+          <span>CatFlip Kuro Math & AI CoinFlip Engine</span>
+        </div>
+
+        <h1 class="hero-title">Automate Coinflips with Kuro Mathematical Precision.</h1>
+
+        <p class="hero-description">
+          Stop reckless all-in gambling. CatFlip combines isolated bankroll vault budgeting, the server-side Kuro mathematical probability engine, and hard risk cutoffs for DeluxeCoinflip servers.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#tiers" class="btn btn-primary">Choose Key Tier</a>
+          <a href="/download" class="btn btn-outlined">Get Mod (.jar)</a>
+        </div>
+
+        <p class="hero-footnote">
+          Instant delivery · Safe bankroll management · Redeem via Discord
+        </p>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">How CatFlip Works</span>
+          <h2 class="section-title">Built for Bankroll Growth</h2>
+          <p class="section-subtitle">Three layers of defense between your coins and the server.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Allocate Your Vault</h3>
+            <p>Set a specific budget with <code>/catflip money 100k</code>. CatFlip only touches your designated vault balance and can never risk your full server economy balance.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Kuro Engine Evaluates</h3>
+            <p>Our server-side mathematical engine scans open coinflip offers, computes risk odds, and determines whether to take an offer, create a strategic flip, or skip.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Hard Risk Protection</h3>
+            <p>If you hit 5 consecutive losses or reach a 50% stop-loss threshold, CatFlip automatically halts automation and preserves your remaining wealth.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Store Section: Side-by-Side 3 Cards on Desktop -->
+    <section id="tiers" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">CatFlip Subscriptions</span>
+          <h2 class="section-title">Choose your key</h2>
+          <p class="section-subtitle">Each tier includes everything from the tier below it.</p>
+        </div>
+
+        <div class="tiers-grid">
+          <!-- Iron Key -->
+          <div class="tier-card">
+            <div class="tier-header">
+              <span class="tier-badge iron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Iron Tier
+              </span>
+              <h3 class="tier-name">Iron Key</h3>
+              <p class="tier-desc">Casual coinflip players wanting conservative, automated bankroll growth with strict stop-loss rules.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price">₹20 / $0.25</span>
+              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹70 / $0.85 Monthly)</small></span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>1 HWID Device</strong> bound cryptographically</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Kuro Math Engine</strong> (Safe & Conservative mode)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Isolated Vault System</strong> (Never touches server wallet)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Hard Risk Engine</strong> (50% stop-loss & 5-loss cutoff)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Real-Time HUD Overlay</strong> (Vault balance & profit/loss)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Iron Discord role & 1 HWID reset every 30 days</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-iron">
+                Buy Iron
+              </a>
+            </div>
+          </div>
+
+          <!-- Gold Key (Featured) -->
+          <div class="tier-card featured">
+            <div class="popular-badge">Most Popular</div>
+            <div class="tier-header">
+              <span class="tier-badge gold">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Gold Tier
+              </span>
+              <h3 class="tier-name">Gold Key</h3>
+              <p class="tier-desc">Competitive players seeking steady profit scaling with aggressive flip creation and dual devices.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price">₹40 / $0.49</span>
+              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹140 / $1.69 Monthly)</small></span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Everything in Iron</strong></span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>2 HWID Devices</strong> (Run on PC + Mobile or Alt account)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Balanced & Aggressive Modes</strong> (Higher volume flipping)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Custom Max Bet Limit</strong> (Tune max bet between 25% – 90%)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Escrow Throttling & Offer Sniping</strong> protection</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>High-Priority Cloud Relay Queue</strong></span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Gold Discord role & 2 HWID resets per subscription period</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-gold">
+                Buy Gold
+              </a>
+            </div>
+          </div>
+
+          <!-- Diamond Key -->
+          <div class="tier-card">
+            <div class="tier-header">
+              <span class="tier-badge diamond">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 3h12l4 6-10 12L2 9l4-6z"/>
+                </svg>
+                Diamond Tier
+              </span>
+              <h3 class="tier-name">Diamond Key</h3>
+              <p class="tier-desc">The high-roller VIP tier for whales, clan syndicates, and accounts running multi-million coinflip pools.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price">₹70 / $0.85</span>
+              <span class="tier-period">per Week <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal; margin-top: 2px;">(or ₹250 / $2.99 Monthly)</small></span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Everything in Gold</strong></span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>5 HWID Devices</strong> (Share across syndicate or multi-instances)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Dual Product Authorization</strong> (Unlocks CatGame + CatFlip)</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Dedicated Zero-Delay VIP Thread Queue</strong></span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span><strong>Custom Server Rule Preset Tuning</strong> within 1 hour</span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>🔄 <strong>Unlimited instant self-service HWID resets</strong></span>
+              </li>
+              <li class="tier-feature">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Diamond Discord role, tab highlight & direct priority developer support</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-diamond">
+                Buy Diamond
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mod Architecture & Solvers Showcase -->
+    <section id="features" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Built For Protection</span>
+          <h2 class="section-title">Why CatFlip is Different</h2>
+          <p class="section-subtitle">Engineered specifically to avoid reckless casino wipeouts with strict mathematical discipline.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h4>Isolated Bankroll Vault</h4>
+            <p>Allocate <code>$50k</code> or <code>$1M</code> with shorthand commands. CatFlip isolates this balance completely — even during extended AFK runs, your personal wallet is never touched.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <line x1="8" y1="6" x2="16" y2="6"/>
+                <line x1="16" y1="14" x2="16" y2="18"/>
+                <path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01"/>
+              </svg>
+            </div>
+            <h4>Kuro 100% Pure Math Engine</h4>
+            <p>Zero AI hallucinations or random guesses. Evaluates EV (expected value), session variance, and win streaks using deterministic probability equations on our cloud backend.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <h4>Hard Risk Engine</h4>
+            <p>Enforces a 25% minimum bet (prevents micro-spam) and a 90% maximum cap (prevents all-in ruin). Automatically cuts off after 5 straight losses or a 50% drawdown.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <h4>Real-Time In-Game HUD</h4>
+            <p>Client-side rendered stats dashboard displays your active vault balance, session profit/loss, win rate percentage, and engine status in real-time.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h4>Escrow Throttling & Cooldowns</h4>
+            <p>Configurable pacing between flips avoids server rate-limits and mimics realistic player interaction, keeping your gameplay smooth and uninterrupted.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h4>Cloud HWID Licensing</h4>
+            <p>Instant license authentication with our high-availability Render cloud backend. Key permissions and device slots are synchronized securely via SHA-256 tokens.</p>
+          </div>
+        </div>
+
+        <!-- In-Game Command Demo -->
+        <div id="commands" class="command-demo-card">
+          <div class="command-demo-header">
+            <div class="terminal-dots">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+            </div>
+            <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">CatFlip In-Game Commands</span>
+          </div>
+
+          <div class="command-list">
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip license &lt;your-key&gt;</div>
+                <div class="command-desc">Authenticates your CatFlip license key with the cloud server.</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip license ">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip money &lt;amount&gt;</div>
+                <div class="command-desc">Funds the AI/Math gambling vault (e.g. 50k, 1.5m, 2b).</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip money 100k">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip mode &lt;safe|balanced|aggressive&gt;</div>
+                <div class="command-desc">Adjusts risk aggressiveness and flip creation frequency.</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip mode balanced">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip start  /  /catflip stop</div>
+                <div class="command-desc">Toggles AFK autonomous coinflip automation and HUD display.</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip start">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Got Questions?</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Everything you need to know about CatFlip keys and safety.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does CatFlip protect my server balance from ruin?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                CatFlip uses an isolated <strong>Vault</strong> system. If you have $10,000,000 on the server but only fund the vault with <code>/catflip money 100k</code>, CatFlip is strictly prohibited from touching the remaining $9,900,000. Furthermore, the hard risk engine enforces a 5-loss cutoff and a 50% stop-loss halt.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Which Minecraft servers and coinflip plugins are supported?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                CatFlip is built for Fabric Loader (0.16+) on Minecraft 1.21.x and is fully compatible with servers running <strong>DeluxeCoinflip</strong> or standard <code>/cf</code> and <code>/coinflip</code> GUI commands.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Does CatFlip use external AI or pure math?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                CatFlip uses the <strong>Kuro Mathematical Algorithm</strong> running directly on our cloud backend for instant zero-latency decisions without API rate-limit delays or hallucinations. Optional AI fallback (Gemini/Qwen) is also supported if enabled.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How do I purchase and activate my CatFlip key?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Click "Buy" on any tier card to open a ticket in our Discord (<a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 600;">discord.gg/Ga6y7rzd5u</a>). Once delivered, run <code>/catflip license &lt;your-key&gt;</code> in Minecraft chat to activate immediately.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-svg">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <div class="footer-brand-info">
+          <h4>Cat Game</h4>
+          <p>Cat Game © 2026. All rights reserved.</p>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="/store" class="footer-link">Store Hub</a>
+        <a href="/store/catgame" class="footer-link">CatGame Keys</a>
+        <a href="/download" class="footer-link">Downloads</a>
+        <a href="/terms" class="footer-link">Terms</a>
+        <a href="/refunds" class="footer-link">Refunds</a>
+        <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="footer-link">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Customizer Modal / Drawer -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="themeDrawer" class="theme-drawer" aria-label="Theme Customizer">
+    <div class="drawer-header">
+      <button id="closeDrawerBtn" class="drawer-close-btn" aria-label="Close settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Accent Color</span>
+      <div class="custom-picker-row">
+        <input type="color" id="customColorPicker" class="custom-color-input" value="#6ba4e8" title="Choose custom color">
+        <label for="customColorPicker" class="custom-picker-label">Pick any color</label>
+      </div>
+      <div class="palette-swatches">
+        <button class="swatch-btn" data-color="#2563eb" style="background-color: #2563eb;" title="Deep Blue"></button>
+        <button class="swatch-btn" data-color="#3b82f6" style="background-color: #3b82f6;" title="Electric Blue"></button>
+        <button class="swatch-btn" data-color="#7c3aed" style="background-color: #7c3aed;" title="Purple"></button>
+        <button class="swatch-btn" data-color="#1e293b" style="background-color: #1e293b;" title="Midnight Navy"></button>
+        <button class="swatch-btn" data-color="#0d9488" style="background-color: #0d9488;" title="Teal"></button>
+        <button class="swatch-btn active" data-color="#6ba4e8" style="background-color: #6ba4e8;" title="Soft Sky (Default)"></button>
+        <button class="swatch-btn" data-color="#f97316" style="background-color: #f97316;" title="Sunset Coral"></button>
+        <button class="swatch-btn" data-color="#18181b" style="background-color: #18181b;" title="Obsidian"></button>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Design System</span>
+      <div style="padding: 12px 16px; border-radius: 12px; background-color: var(--md-surface-container); border: 1px solid var(--md-surface-container-highest); font-size: 0.875rem; color: #475569;">
+        <strong>Material Design 3</strong> active with dynamic Material You accent palettes.
+      </div>
+    </div>
+  </aside>
+
+  <script src="/js/store.js"></script>
+</body>
+</html>

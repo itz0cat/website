@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads & Releases — Cat Game Suite</title>
+  <meta name="description" content="Download official Minecraft Fabric mod JARs, companion utilities, and updates for CatGame, CatFlip, CatPay, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/material.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235c93d6%22><ellipse cx=%2212%22 cy=%2215%22 rx=%225%22 ry=%224%22/><circle cx=%226.5%22 cy=%229.5%22 r=%222%22/><circle cx=%2210%22 cy=%226.5%22 r=%222%22/><circle cx=%2214%22 cy=%226.5%22 r=%222%22/><circle cx=%2217.5%22 cy=%229.5%22 r=%222%22/></svg>">
+  <style>
+    .download-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) {
+      .download-controls {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .search-input-wrap {
+      position: relative;
+      flex-grow: 1;
+      max-width: 440px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: var(--md-radius-full);
+      border: 1px solid #e5e7eb;
+      background-color: #ffffff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: var(--md-transition);
+    }
+    .search-input:focus {
+      border-color: var(--md-primary);
+      box-shadow: 0 0 0 3px var(--md-primary-container);
+    }
+    .search-icon-svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    .download-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .download-item {
+      background-color: var(--md-surface);
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: var(--md-transition);
+      box-shadow: var(--md-elevation-1);
+    }
+    .download-item:hover {
+      border-color: var(--md-primary-container);
+      box-shadow: var(--md-elevation-2);
+      transform: translateY(-2px);
+    }
+    @media (min-width: 768px) {
+      .download-item {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .download-item-left {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      flex-grow: 1;
+    }
+    .download-item-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background-color: var(--md-primary-container);
+      color: var(--md-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .download-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .download-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .download-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.01em;
+    }
+    .download-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--md-radius-full);
+      background-color: var(--md-surface-container);
+      color: var(--md-on-surface-variant);
+      border: 1px solid var(--md-surface-container-highest);
+    }
+    .download-badge.primary {
+      background-color: var(--md-primary-container);
+      color: var(--md-primary);
+      border-color: transparent;
+    }
+    .download-desc {
+      font-size: 0.925rem;
+      color: #4b5563;
+      line-height: 1.5;
+      max-width: 680px;
+    }
+    .download-specs {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: #64748b;
+      flex-wrap: wrap;
+    }
+    .download-spec-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .download-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      background-color: var(--md-primary);
+      color: #ffffff;
+      font-size: 0.925rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--md-transition);
+      box-shadow: 0 4px 12px rgba(92, 147, 214, 0.3);
+    }
+    .btn-download:hover {
+      background-color: var(--md-primary-hover);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar (Header) -->
+  <header class="app-bar">
+    <div class="container app-bar-inner">
+      <a href="/store" class="brand-link">
+        <span class="brand-svg">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <span>Cat Game</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/store" class="nav-link">Store Hub</a></li>
+          <li><a href="/store/catgame" class="nav-link">CatGame Keys</a></li>
+          <li><a href="/store/catflip" class="nav-link">CatFlip Keys</a></li>
+          <li><a href="/download" class="nav-link active">Downloads</a></li>
+          <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="openDrawerBtn" class="icon-btn" aria-label="Customize accent color" title="Theme Settings">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
+          </svg>
+        </button>
+        <button id="mobileMenuToggle" class="icon-btn menu-toggle" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Menu -->
+  <div id="mobileNav" class="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="/store" class="mobile-nav-link">Store Hub</a></li>
+      <li><a href="/store/catgame" class="mobile-nav-link">CatGame Keys</a></li>
+      <li><a href="/store/catflip" class="mobile-nav-link">CatFlip Keys</a></li>
+      <li><a href="/download" class="mobile-nav-link">Downloads</a></li>
+      <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
+      <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
+      <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Join Discord</a></li>
+    </ul>
+  </div>
+
+  <main class="container" style="padding-top: 3rem;">
+    <div class="section-header" style="margin-bottom: 2.5rem;">
+      <span class="section-badge">Verified Builds</span>
+      <h1 class="section-title">Mod Downloads & Releases</h1>
+      <p class="section-subtitle">
+        Official client modifications and companion plugins built for Minecraft Fabric 1.21.x. Drop any file into your <code>.minecraft/mods</code> folder.
+      </p>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="download-controls">
+      <div class="search-input-wrap">
+        <svg class="search-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="modSearchInput" class="search-input" placeholder="Search mods or versions...">
+      </div>
+
+      <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">
+        Requires <strong>Fabric Loader &ge; 0.16.x</strong> + <strong>Java 21</strong>
+      </div>
+    </div>
+
+    <!-- Mod List (List Format) -->
+    <div class="download-list" id="modList">
+
+      <!-- Item 1: CatGame Premium -->
+      <div class="download-item" data-keywords="catgame chatgame solver fabric sense math trivia">
+        <div class="download-item-left">
+          <div class="download-item-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="download-meta">
+            <div class="download-title-row">
+              <h2 class="download-title">CatGame: ChatGames Auto-Solver</h2>
+              <span class="download-badge primary">v1.2.1</span>
+              <span class="download-badge">Fabric 1.21.x</span>
+              <span class="download-badge">Production</span>
+            </div>
+            <p class="download-desc">
+              High-performance chat game detector and auto-solver. Supports Math, Anagrams, Fill-in-the-gaps, Trivia, Reverse, and Literal Quotes with human-safe jitter.
+            </p>
+            <div class="download-specs">
+              <span class="download-spec-item">📁 733 KB</span>
+              <span>•</span>
+              <span class="download-spec-item">☕ Java 21</span>
+              <span>•</span>
+              <span class="download-spec-item">🧩 Fabric API 0.140+</span>
+            </div>
+          </div>
+        </div>
+        <div class="download-actions">
+          <a href="/downloads/catgame-1.2.1.jar" download class="btn-download">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .JAR
+          </a>
+          <a href="/store/catgame" class="btn btn-outlined" style="padding: 10px 16px; font-size: 0.9rem;">
+            Get Key
+          </a>
+        </div>
+      </div>
+
+      <!-- Item 2: CatFlip -->
+      <div class="download-item" data-keywords="catflip coinflip kuro ai math deluxe afk fabric">
+        <div class="download-item-left">
+          <div class="download-item-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+              <path d="M12 18V6"/>
+            </svg>
+          </div>
+          <div class="download-meta">
+            <div class="download-title-row">
+              <h2 class="download-title">CatFlip: Autonomous Coinflip Manager</h2>
+              <span class="download-badge primary">v1.2.0</span>
+              <span class="download-badge">Fabric 1.21.11</span>
+              <span class="download-badge">Kuro Math</span>
+            </div>
+            <p class="download-desc">
+              Autonomous bankroll management mod for DeluxeCoinflip. Features isolated vault allocation, server-side Kuro probability engine, hard risk cutoffs, and real-time HUD.
+            </p>
+            <div class="download-specs">
+              <span class="download-spec-item">📁 181 KB</span>
+              <span>•</span>
+              <span class="download-spec-item">☕ Java 21</span>
+              <span>•</span>
+              <span class="download-spec-item">⚡ 0-Delay Relay</span>
+            </div>
+          </div>
+        </div>
+        <div class="download-actions">
+          <a href="/downloads/catflip-1.2.0.jar" download class="btn-download">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .JAR
+          </a>
+          <a href="/store/catflip" class="btn btn-outlined" style="padding: 10px 16px; font-size: 0.9rem;">
+            Get Key
+          </a>
+        </div>
+      </div>
+
+      <!-- Item 3: CatPay / CoinVex -->
+      <div class="download-item" data-keywords="catpay coinvex economy payment escrow trading fabric">
+        <div class="download-item-left">
+          <div class="download-item-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+          </div>
+          <div class="download-meta">
+            <div class="download-title-row">
+              <h2 class="download-title">CatPay / CoinVex Companion</h2>
+              <span class="download-badge primary">v1.0.3</span>
+              <span class="download-badge">Fabric 1.21.x</span>
+              <span class="download-badge">Utility</span>
+            </div>
+            <p class="download-desc">
+              Automated in-game escrow, transaction logging, and peer-to-peer player payment verification bridge for SMP servers.
+            </p>
+            <div class="download-specs">
+              <span class="download-spec-item">📁 206 KB</span>
+              <span>•</span>
+              <span class="download-spec-item">☕ Java 21</span>
+              <span>•</span>
+              <span class="download-spec-item">🛡️ Safe Escrow</span>
+            </div>
+          </div>
+        </div>
+        <div class="download-actions">
+          <a href="/downloads/catpay-1.0.3.jar" download class="btn-download">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .JAR
+          </a>
+        </div>
+      </div>
+
+      <!-- Item 4: CatTags -->
+      <div class="download-item" data-keywords="cattags cosmetics badges nametag cosmetic fabric">
+        <div class="download-item-left">
+          <div class="download-item-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </div>
+          <div class="download-meta">
+            <div class="download-title-row">
+              <h2 class="download-title">CatTags Cosmetics & Badges</h2>
+              <span class="download-badge primary">v1.0.0</span>
+              <span class="download-badge">Fabric 1.21.x</span>
+              <span class="download-badge">Cosmetics</span>
+            </div>
+            <p class="download-desc">
+              Custom player nametag badges, colored chat indicators, and client-side cosmetic tags tied to CatGame license roles.
+            </p>
+            <div class="download-specs">
+              <span class="download-spec-item">📁 48 KB</span>
+              <span>•</span>
+              <span class="download-spec-item">☕ Java 21</span>
+              <span>•</span>
+              <span class="download-spec-item">✨ Visual Perks</span>
+            </div>
+          </div>
+        </div>
+        <div class="download-actions">
+          <a href="/downloads/cattags-1.0.0.jar" download class="btn-download">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .JAR
+          </a>
+        </div>
+      </div>
+
+      <!-- Item 5: FastClient HUD -->
+      <div class="download-item" data-keywords="fastclient hud ui overlay fps ping coordinates fabric">
+        <div class="download-item-left">
+          <div class="download-item-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <div class="download-meta">
+            <div class="download-title-row">
+              <h2 class="download-title">FastClient HUD Overlay</h2>
+              <span class="download-badge primary">v1.21.11</span>
+              <span class="download-badge">Fabric Universal</span>
+              <span class="download-badge">HUD</span>
+            </div>
+            <p class="download-desc">
+              Lightweight, zero-overhead HUD modification rendering customizable FPS counters, server ping radar, armor durability, and coordinates.
+            </p>
+            <div class="download-specs">
+              <span class="download-spec-item">📁 3.9 MB</span>
+              <span>•</span>
+              <span class="download-spec-item">☕ Java 21</span>
+              <span>•</span>
+              <span class="download-spec-item">⚡ High FPS</span>
+            </div>
+          </div>
+        </div>
+        <div class="download-actions">
+          <a href="/downloads/fastclient-hud-1.21.11.jar" download class="btn-download">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .JAR
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Installation Instructions Card -->
+    <div style="background-color: var(--md-surface-container-low); border: 1px solid var(--md-surface-container-highest); border-radius: 20px; padding: 2rem; margin-top: 3.5rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">Installation Instructions</h3>
+      <ol style="padding-left: 1.5rem; color: #4b5563; font-size: 0.95rem; line-height: 1.7;">
+        <li>Ensure you have <strong>Fabric Loader &ge; 0.16.x</strong> installed for your targeted Minecraft version (1.21.x).</li>
+        <li>Place the required <strong>Fabric API</strong> JAR into your <code>.minecraft/mods</code> folder (or PojavLauncher mods folder).</li>
+        <li>Download the mod JARs from above and place them in the same <code>mods/</code> directory.</li>
+        <li>Launch Minecraft, connect to your server, and activate your license using <code>/cat key &lt;your-key&gt;</code> or <code>/catflip license &lt;your-key&gt;</code>.</li>
+      </ol>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-svg">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <div class="footer-brand-info">
+          <h4>Cat Game</h4>
+          <p>Cat Game © 2026. All rights reserved.</p>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="/store" class="footer-link">Store Hub</a>
+        <a href="/store/catgame" class="footer-link">CatGame Keys</a>
+        <a href="/store/catflip" class="footer-link">CatFlip Keys</a>
+        <a href="/download" class="footer-link">Downloads</a>
+        <a href="/terms" class="footer-link">Terms</a>
+        <a href="/refunds" class="footer-link">Refunds</a>
+        <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="footer-link">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Customizer Modal / Drawer -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="themeDrawer" class="theme-drawer" aria-label="Theme Customizer">
+    <div class="drawer-header">
+      <button id="closeDrawerBtn" class="drawer-close-btn" aria-label="Close settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Accent Color</span>
+      <div class="custom-picker-row">
+        <input type="color" id="customColorPicker" class="custom-color-input" value="#6ba4e8" title="Choose custom color">
+        <label for="customColorPicker" class="custom-picker-label">Pick any color</label>
+      </div>
+      <div class="palette-swatches">
+        <button class="swatch-btn" data-color="#2563eb" style="background-color: #2563eb;" title="Deep Blue"></button>
+        <button class="swatch-btn" data-color="#3b82f6" style="background-color: #3b82f6;" title="Electric Blue"></button>
+        <button class="swatch-btn" data-color="#7c3aed" style="background-color: #7c3aed;" title="Purple"></button>
+        <button class="swatch-btn" data-color="#1e293b" style="background-color: #1e293b;" title="Midnight Navy"></button>
+        <button class="swatch-btn" data-color="#0d9488" style="background-color: #0d9488;" title="Teal"></button>
+        <button class="swatch-btn active" data-color="#6ba4e8" style="background-color: #6ba4e8;" title="Soft Sky (Default)"></button>
+        <button class="swatch-btn" data-color="#f97316" style="background-color: #f97316;" title="Sunset Coral"></button>
+        <button class="swatch-btn" data-color="#18181b" style="background-color: #18181b;" title="Obsidian"></button>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Design System</span>
+      <div style="padding: 12px 16px; border-radius: 12px; background-color: var(--md-surface-container); border: 1px solid var(--md-surface-container-highest); font-size: 0.875rem; color: #475569;">
+        <strong>Material Design 3</strong> active with dynamic Material You accent palettes.
+      </div>
+    </div>
+  </aside>
+
+  <script src="/js/store.js"></script>
+  <script>
+    // Live Search Filter for Downloads
+    const searchInput = document.getElementById('modSearchInput');
+    const items = document.querySelectorAll('.download-item');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        items.forEach(item => {
+          const text = (item.dataset.keywords + ' ' + item.textContent).toLowerCase();
+          if (text.includes(query)) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

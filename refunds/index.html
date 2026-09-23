@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/material.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235c93d6%22><ellipse cx=%2212%22 cy=%2215%22 rx=%225%22 ry=%224%22/><circle cx=%226.5%22 cy=%229.5%22 r=%222%22/><circle cx=%2210%22 cy=%226.5%22 r=%222%22/><circle cx=%2214%22 cy=%226.5%22 r=%222%22/><circle cx=%2217.5%22 cy=%229.5%22 r=%222%22/></svg>">
   <style>
     .legal-content {
       max-width: 800px;
@@ -68,6 +68,13 @@
       padding: 1.25rem 1.5rem;
       border-radius: 14px;
       margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .highlight-icon {
+      color: var(--md-primary);
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -75,7 +82,15 @@
   <header class="app-bar">
     <div class="container app-bar-inner">
       <a href="/store" class="brand-link">
-        <span class="brand-icon">🐾</span>
+        <span class="brand-svg">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
         <span>Cat Game</span>
       </a>
       <div class="nav-actions">
@@ -91,7 +106,16 @@
       <div class="legal-date">Last updated: September 2026</div>
 
       <div class="highlight-card">
-        <strong>💡 Need help with your key?</strong> Our support staff is ready to help resolve activation issues, HWID transfers, or key replacements 24/7 via <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 700;">Discord Tickets</a>.
+        <span class="highlight-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Need help with your key?</strong> Our support staff is ready to help resolve activation issues, HWID transfers, or key replacements 24/7 via <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 700;">Discord Tickets</a>.
+        </div>
       </div>
 
       <h2>1. Nature of Digital Goods</h2>
@@ -129,8 +153,19 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <h4>🐾 Cat Game</h4>
-        <p>Cat Game © 2026. All rights reserved.</p>
+        <span class="brand-svg">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <div class="footer-brand-info">
+          <h4>Cat Game</h4>
+          <p>Cat Game © 2026. All rights reserved.</p>
+        </div>
       </div>
       <div class="footer-links">
         <a href="/store" class="footer-link">Store</a>

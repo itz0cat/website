@@ -37,7 +37,7 @@ function setAccentColor(hexColor) {
 
   // Update active swatch indicator
   document.querySelectorAll('.swatch-btn').forEach(btn => {
-    if (btn.dataset.color.toLowerCase() === hexColor.toLowerCase()) {
+    if (btn.dataset.color && btn.dataset.color.toLowerCase() === hexColor.toLowerCase()) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
@@ -61,7 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Swatch click handlers
   document.querySelectorAll('.swatch-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      setAccentColor(btn.dataset.color);
+      if (btn.dataset.color) {
+        setAccentColor(btn.dataset.color);
+      }
     });
   });
 
@@ -115,27 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Currency Switcher (INR vs USD)
-  const currencyBtns = document.querySelectorAll('[data-currency]');
-  const priceElements = document.querySelectorAll('[data-price-inr]');
-
-  currencyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      currencyBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const selectedCurrency = btn.dataset.currency;
-      priceElements.forEach(el => {
-        if (selectedCurrency === 'USD') {
-          el.textContent = el.dataset.priceUsd;
-        } else {
-          el.textContent = el.dataset.priceInr;
-        }
-      });
-    });
-  });
-
-  // 5. FAQ Accordion
+  // 4. FAQ Accordion
   document.querySelectorAll('.faq-question').forEach(button => {
     button.addEventListener('click', () => {
       const faqItem = button.parentElement;
@@ -155,16 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Copy Command Helper
+  // 5. Copy Command Helper
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const code = btn.dataset.copy;
       navigator.clipboard.writeText(code).then(() => {
-        const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
         btn.style.backgroundColor = 'rgba(16, 185, 129, 0.4)';
         setTimeout(() => {
-          btn.textContent = originalText;
+          btn.innerHTML = originalHTML;
           btn.style.backgroundColor = '';
         }, 2000);
       });

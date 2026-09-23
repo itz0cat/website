@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cat Game — Mod Key Store</title>
+  <meta name="description" content="Unlock the full Cat Game experience. Get exclusive Minecraft mod keys, automated cloud solvers, custom delays, and in-game perks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/material.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+</head>
+<body>
+
+  <!-- Top App Bar (Header) -->
+  <header class="app-bar">
+    <div class="container app-bar-inner">
+      <a href="/store" class="brand-link">
+        <span class="brand-icon">🐾</span>
+        <span>Cat Game</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#store" class="nav-link">Store</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#commands" class="nav-link">Commands</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Accent Palette Switcher (Matches Screenshots) -->
+        <button id="openDrawerBtn" class="icon-btn" aria-label="Customize accent color" title="Theme Settings">
+          🎨
+        </button>
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="icon-btn menu-toggle" aria-label="Toggle navigation">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Menu -->
+  <div id="mobileNav" class="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="#store" class="mobile-nav-link">Store</a></li>
+      <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
+      <li><a href="#features" class="mobile-nav-link">Features</a></li>
+      <li><a href="#commands" class="mobile-nav-link">Commands</a></li>
+      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+      <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
+      <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
+      <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Join Discord</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <!-- Hero Section (Matches Screenshot 2 & 3) -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="badge-pill">
+          <span>🔑</span>
+          <span>Cat Game Mod Keys</span>
+        </div>
+
+        <h1 class="hero-title">Unlock the full Cat Game experience.</h1>
+
+        <p class="hero-description">
+          A Cat Game key gives you exclusive tags, cosmetics, and in-game perks across our Minecraft mods. Pick a tier, redeem instantly, and start using your perks the same session.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#store" class="btn btn-primary">Get a key</a>
+          <a href="#how-it-works" class="btn btn-outlined">How it works</a>
+        </div>
+
+        <p class="hero-footnote">
+          Instant delivery · One-time purchase · Redeem via Discord
+        </p>
+      </div>
+    </section>
+
+    <!-- How It Works Section (Matches temp.txt) -->
+    <section id="how-it-works" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Simple 3-Step Process</span>
+          <h2 class="section-title">How it works</h2>
+          <p class="section-subtitle">Three steps, no waiting around.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Pick a tier</h3>
+            <p>Iron, Gold, or Diamond — each one stacks the perks of the tier below it, with lifetime or flexible competitive plans.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Checkout</h3>
+            <p>Click Buy on any tier to open a private ticket on our official Discord. Pay securely, then get your key delivered straight to your Discord DMs.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Redeem</h3>
+            <p>Drop the Fabric mod JAR in your mods folder, run <code>/cat key &lt;your-key&gt;</code> in chat, and your perks apply instantly, in-game.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Store Section: Choose Your Key -->
+    <section id="store" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Licensing & Tiers</span>
+          <h2 class="section-title">Choose your key</h2>
+          <p class="section-subtitle">Each tier includes everything from the tier below it.</p>
+        </div>
+
+        <!-- Currency Switcher -->
+        <div class="pricing-controls">
+          <div class="segmented-control">
+            <button class="segmented-btn active" data-currency="INR">INR (₹)</button>
+            <button class="segmented-btn" data-currency="USD">USD ($)</button>
+          </div>
+        </div>
+
+        <div class="tiers-grid">
+          <!-- Iron Key -->
+          <div class="tier-card">
+            <div class="tier-header">
+              <span class="tier-badge iron">🥉 Iron Tier</span>
+              <h3 class="tier-name">Iron Key</h3>
+              <p class="tier-desc">Casual players looking for a reliable, safe auto-solver that guarantees peace of mind.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price" data-price-inr="₹80" data-price-usd="$4.99">₹80</span>
+              <span class="tier-period">/ Lifetime (Permanent)</span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Permanent Access</strong> (Never expires, one-time payment)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>4.0s Fixed Safe Delay</strong> (+0.2s–0.6s human jitter)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>1 HWID Device</strong> bound cryptographically</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>All 6 Core Solvers</strong> (Math, Trivia, Gaps, Anagrams, Reverse, Quotes)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Custom tag color</strong> & 1 nametag badge</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Iron Discord role</strong> & community perks</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span>1 HWID reset every 30 days</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-iron">
+                Buy Iron
+              </a>
+            </div>
+          </div>
+
+          <!-- Gold Key (Featured) -->
+          <div class="tier-card featured">
+            <div class="popular-badge">Most Popular</div>
+            <div class="tier-header">
+              <span class="tier-badge gold">🥇 Gold Tier</span>
+              <h3 class="tier-name">Gold Key</h3>
+              <p class="tier-desc">Competitive players who want to win ~80%+ of chat games by beating fast manual typers.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price" data-price-inr="₹20" data-price-usd="$9.99">₹20</span>
+              <span class="tier-period">/ 7 Days <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal;">(or ₹70 / Month)</small></span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <span class="feature-icon">★</span>
+                <span><strong>Everything in Iron</strong></span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>2.5s Default Speed</strong> (Down to 2.0s with <code>/cat delay</code>)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>In-Game Delay Control</strong> enabled</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>2 HWID Devices</strong> (Play on PC + Phone/Alt)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>High-Priority Solver Queue</strong> on cloud backend</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Nametag animation effects</strong> & priority server queue</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Gold Discord role</strong> & custom server trivia requests</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span>2 HWID resets per subscription period</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-gold">
+                Buy Gold
+              </a>
+            </div>
+          </div>
+
+          <!-- Diamond Key -->
+          <div class="tier-card">
+            <div class="tier-header">
+              <span class="tier-badge diamond">💎 Diamond Tier</span>
+              <h3 class="tier-name">Diamond Key</h3>
+              <p class="tier-desc">The ultimate VIP tier for leaderboard grinders, clan teams, and server rich-list dominance.</p>
+            </div>
+
+            <div class="tier-price-box">
+              <span class="tier-price" data-price-inr="₹40" data-price-usd="$19.99">₹40</span>
+              <span class="tier-period">/ 7 Days <small style="display:block; font-size: 0.8rem; color: #6b7280; font-weight: normal;">(or ₹140 / Month)</small></span>
+            </div>
+
+            <ul class="tier-features">
+              <li class="tier-feature">
+                <span class="feature-icon">★</span>
+                <span><strong>Everything in Gold</strong></span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Near-Instant 0.8s Default</strong> (Unrestricted down to 0.1s!)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Full Unrestricted Delay Control</strong> (<code>/cat delay 0.1</code>)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>5 HWID Devices</strong> (Share with team/clan members)</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Zero-Delay VIP Queue</strong> dedicated thread workers</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>24/7 Custom Trivia Additions</strong> within 1 hour</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Exclusive particle trail</strong> & tab highlight</span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span><strong>Early access to new mod features</strong></span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span>🔄 <strong>Unlimited instant HWID resets</strong></span>
+              </li>
+              <li class="tier-feature">
+                <span class="feature-icon">✓</span>
+                <span>Diamond Discord role + direct priority support</span>
+              </li>
+            </ul>
+
+            <div class="tier-action">
+              <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn-tier btn-diamond">
+                Buy Diamond
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mod Architecture & Solvers Showcase -->
+    <section id="features" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Built For Dominance</span>
+          <h2 class="section-title">What Cat Game Does</h2>
+          <p class="section-subtitle">Engineered specifically for Minecraft Fabric 1.21.x to detect and win every chat game cleanly.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-box">
+            <div class="feature-box-icon">🧩</div>
+            <h4>Fill-In-The-Blank Matcher</h4>
+            <p>Indexes 2,466+ official Minecraft item, block, and mob registry names. Instantly decodes patterns like <code>_rown Co_cret_ ___d__</code> into <code>Brown Concrete Powder</code>.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon">⚡</div>
+            <h4>Instant Anagram Unscrambler</h4>
+            <p>High-speed letter-frequency algorithm solves scrambled words (e.g. <code>Onraeg loWo</code> → <code>Orange Wool</code>) in single-digit milliseconds.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon">🧮</div>
+            <h4>Complex Equation Solver</h4>
+            <p>Handles negative numbers, nested operator precedence, and arithmetic equations with 100% precision before human players can calculate them.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon">📡</div>
+            <h4>Predictive Cooldown Radar</h4>
+            <p>Constantly monitors server timing patterns and gives you a 20-second warning in your Action Bar so you never get caught on chat cooldown when a game drops.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon">🛡️</div>
+            <h4>Human Jitter Anti-Cheat</h4>
+            <p>Engineered with micro-delays and randomized typing jitter to keep your answers within natural human timing windows and protect against detection.</p>
+          </div>
+
+          <div class="feature-box">
+            <div class="feature-box-icon">🔒</div>
+            <h4>SHA-256 HWID Security</h4>
+            <p>Hardware IDs are cryptographically hashed locally before communicating with our cloud API. Zero leaked credentials and zero server-side impersonation.</p>
+          </div>
+        </div>
+
+        <!-- In-Game Command Demo -->
+        <div id="commands" class="command-demo-card">
+          <div class="command-demo-header">
+            <div class="terminal-dots">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+            </div>
+            <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Minecraft In-Game Commands</span>
+          </div>
+
+          <div class="command-list">
+            <div class="command-item">
+              <div>
+                <div class="command-code">/cat key &lt;your-key&gt;</div>
+                <div class="command-desc">Authenticates your license key and binds your tier perks.</div>
+              </div>
+              <button class="copy-btn" data-copy="/cat key ">Copy</button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/cat delay &lt;seconds&gt;</div>
+                <div class="command-desc">Adjusts answer delay in-game (Gold: 2.0s–10s, Diamond: down to 0.1s).</div>
+              </div>
+              <button class="copy-btn" data-copy="/cat delay ">Copy</button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/cat status</div>
+                <div class="command-desc">Displays your active tier, allowed device slots, and connection health.</div>
+              </div>
+              <button class="copy-btn" data-copy="/cat status">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Got Questions?</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Everything you need to know about keys, tiers, and setup.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How do I purchase and receive my key?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Simply click "Buy" on any tier card to be directed to our official Discord server (<a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 600;">discord.gg/Ga6y7rzd5u</a>). Open a ticket in the ticket channel, choose your payment method, and your unique <code>CAT-XXXX-XXXX-XXXX-XXXX</code> key will be delivered directly to your ticket.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What Minecraft versions and loaders are supported?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Cat Game is built for <strong>Fabric Loader (0.16+)</strong> running on Minecraft universal range <strong>1.21.x</strong> (Java 21). It works seamlessly on popular servers such as BananaSMP, Lifesteal, and custom SMP networks.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can I switch PCs or reset my Hardware ID (HWID)?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Yes! Iron Tier includes 1 monthly reset, Gold Tier includes 2 resets per subscription cycle, and Diamond Tier includes unlimited instant resets. Just send a message in your Discord ticket to update your device.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Will I get flagged or banned by server anti-cheat?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Iron Tier uses a fixed 4.0-second delay with randomized human typing jitter, making it indistinguishable from a normal player. Gold Tier allows down to 2.0s which is within fast human typing speed. Diamond Tier allows down to 0.1s for players who want absolute domination.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How do subscription renewals and upgrades work?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                You can upgrade your tier or renew your weekly/monthly subscription anytime through your Discord ticket. Our admin tools can upgrade your existing key without requiring you to re-download the mod.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Matches temp.txt) -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <h4>🐾 Cat Game</h4>
+        <p>Cat Game © 2026. All rights reserved.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="/terms" class="footer-link">Terms</a>
+        <a href="/refunds" class="footer-link">Refunds</a>
+        <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="footer-link">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Customizer Modal / Drawer (Matches Screenshot 1) -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="themeDrawer" class="theme-drawer" aria-label="Theme Customizer">
+    <div class="drawer-header">
+      <button id="closeDrawerBtn" class="drawer-close-btn" aria-label="Close settings">
+        ✕
+      </button>
+    </div>
+
+    <!-- Accent Color (Screenshot 1) -->
+    <div class="drawer-section">
+      <span class="drawer-label">Accent Color</span>
+
+      <div class="custom-picker-row">
+        <input type="color" id="customColorPicker" class="custom-color-input" value="#6ba4e8" title="Choose custom color">
+        <label for="customColorPicker" class="custom-picker-label">Pick any color</label>
+      </div>
+
+      <div class="palette-swatches">
+        <button class="swatch-btn" data-color="#2563eb" style="background-color: #2563eb;" title="Deep Blue"></button>
+        <button class="swatch-btn" data-color="#3b82f6" style="background-color: #3b82f6;" title="Electric Blue"></button>
+        <button class="swatch-btn" data-color="#7c3aed" style="background-color: #7c3aed;" title="Purple"></button>
+        <button class="swatch-btn" data-color="#1e293b" style="background-color: #1e293b;" title="Midnight Navy"></button>
+        <button class="swatch-btn" data-color="#0d9488" style="background-color: #0d9488;" title="Teal"></button>
+        <button class="swatch-btn active" data-color="#6ba4e8" style="background-color: #6ba4e8;" title="Soft Sky (Default)"></button>
+        <button class="swatch-btn" data-color="#f97316" style="background-color: #f97316;" title="Sunset Coral"></button>
+        <button class="swatch-btn" data-color="#18181b" style="background-color: #18181b;" title="Obsidian"></button>
+      </div>
+    </div>
+
+    <!-- Strictly Material Design Note -->
+    <div class="drawer-section">
+      <span class="drawer-label">Design System</span>
+      <div style="padding: 12px 16px; border-radius: 12px; background-color: var(--md-surface-container); border: 1px solid var(--md-surface-container-highest); font-size: 0.875rem; color: #475569;">
+        ✨ <strong>Material Design 3</strong> active with dynamic Material You accent palettes.
+      </div>
+    </div>
+  </aside>
+
+  <script src="/js/store.js"></script>
+</body>
+</html>

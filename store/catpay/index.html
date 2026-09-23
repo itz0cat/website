@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CatPay Mod — Minecraft Economy & Payment Simulator (No Key Required)</title>
+  <meta name="description" content="CatPay is a paid client-side Minecraft Fabric mod for simulating /pay transactions, BananaSMP currency glyphs, and incoming payments. Zero activation keys required — lifetime offline ownership.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/material.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235c93d6%22><ellipse cx=%2212%22 cy=%2215%22 rx=%225%22 ry=%224%22/><circle cx=%226.5%22 cy=%229.5%22 r=%222%22/><circle cx=%2210%22 cy=%226.5%22 r=%222%22/><circle cx=%2214%22 cy=%226.5%22 r=%222%22/><circle cx=%2217.5%22 cy=%229.5%22 r=%222%22/></svg>">
+  <style>
+    .no-key-banner {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.15) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 24px;
+      padding: 2rem 2.25rem;
+      margin: 1.5rem auto 3.5rem;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: var(--md-elevation-1);
+    }
+    @media (max-width: 768px) {
+      .no-key-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+      }
+    }
+    .no-key-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: #22c55e;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+    }
+    .no-key-text h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #14532d;
+      margin-bottom: 0.35rem;
+    }
+    .no-key-text p {
+      font-size: 0.95rem;
+      color: #166534;
+      line-height: 1.55;
+      margin: 0;
+    }
+    .pricing-grid-catpay {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .pricing-grid-catpay {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .glyph-preview-box {
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 1.5rem;
+      color: #f8fafc;
+      font-family: var(--md-font-mono);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      border: 1px solid #1e293b;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+    }
+    .glyph-mint {
+      color: #55FFAA;
+      font-weight: 700;
+    }
+    .glyph-gray {
+      color: #94a3b8;
+    }
+    .glyph-white {
+      color: #ffffff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar (Header) -->
+  <header class="app-bar">
+    <div class="container app-bar-inner">
+      <a href="/store" class="brand-link">
+        <span class="brand-svg">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <span>Cat Game</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/store" class="nav-link">Store Hub</a></li>
+          <li><a href="/store/catgame" class="nav-link">CatGame Keys</a></li>
+          <li><a href="/store/catflip" class="nav-link">CatFlip Keys</a></li>
+          <li><a href="/store/catpay" class="nav-link active">CatPay Mod</a></li>
+          <li><a href="/download" class="nav-link">Downloads</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="openDrawerBtn" class="icon-btn" aria-label="Customize accent color" title="Theme Settings">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
+          </svg>
+        </button>
+        <button id="mobileMenuToggle" class="icon-btn menu-toggle" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Menu -->
+  <div id="mobileNav" class="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="/store" class="mobile-nav-link">Store Hub</a></li>
+      <li><a href="/store/catgame" class="mobile-nav-link">CatGame Keys</a></li>
+      <li><a href="/store/catflip" class="mobile-nav-link">CatFlip Keys</a></li>
+      <li><a href="/store/catpay" class="mobile-nav-link">CatPay Mod</a></li>
+      <li><a href="/download" class="mobile-nav-link">Downloads</a></li>
+      <li><a href="#features" class="mobile-nav-link">Features</a></li>
+      <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+      <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
+      <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
+      <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Join Discord</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="badge-pill">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+          <span>Paid Client Mod · Fabric 1.21.11</span>
+        </div>
+
+        <h1 class="hero-title">CatPay — Economy & Payment Simulator.</h1>
+
+        <p class="hero-description">
+          Authentic client-side <code>/pay</code> simulation and fake incoming payment triggers. Replicates server currency glyphs, custom MiniMessage hex colors, and player tab completion — with <strong>zero cloud keys required</strong>.
+        </p>
+
+        <!-- No Key System Callout -->
+        <div class="no-key-banner">
+          <div class="no-key-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div class="no-key-text">
+            <h3>Stand-Alone Paid Mod · No Key System Needed</h3>
+            <p>
+              Unlike CatGame and CatFlip which require cloud license keys, <strong>CatPay is a pure standalone mod</strong>. Buy it once, download your JAR, and drop it in your mods folder. No activation keys, no HWID limits, no expiration dates, and 100% offline support.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section" style="padding-top: 0.5rem;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Simple Pricing</span>
+          <h2 class="section-title">One-Time Purchase. Lifetime Ownership.</h2>
+          <p class="section-subtitle">No weekly renewals. No HWID device limits. Yours forever.</p>
+        </div>
+
+        <div class="pricing-grid-catpay">
+          <!-- Tier 1: Standard Mod License -->
+          <div class="tier-card featured">
+            <div class="tier-badge">Most Popular</div>
+            <div class="tier-icon-wrap" style="color: var(--md-primary); background-color: var(--md-primary-container);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                <line x1="2" y1="10" x2="22" y2="10"/>
+              </svg>
+            </div>
+            <h3 class="tier-name">CatPay Standard</h3>
+            <p class="tier-desc">Complete standalone client mod JAR with full feature access and future version updates.</p>
+
+            <div class="tier-price-row">
+              <div class="tier-price-val">₹99 / $1.19</div>
+              <div class="tier-price-period">One-time payment · Lifetime access</div>
+            </div>
+
+            <ul class="tier-features">
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>No Key Needed:</strong> Permanent offline mod access</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>BananaSMP Currency Glyph:</strong> Authentic <code>\uE058</code> glyph</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Mint Hex Color:</strong> Exact <code>&lt;#55FFAA&gt;</code> rendering</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Client <code>/pay</code> Interception:</strong> Tab list + shorthand</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Silent Toggle Keybind:</strong> Stealth mode with zero trace</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Unlimited Devices:</strong> Use on all your PCs</span>
+              </li>
+            </ul>
+
+            <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: auto;">
+              Buy Standard Mod (Discord)
+            </a>
+          </div>
+
+          <!-- Tier 2: VIP / Supporter Edition -->
+          <div class="tier-card">
+            <div class="tier-icon-wrap" style="color: #7c3aed; background-color: rgba(124, 58, 237, 0.15);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <h3 class="tier-name">CatPay VIP Supporter</h3>
+            <p class="tier-desc">For content creators and supporters. Includes priority custom server profile requests.</p>
+
+            <div class="tier-price-row">
+              <div class="tier-price-val">₹199 / $2.39</div>
+              <div class="tier-price-period">One-time payment · VIP Benefits</div>
+            </div>
+
+            <ul class="tier-features">
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Everything in Standard:</strong> Full standalone mod JAR</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Custom Server Profile Request:</strong> We build & push profiles for your favorite server</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Priority Beta Access:</strong> Test early releases for new Minecraft versions</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>VIP Discord Role:</strong> Exclusive access to developer chat</span>
+              </li>
+              <li class="feature-item">
+                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Direct Support:</strong> 1-on-1 configuration assistance</span>
+              </li>
+            </ul>
+
+            <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-outlined" style="margin-top: auto;">
+              Buy VIP Supporter (Discord)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deep-Dive Features Section -->
+    <section id="features" class="section" style="background-color: var(--md-surface-container-low);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Authentic Engineering</span>
+          <h2 class="section-title">Built for Flawless In-Game Replication</h2>
+          <p class="section-subtitle">Every pixel, font character, and formatting code matched directly from server chat.</p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">BananaSMP Unicode Glyph</h3>
+            <p class="feature-desc">
+              Pre-loaded with BananaSMP's custom font glyph <code>\uE058</code>. Renders the exact custom money icon on servers using resource-pack fonts, with a simple toggle for vanilla SMPs.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">MiniMessage & Hex Engine</h3>
+            <p class="feature-desc">
+              Full support for modern Paper/Spigot MiniMessage tags, Spigot hex (<code>&lt;#55FFAA&gt;</code>), and standard Minecraft color codes. Both currency glyph and amounts match authentic server palettes.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4 17 10 11 4 5"/>
+                <line x1="12" y1="19" x2="20" y2="19"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Client-Side /pay Interception</h3>
+            <p class="feature-desc">
+              Type <code>/pay &lt;player&gt; &lt;amount&gt;</code> in chat. Auto-completes player names from tab list and parses shorthand numbers like <code>10m</code> or <code>1.5b</code> with comma grouping up to 1 Trillion.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Silent Stealth Keybind</h3>
+            <p class="feature-desc">
+              Dedicated silent toggle keybinding. Turn the entire simulator on or off instantly with zero chat or HUD messages, leaving no trace during screenshares or recording.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Simulate Incoming Payment</h3>
+            <p class="feature-desc">
+              Hit your configured keybind to instantly simulate receiving payments from any chosen player and amount. Fully customizable in ModMenu or config.json.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">100% Anti-Cheat Safe</h3>
+            <p class="feature-desc">
+              CatPay generates purely local client chat components. It sends zero fake packets to the server, alters zero player balances, and is mathematically undetectable by server anti-cheats.
+            </p>
+          </div>
+        </div>
+
+        <!-- Chat Replica Preview -->
+        <div style="max-width: 800px; margin: 3rem auto 0;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem; text-align: center;">In-Game Chat Visual Output</h3>
+          <p style="font-size: 0.95rem; color: #4b5563; text-align: center; margin-bottom: 1rem;">
+            Matches exact colors and glyphs from BananaSMP server packets:
+          </p>
+          <div class="glyph-preview-box">
+            <div><span class="glyph-mint"> $500,000,000</span><span class="glyph-gray"> has been received from </span><span class="glyph-white">JustGhastlyyy</span>.</div>
+            <div><span class="glyph-mint"> $25,000,000</span><span class="glyph-gray"> has been sent to </span><span class="glyph-white">BananaKing</span>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- In-Game Configuration & Setup Section -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Configuration</span>
+          <h2 class="section-title">Effortless In-Game Setup</h2>
+          <p class="section-subtitle">Configure everything through ModMenu or directly via JSON.</p>
+        </div>
+
+        <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="feature-card" style="display: flex; flex-direction: column; gap: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827;">Configuration File Path</h3>
+            <p style="font-size: 0.95rem; color: #4b5563; margin: 0;">
+              Local settings are saved in your Minecraft directory:
+            </p>
+            <div class="cmd-copier" style="margin: 0;">
+              <code class="cmd-text">.minecraft/config/catpay/config.json</code>
+              <button class="copy-btn" data-copy=".minecraft/config/catpay/config.json">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <div class="feature-card" style="display: flex; flex-direction: column; gap: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827;">Keybindings (In-Game Controls)</h3>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+              <li style="display: flex; align-items: center; justify-content: space-between; font-size: 0.95rem; padding-bottom: 0.5rem; border-bottom: 1px dashed #e5e7eb;">
+                <span><strong>Toggle CatPay (Silent)</strong> — Stealth master toggle</span>
+                <span class="cmd-badge">Configurable in Controls</span>
+              </li>
+              <li style="display: flex; align-items: center; justify-content: space-between; font-size: 0.95rem; padding-bottom: 0.5rem; border-bottom: 1px dashed #e5e7eb;">
+                <span><strong>Simulate Payment Received</strong> — Trigger fake incoming transfer</span>
+                <span class="cmd-badge">Configurable in Controls</span>
+              </li>
+              <li style="display: flex; align-items: center; justify-content: space-between; font-size: 0.95rem;">
+                <span><strong>ModMenu GUI</strong> — In-game visual configuration UI</span>
+                <span class="cmd-badge">Mods &gt; CatPay &gt; Configure</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section" style="background-color: var(--md-surface-container-low);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Got Questions?</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Everything you need to know about purchasing and using CatPay.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Why does CatPay NOT require a license key?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                CatPay is a client-side simulation mod that does not rely on cloud solvers or remote AI engines. You purchase the mod binary directly, drop the JAR into your mods folder, and use it freely forever. There are zero cloud keys to enter, zero HWID locks, and no subscription renewals.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can I use CatPay on multiple computers?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Yes! Because there is no HWID binding or key lock, you can install your purchased JAR on your desktop, laptop, or any personal gaming machine without needing device resets.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Will server admins or anti-cheats detect this?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                No. When CatPay is active and intercepts <code>/pay</code>, the command is intercepted locally in the Minecraft client. Zero packets are sent across the network, making it invisible to the server. Furthermore, the silent toggle keybind allows you to turn the mod off without any chat alert.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How do I receive the mod after purchasing?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Click any purchase button on this page to join our official Discord server (<a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" style="color: var(--md-primary); font-weight: 600;">discord.gg/Ga6y7rzd5u</a>). Open a ticket in the ticket channel, choose your payment method, and your authenticated JAR download link will be provided instantly in your ticket.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What Minecraft versions and loaders are supported?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                CatPay is built for <strong>Fabric Loader (0.16+)</strong> on Minecraft <strong>1.21.x</strong> (Java 21) with full support for Cloth Config and ModMenu.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Discord CTA -->
+    <section class="section" style="text-align: center;">
+      <div class="container">
+        <h2 style="font-size: 2rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">Ready to Get CatPay?</h2>
+        <p style="font-size: 1.05rem; color: #4b5563; max-width: 580px; margin: 0 auto 2rem; line-height: 1.6;">
+          Open a ticket on our official Discord server. Instant delivery, secure payments, and lifetime access.
+        </p>
+        <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size: 1rem; padding: 14px 32px;">
+          Purchase CatPay on Discord
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-brand">
+        <span class="brand-svg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </span>
+        <span>Cat Game Mod Suite</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="/store" class="footer-link">Store Hub</a>
+        <a href="/store/catgame" class="footer-link">CatGame Keys</a>
+        <a href="/store/catflip" class="footer-link">CatFlip Keys</a>
+        <a href="/store/catpay" class="footer-link">CatPay Mod</a>
+        <a href="/download" class="footer-link">Downloads</a>
+        <a href="/terms" class="footer-link">Terms</a>
+        <a href="/refunds" class="footer-link">Refunds</a>
+        <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="footer-link">Discord</a>
+      </div>
+
+      <div class="footer-copy">
+        Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft. All product trademarks belong to their respective owners.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Customizer Modal / Drawer -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="themeDrawer" class="theme-drawer" aria-label="Theme Customizer">
+    <div class="drawer-header">
+      <button id="closeDrawerBtn" class="drawer-close-btn" aria-label="Close settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Accent Color</span>
+      <div class="custom-picker-row">
+        <input type="color" id="customColorPicker" class="custom-color-input" value="#6ba4e8" title="Choose custom color">
+        <label for="customColorPicker" class="custom-picker-label">Pick any color</label>
+      </div>
+      <div class="palette-swatches">
+        <button class="swatch-btn" data-color="#2563eb" style="background-color: #2563eb;" title="Deep Blue"></button>
+        <button class="swatch-btn" data-color="#3b82f6" style="background-color: #3b82f6;" title="Electric Blue"></button>
+        <button class="swatch-btn" data-color="#7c3aed" style="background-color: #7c3aed;" title="Purple"></button>
+        <button class="swatch-btn" data-color="#1e293b" style="background-color: #1e293b;" title="Midnight Navy"></button>
+        <button class="swatch-btn" data-color="#0d9488" style="background-color: #0d9488;" title="Teal"></button>
+        <button class="swatch-btn active" data-color="#6ba4e8" style="background-color: #6ba4e8;" title="Soft Sky (Default)"></button>
+        <button class="swatch-btn" data-color="#f97316" style="background-color: #f97316;" title="Sunset Coral"></button>
+        <button class="swatch-btn" data-color="#18181b" style="background-color: #18181b;" title="Obsidian"></button>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <span class="drawer-label">Design System</span>
+      <div style="padding: 12px 16px; border-radius: 12px; background-color: var(--md-surface-container); border: 1px solid var(--md-surface-container-highest); font-size: 0.875rem; color: #475569;">
+        <strong>Material Design 3</strong> active with dynamic Material You accent palettes.
+      </div>
+    </div>
+  </aside>
+
+  <script src="/js/store.js"></script>
+</body>
+</html>

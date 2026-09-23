@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cat Game Store — Mod Key Portal</title>
-  <meta name="description" content="Official store for CatGame and CatFlip Minecraft Fabric mods. Choose your key, unlock cloud solvers, and dominate your servers.">
+  <title>Cat Game Store — Mod Portal</title>
+  <meta name="description" content="Official store for CatGame, CatFlip, and CatPay Minecraft Fabric mods. Choose your key or download paid mods directly.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -14,20 +14,20 @@
     .hub-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 2rem;
-      max-width: 1100px;
+      gap: 1.75rem;
+      max-width: 1240px;
       margin: 0 auto;
     }
-    @media (min-width: 860px) {
+    @media (min-width: 920px) {
       .hub-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
     .hub-card {
       background-color: var(--md-surface);
       border: 1px solid #e5e7eb;
-      border-radius: 28px;
-      padding: 2.75rem 2.25rem;
+      border-radius: 24px;
+      padding: 2.25rem 1.75rem;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -35,66 +35,66 @@
       box-shadow: var(--md-elevation-1);
     }
     .hub-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
       box-shadow: var(--md-elevation-3);
       border-color: var(--md-primary-container);
     }
     .hub-card-icon-wrap {
-      width: 64px;
-      height: 64px;
-      border-radius: 18px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
       background-color: var(--md-primary-container);
       color: var(--md-primary);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     .hub-card-tag {
       display: inline-block;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--md-primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
     .hub-card-title {
-      font-size: 1.85rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: #111827;
-      letter-spacing: -0.025em;
-      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
     }
     .hub-card-desc {
-      font-size: 0.975rem;
+      font-size: 0.925rem;
       color: #4b5563;
-      line-height: 1.6;
-      margin-bottom: 1.75rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
     }
     .hub-feature-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      margin-bottom: 2.25rem;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
       flex-grow: 1;
     }
     .hub-feature-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.925rem;
+      gap: 8px;
+      font-size: 0.885rem;
       color: #374151;
-      line-height: 1.45;
+      line-height: 1.4;
     }
     .hub-card-footer {
       border-top: 1px dashed #e5e7eb;
-      padding-top: 1.5rem;
+      padding-top: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
     .hub-price-callout {
@@ -102,14 +102,14 @@
       flex-direction: column;
     }
     .hub-price-label {
-      font-size: 0.75rem;
+      font-size: 0.725rem;
       text-transform: uppercase;
       font-weight: 700;
       letter-spacing: 0.05em;
       color: #6b7280;
     }
     .hub-price-val {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #111827;
     }
@@ -117,10 +117,10 @@
       background: linear-gradient(135deg, var(--md-surface-container-low) 0%, var(--md-primary-container) 100%);
       border: 1px solid var(--md-surface-container-highest);
       border-radius: 24px;
-      padding: 2.5rem;
+      padding: 2.25rem;
       text-align: center;
-      margin: 4rem auto 0;
-      max-width: 900px;
+      margin: 3.5rem auto 0;
+      max-width: 960px;
       box-shadow: var(--md-elevation-1);
     }
   </style>
@@ -148,6 +148,7 @@
           <li><a href="/store" class="nav-link active">Store Hub</a></li>
           <li><a href="/store/catgame" class="nav-link">CatGame Keys</a></li>
           <li><a href="/store/catflip" class="nav-link">CatFlip Keys</a></li>
+          <li><a href="/store/catpay" class="nav-link">CatPay Mod</a></li>
           <li><a href="/download" class="nav-link">Downloads</a></li>
           <li><a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="nav-link">Discord</a></li>
         </ul>
@@ -180,6 +181,7 @@
       <li><a href="/store" class="mobile-nav-link">Store Hub</a></li>
       <li><a href="/store/catgame" class="mobile-nav-link">CatGame Keys</a></li>
       <li><a href="/store/catflip" class="mobile-nav-link">CatFlip Keys</a></li>
+      <li><a href="/store/catpay" class="mobile-nav-link">CatPay Mod</a></li>
       <li><a href="/download" class="mobile-nav-link">Downloads</a></li>
       <li><a href="/terms" class="mobile-nav-link">Terms of Service</a></li>
       <li><a href="/refunds" class="mobile-nav-link">Refund Policy</a></li>
@@ -195,125 +197,141 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2-1.5 1.5 2 2L13 10l-2-2-1.5 1.5 2 2L9 14l-2-2L2 17l5 5 12-12-2-2z"/>
           </svg>
-          <span>Official Mod Key Store</span>
+          <span>Official Mod & Key Store</span>
         </div>
 
         <h1 class="hero-title">Pick Your Mod Experience.</h1>
 
         <p class="hero-description">
-          Choose between <strong>CatGame</strong> for high-speed chat game auto-solving or <strong>CatFlip</strong> for mathematical bankroll automation on DeluxeCoinflip servers.
+          Choose between cloud-powered solver keys for <strong>CatGame</strong> and <strong>CatFlip</strong>, or get the standalone <strong>CatPay</strong> paid mod with zero key requirements.
         </p>
 
         <p class="hero-footnote">
-          Instant key generation · Secure Discord delivery · Minecraft Fabric 1.21.x
+          Instant delivery · Secure Discord checkout · Minecraft Fabric 1.21.x
         </p>
       </div>
     </section>
 
-    <!-- Two Main Cards Section -->
+    <!-- Three Main Cards Section (Short & Concise) -->
     <section class="section" style="padding-top: 1rem;">
       <div class="container">
         <div class="hub-grid">
           <!-- Card 1: CatGame Keys -->
           <div class="hub-card">
             <div class="hub-card-icon-wrap">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
             </div>
             <span class="hub-card-tag">ChatGame Auto-Solver</span>
             <h2 class="hub-card-title">CatGame Keys</h2>
             <p class="hub-card-desc">
-              High-performance Minecraft Fabric mod engineered to detect, solve, and win chat games on BananaSMP, Lifesteal, and custom SMP networks.
+              Instant cloud auto-solver for SMP chat games with humanized delays and anti-cheat protection.
             </p>
 
             <ul class="hub-feature-list">
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>6 Cloud Solvers:</strong> Math, Trivia, Gaps, Anagrams, Reverse & Literal Quotes</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>6 Cloud Solvers:</strong> Math, Trivia, Gaps, Anagrams</span>
               </li>
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Human Delays:</strong> Fixed 4.0s safe delay down to near-instant 0.8s</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Human Delays:</strong> Safe 4.0s down to instant 0.8s</span>
               </li>
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Predictive Radar:</strong> 20-second heads-up warning in Action Bar</span>
-              </li>
-              <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Anti-Cheat Safe:</strong> Randomized typing jitter & 0-leak SHA-256 HWID</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Predictive Radar:</strong> 20s warning in Action Bar</span>
               </li>
             </ul>
 
             <div class="hub-card-footer">
               <div class="hub-price-callout">
                 <span class="hub-price-label">Starting From</span>
-                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.8rem; color: #6b7280; font-weight: normal;">/wk</small></span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #6b7280; font-weight: normal;">/wk</small></span>
               </div>
-              <a href="/store/catgame" class="btn btn-primary" style="padding: 12px 22px;">
-                Explore CatGame Keys →
+              <a href="/store/catgame" class="btn btn-primary" style="padding: 10px 18px; font-size: 0.875rem;">
+                CatGame Keys →
               </a>
             </div>
           </div>
 
           <!-- Card 2: CatFlip Keys -->
           <div class="hub-card">
-            <div class="hub-card-icon-wrap">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="hub-card-icon-wrap" style="color: #0891b2; background-color: rgba(8, 145, 178, 0.15);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
                 <path d="M12 18V6"/>
               </svg>
             </div>
-            <span class="hub-card-tag">CoinFlip Automation</span>
+            <span class="hub-card-tag" style="color: #0891b2;">CoinFlip Automation</span>
             <h2 class="hub-card-title">CatFlip Keys</h2>
             <p class="hub-card-desc">
-              Autonomous coinflip manager combining isolated bankroll budgeting, the Kuro Mathematical Odds Engine, and hard risk cutoffs for DeluxeCoinflip.
+              Mathematical bankroll manager & Kuro odds engine for DeluxeCoinflip servers.
             </p>
 
             <ul class="hub-feature-list">
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Isolated Vault:</strong> Allocate $50k or $1M without risking your wallet</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Kuro Math Engine:</strong> 100% deterministic odds</span>
               </li>
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Kuro Math Engine:</strong> 100% deterministic probability calculations</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Isolated Vault:</strong> Budget safely via <code>/cf vault</code></span>
               </li>
               <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Hard Risk Engine:</strong> 5-loss cutoff and 50% stop-loss protection</span>
-              </li>
-              <li class="hub-feature-item">
-                <svg class="feature-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span><strong>Real-Time HUD:</strong> Live vault balance, session profit/loss, and winrate %</span>
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Hard Risk Engine:</strong> Automatic 5-loss cutoff</span>
               </li>
             </ul>
 
             <div class="hub-card-footer">
               <div class="hub-price-callout">
                 <span class="hub-price-label">Starting From</span>
-                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.8rem; color: #6b7280; font-weight: normal;">/wk</small></span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #6b7280; font-weight: normal;">/wk</small></span>
               </div>
-              <a href="/store/catflip" class="btn btn-primary" style="padding: 12px 22px;">
-                Explore CatFlip Keys →
+              <a href="/store/catflip" class="btn btn-primary" style="padding: 10px 18px; font-size: 0.875rem;">
+                CatFlip Keys →
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 3: CatPay Mod (Paid Mod · No Key System) -->
+          <div class="hub-card">
+            <div class="hub-card-icon-wrap" style="color: #22c55e; background-color: rgba(34, 197, 94, 0.15);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                <line x1="2" y1="10" x2="22" y2="10"/>
+              </svg>
+            </div>
+            <span class="hub-card-tag" style="color: #16a34a;">Paid Mod · No Key System</span>
+            <h2 class="hub-card-title">CatPay Mod</h2>
+            <p class="hub-card-desc">
+              Client-side economy & <code>/pay</code> simulator with authentic BananaSMP font glyphs.
+            </p>
+
+            <ul class="hub-feature-list">
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>No Key Needed:</strong> Permanent offline mod ownership</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>BananaSMP Glyph:</strong> Exact <code>\uE058</code> & mint hex</span>
+              </li>
+              <li class="hub-feature-item">
+                <svg class="feature-check-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Silent Toggle:</strong> Keybind stealth & fake receive</span>
+              </li>
+            </ul>
+
+            <div class="hub-card-footer">
+              <div class="hub-price-callout">
+                <span class="hub-price-label">Lifetime Price</span>
+                <span class="hub-price-val">₹99 / $1.19</span>
+              </div>
+              <a href="/store/catpay" class="btn btn-primary" style="padding: 10px 18px; font-size: 0.875rem;">
+                Explore CatPay →
               </a>
             </div>
           </div>
@@ -321,11 +339,11 @@
 
         <!-- Dual Product Bundle Callout -->
         <div class="bundle-banner">
-          <h3 style="font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem;">Need Both Mods?</h3>
-          <p style="font-size: 0.95rem; color: #4b5563; max-width: 620px; margin: 0 auto 1.5rem; line-height: 1.6;">
-            We offer unified Diamond bundle keys with both <code>CATGAME</code> and <code>CATFLIP</code> products enabled on a single key. Open a ticket on Discord to get the all-in-one suite.
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem;">Looking for Key Bundles?</h3>
+          <p style="font-size: 0.925rem; color: #4b5563; max-width: 640px; margin: 0 auto 1.5rem; line-height: 1.6;">
+            Get both <code>CATGAME</code> and <code>CATFLIP</code> on a single unified VIP license key. Open a ticket on Discord to get the all-in-one suite.
           </p>
-          <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <a href="https://discord.gg/Ga6y7rzd5u" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 12px 24px;">
             Request Dual Bundle on Discord
           </a>
         </div>
@@ -355,6 +373,7 @@
       <div class="footer-links">
         <a href="/store/catgame" class="footer-link">CatGame Keys</a>
         <a href="/store/catflip" class="footer-link">CatFlip Keys</a>
+        <a href="/store/catpay" class="footer-link">CatPay Mod</a>
         <a href="/download" class="footer-link">Downloads</a>
         <a href="/terms" class="footer-link">Terms</a>
         <a href="/refunds" class="footer-link">Refunds</a>

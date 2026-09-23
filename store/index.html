@@ -124,7 +124,7 @@
       box-shadow: var(--md-elevation-1);
     }
 
-    /* Golden Theme for CatFlip Card */
+    /* Golden Theme for CatGame Card */
     .hub-card.hub-card-gold {
       background: linear-gradient(165deg, #fffef9 0%, #fffdf0 50%, #fef9e8 100%);
       border: 2px solid #f59e0b;
@@ -133,7 +133,7 @@
     }
     .hub-card.hub-card-gold:hover {
       transform: translateY(-6px);
-      box-shadow: 0 10px 32px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 10px 32px rgba(245, 158, 11, 0.42);
       border-color: #d97706;
     }
     .hub-card-gold .hub-card-icon-wrap {
@@ -197,6 +197,156 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
       box-shadow: 0 2px 8px rgba(217, 119, 6, 0.32);
+    }
+
+    /* Green Theme for CatFlip Card */
+    .hub-card.hub-card-green {
+      background: linear-gradient(165deg, #f7fdf9 0%, #f0fdf4 50%, #e8fbf0 100%);
+      border: 2px solid #22c55e;
+      box-shadow: 0 4px 22px -2px rgba(34, 197, 94, 0.3), 0 2px 8px -1px rgba(22, 163, 74, 0.16);
+      position: relative;
+    }
+    .hub-card.hub-card-green:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 32px rgba(34, 197, 94, 0.45);
+      border-color: #16a34a;
+    }
+    .hub-card-green .hub-card-icon-wrap {
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      color: #15803d;
+      border: 1px solid #86efac;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+    }
+    .hub-card-green .hub-card-tag {
+      color: #15803d;
+      background-color: #dcfce7;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      border: 1px solid #bbf7d0;
+      display: inline-block;
+      width: fit-content;
+      font-weight: 800;
+    }
+    .hub-card-green .hub-card-title {
+      color: #14532d;
+    }
+    .hub-card-green .feature-check-svg {
+      color: #16a34a;
+    }
+    .hub-card-green .btn-hub-green {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+      padding: 10px 18px;
+      font-size: 0.875rem;
+      border-radius: var(--md-radius-full);
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--md-transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hub-card-green .btn-hub-green:hover {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      box-shadow: 0 6px 18px rgba(22, 163, 74, 0.45);
+      transform: translateY(-1px);
+    }
+    .hub-card-green .hub-card-footer {
+      border-top-color: #bbf7d0;
+    }
+    .hub-card-green .hub-price-val {
+      color: #14532d;
+    }
+    .hub-card-green-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.32);
+    }
+
+    /* Diamond Theme for CatPay Mod Card */
+    .hub-card.hub-card-diamond {
+      background: linear-gradient(165deg, #f8fcff 0%, #f0f9ff 50%, #e0f2fe 100%);
+      border: 2px solid #06b6d4;
+      box-shadow: 0 4px 22px -2px rgba(6, 182, 212, 0.3), 0 2px 8px -1px rgba(8, 145, 178, 0.16);
+      position: relative;
+    }
+    .hub-card.hub-card-diamond:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 32px rgba(6, 182, 212, 0.45);
+      border-color: #0891b2;
+    }
+    .hub-card-diamond .hub-card-icon-wrap {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.25);
+    }
+    .hub-card-diamond .hub-card-tag {
+      color: #0369a1;
+      background-color: #e0f2fe;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      border: 1px solid #bae6fd;
+      display: inline-block;
+      width: fit-content;
+      font-weight: 800;
+    }
+    .hub-card-diamond .hub-card-title {
+      color: #0c4a6e;
+    }
+    .hub-card-diamond .feature-check-svg {
+      color: #0891b2;
+    }
+    .hub-card-diamond .btn-hub-diamond {
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+      padding: 10px 18px;
+      font-size: 0.875rem;
+      border-radius: var(--md-radius-full);
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--md-transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hub-card-diamond .btn-hub-diamond:hover {
+      background: linear-gradient(135deg, #0891b2 0%, #0369a1 100%);
+      box-shadow: 0 6px 18px rgba(6, 182, 212, 0.45);
+      transform: translateY(-1px);
+    }
+    .hub-card-diamond .hub-card-footer {
+      border-top-color: #bae6fd;
+    }
+    .hub-card-diamond .hub-price-val {
+      color: #0c4a6e;
+    }
+    .hub-card-diamond-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.32);
     }
   </style>
 </head>
@@ -291,8 +441,9 @@
     <section class="section" style="padding-top: 1rem;">
       <div class="container">
         <div class="hub-grid">
-          <!-- Card 1: CatGame Keys -->
-          <div class="hub-card">
+          <!-- Card 1: CatGame Keys (Golden Card) -->
+          <div class="hub-card hub-card-gold">
+            <span class="hub-card-gold-badge">★ Golden Tier</span>
             <div class="hub-card-icon-wrap">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
@@ -322,17 +473,17 @@
             <div class="hub-card-footer">
               <div class="hub-price-callout">
                 <span class="hub-price-label">Starting From</span>
-                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #6b7280; font-weight: normal;">/wk</small></span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #b45309; font-weight: normal;">/wk</small></span>
               </div>
-              <a href="/store/catgame" class="btn btn-primary" style="padding: 10px 18px; font-size: 0.875rem;">
+              <a href="/store/catgame" class="btn-hub-gold">
                 CatGame Keys →
               </a>
             </div>
           </div>
 
-          <!-- Card 2: CatFlip Keys (Golden Card) -->
-          <div class="hub-card hub-card-gold">
-            <span class="hub-card-gold-badge">★ Featured</span>
+          <!-- Card 2: CatFlip Keys (Green Card) -->
+          <div class="hub-card hub-card-green">
+            <span class="hub-card-green-badge">★ Kuro Math</span>
             <div class="hub-card-icon-wrap">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
@@ -364,23 +515,24 @@
             <div class="hub-card-footer">
               <div class="hub-price-callout">
                 <span class="hub-price-label">Starting From</span>
-                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #b45309; font-weight: normal;">/wk</small></span>
+                <span class="hub-price-val">₹20 / $0.25 <small style="font-size: 0.75rem; color: #15803d; font-weight: normal;">/wk</small></span>
               </div>
-              <a href="/store/catflip" class="btn-hub-gold">
+              <a href="/store/catflip" class="btn-hub-green">
                 CatFlip Keys →
               </a>
             </div>
           </div>
 
-          <!-- Card 3: CatPay Mod (Paid Mod · No Key System) -->
-          <div class="hub-card">
-            <div class="hub-card-icon-wrap" style="color: #22c55e; background-color: rgba(34, 197, 94, 0.15);">
+          <!-- Card 3: CatPay Mod (Diamond Card · Paid Mod) -->
+          <div class="hub-card hub-card-diamond">
+            <span class="hub-card-diamond-badge">★ No Key Needed</span>
+            <div class="hub-card-icon-wrap">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="5" width="20" height="14" rx="2"/>
                 <line x1="2" y1="10" x2="22" y2="10"/>
               </svg>
             </div>
-            <span class="hub-card-tag" style="color: #16a34a;">Paid Mod · No Key System</span>
+            <span class="hub-card-tag">Paid Mod · Standalone</span>
             <h2 class="hub-card-title">CatPay Mod</h2>
             <p class="hub-card-desc">
               Client-side economy & <code>/pay</code> simulator with authentic BananaSMP font glyphs.
@@ -406,7 +558,7 @@
                 <span class="hub-price-label">Lifetime Price</span>
                 <span class="hub-price-val">₹50 / $0.59</span>
               </div>
-              <a href="/store/catpay" class="btn btn-primary" style="padding: 10px 18px; font-size: 0.875rem;">
+              <a href="/store/catpay" class="btn-hub-diamond">
                 Explore CatPay →
               </a>
             </div>

@@ -385,7 +385,7 @@
               </svg>
             </div>
             <h4>Isolated Bankroll Vault</h4>
-            <p>Allocate <code>$50k</code> or <code>$1M</code> with shorthand commands. CatFlip isolates this balance completely — even during extended AFK runs, your personal wallet is never touched.</p>
+            <p>Full vault management via <code>/catflip vault &lt;set|add|remove|info&gt;</code>. CatFlip isolates this balance completely — even during extended AFK runs, your main server balance is never touched.</p>
           </div>
 
           <div class="feature-box">
@@ -397,8 +397,8 @@
                 <path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01"/>
               </svg>
             </div>
-            <h4>Kuro 100% Pure Math Engine</h4>
-            <p>Zero AI hallucinations or random guesses. Evaluates EV (expected value), session variance, and win streaks using deterministic probability equations on our cloud backend.</p>
+            <h4>Universal Math & AI Engine</h4>
+            <p>Choose between 100% deterministic Math Kelly staking or high-conviction AI (Gemini 3.6 Flash / Qwen) with automatic key detection via <code>/catflip apikey</code>.</p>
           </div>
 
           <div class="feature-box">
@@ -409,7 +409,7 @@
               </svg>
             </div>
             <h4>Hard Risk Engine</h4>
-            <p>Enforces a 25% minimum bet (prevents micro-spam) and a 90% maximum cap (prevents all-in ruin). Automatically cuts off after 5 straight losses or a 50% drawdown.</p>
+            <p>Strict boundaries in aggressive mode (clamped between 25% and 90% of vault). Automatically halts after 5 straight losses or a 50% drawdown.</p>
           </div>
 
           <div class="feature-box">
@@ -427,12 +427,13 @@
           <div class="feature-box">
             <div class="feature-box-icon-wrap">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
             </div>
-            <h4>Escrow Throttling & Cooldowns</h4>
-            <p>Configurable pacing between flips avoids server rate-limits and mimics realistic player interaction, keeping your gameplay smooth and uninterrupted.</p>
+            <h4>Automatic Launch Updater</h4>
+            <p>Never manually update JARs again. CatFlip automatically detects new releases on startup, downloads the new version, cleans up older JARs, and safely restarts.</p>
           </div>
 
           <div class="feature-box">
@@ -475,10 +476,38 @@
 
             <div class="command-item">
               <div>
-                <div class="command-code">/catflip money &lt;amount&gt;</div>
-                <div class="command-desc">Funds the AI/Math gambling vault (e.g. 50k, 1.5m, 2b).</div>
+                <div class="command-code">/catflip vault &lt;set|add|remove|info&gt; [amount]</div>
+                <div class="command-desc">Full bankroll management (e.g. <code>add 500k</code>, <code>set 2m</code>, <code>info</code>). Legacy <code>/catflip money</code> also works.</div>
               </div>
-              <button class="copy-btn" data-copy="/catflip money 100k">
+              <button class="copy-btn" data-copy="/catflip vault add 100k">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip apikey &lt;your-ai-key&gt;</div>
+                <div class="command-desc">Sets BYOK key — auto-detects Gemini 3.6 Flash or Qwen instantly.</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip apikey ">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/catflip provider &lt;math|gemini|qwen&gt;</div>
+                <div class="command-desc">Switch between Kelly math engine or cloud AI reasoning.</div>
+              </div>
+              <button class="copy-btn" data-copy="/catflip provider math">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -490,7 +519,7 @@
             <div class="command-item">
               <div>
                 <div class="command-code">/catflip mode &lt;safe|balanced|aggressive&gt;</div>
-                <div class="command-desc">Adjusts risk aggressiveness and flip creation frequency.</div>
+                <div class="command-desc">Risk profile. Aggressive mode strictly clamps bets between 25% and 90% of vault.</div>
               </div>
               <button class="copy-btn" data-copy="/catflip mode balanced">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -539,7 +568,7 @@
             </button>
             <div class="faq-answer">
               <div class="faq-answer-inner">
-                CatFlip uses an isolated <strong>Vault</strong> system. If you have $10,000,000 on the server but only fund the vault with <code>/catflip money 100k</code>, CatFlip is strictly prohibited from touching the remaining $9,900,000. Furthermore, the hard risk engine enforces a 5-loss cutoff and a 50% stop-loss halt.
+                CatFlip uses an isolated <strong>Vault</strong> system. If you have $10,000,000 on the server but only fund the vault with <code>/catflip vault add 100k</code>, CatFlip is strictly prohibited from touching the remaining $9,900,000. Furthermore, the hard risk engine enforces a 5-loss cutoff and a 50% stop-loss halt.
               </div>
             </div>
           </div>
@@ -569,7 +598,22 @@
             </button>
             <div class="faq-answer">
               <div class="faq-answer-inner">
-                CatFlip uses the <strong>Kuro Mathematical Algorithm</strong> running directly on our cloud backend for instant zero-latency decisions without API rate-limit delays or hallucinations. Optional AI fallback (Gemini/Qwen) is also supported if enabled.
+                CatFlip defaults to the <strong>100% Deterministic Math Kelly Algorithm</strong> (<code>/catflip provider math</code>) for instant zero-latency decisions without API rate-limit delays or hallucinations. If you prefer AI reasoning, CatFlip also natively supports <strong>Google Gemini 3.6 Flash</strong> and <strong>Qwen</strong> via <code>/catflip apikey &lt;key&gt;</code>, which automatically detects your provider and model.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does the automatic launch updater work?</span>
+              <svg class="faq-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                On game launch, CatFlip checks the cloud server for new versions. If an update exists, it automatically downloads the new JAR into your <code>mods/</code> folder, cleans up the old version to eliminate duplicate mod conflicts, and safely closes Minecraft so the launcher restarts with the latest version.
               </div>
             </div>
           </div>

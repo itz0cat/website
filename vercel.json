@@ -12,6 +12,11 @@
       "source": "/downloads",
       "destination": "/download",
       "permanent": false
+    },
+    {
+      "source": "/download/catgame",
+      "destination": "/downloads/catgame-latest.jar",
+      "permanent": false
     }
   ]
 }

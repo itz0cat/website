@@ -474,7 +474,7 @@
             <div class="command-item">
               <div>
                 <div class="command-code">/cat key &lt;your-key&gt;</div>
-                <div class="command-desc">Authenticates your license key and binds your tier perks.</div>
+                <div class="command-desc">Authenticates your license key with CatCore and binds your tier perks.</div>
               </div>
               <button class="copy-btn" data-copy="/cat key ">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -502,9 +502,37 @@
             <div class="command-item">
               <div>
                 <div class="command-code">/cat status</div>
-                <div class="command-desc">Displays your active tier, allowed device slots, and connection health.</div>
+                <div class="command-desc">Displays your active tier, allowed device slots, and CatCore cloud health.</div>
               </div>
               <button class="copy-btn" data-copy="/cat status">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/cat theme &lt;#hex&gt;</div>
+                <div class="command-desc">Customizes chat feedback and radar HUD primary accent color (e.g. <code>/cat theme #2EC4B6</code>).</div>
+              </div>
+              <button class="copy-btn" data-copy="/cat theme #2EC4B6">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="command-item">
+              <div>
+                <div class="command-code">/cat panic</div>
+                <div class="command-desc">Emergency pause toggle — instantly disables all auto-solving and radar warnings.</div>
+              </div>
+              <button class="copy-btn" data-copy="/cat panic">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -567,7 +595,7 @@
             </button>
             <div class="faq-answer">
               <div class="faq-answer-inner">
-                CatGame is built for <strong>Fabric Loader (0.16+)</strong> running on Minecraft universal range <strong>1.21.x</strong> (Java 21). You can grab the latest compiled JAR anytime on our <a href="/download" style="color: var(--md-primary); font-weight: 600;">Downloads page</a>.
+                CatGame v2 is built for <strong>Fabric Loader (0.19.5+)</strong> running on Minecraft <strong>1.21.11</strong> (Java 21) with <strong>Cloth Config Fabric</strong>. You can grab the latest release JAR anytime on our <a href="/download" style="color: var(--md-primary); font-weight: 600;">Downloads page</a>.
               </div>
             </div>
           </div>

@@ -2,21 +2,10 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
+  "rewrites": [
     {
-      "source": "/",
-      "destination": "/store",
-      "permanent": false
-    },
-    {
-      "source": "/downloads",
-      "destination": "/download",
-      "permanent": false
-    },
-    {
-      "source": "/download/catgame",
-      "destination": "/downloads/catgame-2.0.0+1.21.11.jar",
-      "permanent": false
+      "source": "/(.*)",
+      "destination": "/maintenance.html"
     }
   ]
 }

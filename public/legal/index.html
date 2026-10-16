@@ -3,10 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Terms of Service & Privacy Policy | Cat Game</title>
+<title>Legal Agreement & Policies | Cat Game</title>
 <link rel="icon" type="image/png" href="/assets/logo.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/style.css">
+<style>
+.legal { max-width: 860px; padding-top: 40px; }
+.legal-title { font: 800 2.2rem "Bricolage Grotesque", sans-serif; letter-spacing: -0.02em; margin-bottom: 8px; color: var(--ink); }
+.legal h2 { margin-top: 40px; font-size: 1.7rem; border-bottom: 2px solid var(--ink); padding-bottom: 8px; font-family: "Bricolage Grotesque", sans-serif; }
+.legal h3 { margin: 24px 0 8px; font-size: 1.18rem; font-weight: 700; color: var(--ink); }
+.legal p, .legal li { color: #252d47; line-height: 1.62; margin-bottom: 10px; font-size: 15px; }
+.legal ul, .legal ol { padding-left: 24px; margin-bottom: 16px; }
+.legal-toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px; padding-left: 0; list-style-position: inside; }
+.legal-toc li { background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 6px 12px; margin-bottom: 0; box-shadow: 2px 2px 0 var(--ink); font-weight: 600; }
+.legal-toc li a { color: var(--ink); text-decoration: none; }
+.legal-toc li a:hover { text-decoration: underline; color: var(--blue); }
+.tbl-wrap { overflow-x: auto; margin: 16px 0 24px; }
+.legal table { width: 100%; border-collapse: collapse; background: #fff; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 3px 3px 0 var(--ink); }
+.legal th, .legal td { padding: 10px 14px; border: 1px solid #dcdfee; text-align: left; font-size: 14.5px; }
+.legal th { background: #eef1f8; font-weight: 700; color: var(--ink); border-bottom: 2px solid var(--ink); }
+.legal blockquote { margin: 16px 0; padding: 12px 18px; background: #fff8e6; border-left: 4px solid var(--ink); border-radius: 0 8px 8px 0; box-shadow: 2px 2px 0 var(--ink); }
+.legal blockquote p { margin: 0; font-weight: 600; color: var(--ink); }
+.legal code { background: #eef1f8; padding: 2px 6px; border-radius: 4px; font-size: 13.5px; border: 1px solid #dcdfee; font-family: monospace; color: var(--ink); }
+.legal hr { border: 0; border-top: 2px dashed #cfd4e8; margin: 32px 0; }
+.alert-box { background: #fff; border: 2px solid var(--ink); border-left: 6px solid #b3261e; padding: 16px 20px; border-radius: 8px; box-shadow: 3px 3px 0 var(--ink); margin: 20px 0; }
+.alert-box p { margin: 0; color: #141a2e; font-weight: 600; }
+.legal input[type="checkbox"] { accent-color: var(--blue); width: 16px; height: 16px; vertical-align: middle; }
+.quick-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+</style>
 </head>
 <body>
 <header>
@@ -23,122 +47,942 @@
 </header>
 
 <main class="wrap legal">
-  <div class="box" style="margin-bottom:32px;background:#fff">
-    <h1 style="font-size:2.2rem;margin-bottom:8px">Legal Agreement & Policies</h1>
-    <p class="lead" style="margin-bottom:12px">Last updated: October 2026. Effective immediately for all users, purchasers, and visitors.</p>
-    <div class="seg" role="navigation" aria-label="Legal Sections">
-      <a class="btn sm alt" href="#terms">Terms of Service</a>
-      <a class="btn sm alt" href="#intellectual-property">Anti-Decompilation & IP</a>
-      <a class="btn sm alt" href="#privacy">Privacy Policy</a>
-      <a class="btn sm alt" href="#refunds">Refund Policy</a>
+  <div class="box" style="margin-bottom:28px;background:#fff">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <span class="badge blue" style="margin-bottom:6px">Official Legal Agreement</span>
+        <h1 style="font-size:2.2rem;margin:4px 0 8px">Cat Game Legal Terms &amp; Policies</h1>
+        <p class="lead" style="margin:0">Binding EULA, Terms of Service, Privacy Policy &amp; Anti-Piracy Protection.</p>
+      </div>
+      <a href="/download" class="btn sm">Back to Downloads</a>
+    </div>
+    <div class="quick-nav">
+      <a class="btn sm alt" href="#1-parties-acceptance">EULA &amp; Parties</a>
+      <a class="btn sm alt" href="#2-age-requirement-eligibility-12">Age 12+</a>
+      <a class="btn sm alt" href="#4-license-grant-keys-hardware-binding">HWID Binding</a>
+      <a class="btn sm alt" href="#7-intellectual-property-anti-decompilation">Anti-Decompilation</a>
+      <a class="btn sm alt" href="#8-strict-prohibitions-restrictions">Prohibitions</a>
+      <a class="btn sm alt" href="#9-contractual-violations-fines-damages">Liquidated Damages</a>
+      <a class="btn sm alt" href="#11-privacy-policy-data-collection">Privacy Policy</a>
+      <a class="btn sm alt" href="#12-refunds-replacement-policy">Refunds</a>
+      <a class="btn sm alt" href="#13-governing-law-jurisdiction-disputes">Governing Law</a>
+      <a class="btn sm alt" href="#17-contact-legal-notices">Contact</a>
     </div>
   </div>
 
-  <section id="terms" style="padding-top:16px">
-    <h2>1. Terms of Service</h2>
-    <p>By purchasing, downloading, activating, accessing, or using any Cat Game software, license key, mod JAR, or online solver service, you enter into a legally binding contract and agree to be bound by these Terms of Service.</p>
+  <div class="box" style="background:#fff;padding:28px 32px">
+<h1 class="legal-title">CAT GAME — COMPREHENSIVE LEGAL AGREEMENT</h1>
 
-    <h3>1.1 Age Requirement & Eligibility (12+)</h3>
-    <p>You must be at least twelve (12) years of age or older to access our website, claim trial keys, purchase subscriptions, or download any software. If you are between 12 and the age of majority in your jurisdiction, you represent that your legal guardian has reviewed and consented to these terms on your behalf. Any registration or use by individuals under 12 years of age is strictly unauthorized.</p>
+<p><strong>End User License Agreement (EULA), Terms of Service (ToS), Privacy Policy, and Anti-Piracy Notice</strong></p>
 
-    <h3>1.2 Independent Third-Party Status</h3>
-    <p>Cat Game and its associated modifications (CatGame, CatFlip, CatPay) are independent third-party utilities. We are not endorsed by, directly affiliated with, maintained, authorized, or sponsored by Mojang AB, Microsoft Corporation, or any specific Minecraft server network. Minecraft is a registered trademark of Mojang AB.</p>
+<hr>
 
-    <h3>1.3 License Grant, Keys & Hardware Binding</h3>
-    <p>All license keys are non-exclusive, non-transferable, and revocable. Each key is assigned exclusively to the purchasing Discord account and bound cryptographically to unique hashed hardware IDs (HWID):</p>
-    <ul>
-      <li><strong>Iron Tier:</strong> Limited to one (1) active hardware device.</li>
-      <li><strong>Gold Tier:</strong> Limited to two (2) active hardware devices.</li>
-      <li><strong>Diamond Tier:</strong> Limited to five (5) active hardware devices.</li>
-    </ul>
-    <p>Sharing, redistributing, leasing, publishing, sublicensing, or reselling any license key or downloaded mod file is strictly prohibited and results in immediate automated termination without refund.</p>
+<h2 id="document-control">DOCUMENT CONTROL</h2>
 
-    <h3>1.4 Server Rules & Player Responsibility</h3>
-    <p>Multiplayer game servers maintain individual rules and policies regarding client modifications. You are solely responsible for verifying that client utilities comply with the rules of the servers on which you play. Cat Game assumes no responsibility or liability for server-side disciplinary actions, including in-game mutes, kicks, temporary bans, or permanent account suspensions.</p>
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Field</th>
+<th>Value</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Legal Owner</strong></td>
+<td>Pritam Raj</td>
+</tr>
+<tr>
+<td><strong>Location</strong></td>
+<td>India, Bihar</td>
+</tr>
+<tr>
+<td><strong>Contact Email</strong></td>
+<td>itz0cat@gmail.com</td>
+</tr>
+<tr>
+<td><strong>Branding</strong></td>
+<td>Cat Game, CatGame, CatFlip, CatPay, CatShield</td>
+</tr>
+<tr>
+<td><strong>Last Updated</strong></td>
+<td>October 2026</td>
+</tr>
+<tr>
+<td><strong>Effective Date</strong></td>
+<td>Immediately upon publication</td>
+</tr>
+</tbody></table></div>
 
-    <h3>1.5 Subscription Periods & Renewals</h3>
-    <p>Weekly and monthly license keys remain active for their stated contractual duration from the moment of activation and do not auto-renew. Upon expiration, access to solver infrastructure and protected downloads terminates automatically unless renewed.</p>
-  </section>
+<hr>
 
-  <section id="intellectual-property" style="padding-top:32px">
-    <h2>2. Intellectual Property, Anti-Decompilation & Legal Penalties</h2>
-    <p>Cat Game client modifications, encrypted payloads, and backend solver architectures represent valuable trade secrets, proprietary algorithms, and copyrighted intellectual property.</p>
+<h2 id="table-of-contents">TABLE OF CONTENTS</h2>
 
-    <h3>2.1 Strict Prohibition on Decompilation & Reverse Engineering</h3>
-    <p>You expressly agree that you shall NOT, under any circumstances, directly or indirectly:</p>
-    <ul>
-      <li>Decompile, disassemble, reverse engineer, deobfuscate, decrypt, or unpack any portion of CatGame, CatFlip, or CatShield binaries;</li>
-      <li>Extract, dump, inspect, or tamper with embedded encrypted payloads (including <code>assets/catgame/.payload.enc</code>, <code>libcatshield.so</code>, or runtime memory bytecode);</li>
-      <li>Intercept, spoof, replay, exploit, or create unauthorized emulators or alternative clients for our backend API endpoints;</li>
-      <li>Copy, reproduce, distribute, or publicly post our source code, algorithms, pattern classifiers, item databases, or timing heuristics;</li>
-      <li>Circumvent, bypass, or disable license authentication, HWID device limits, or anti-tamper mechanisms.</li>
-    </ul>
+<ol class="legal-toc">
+<li><a href="#1-parties-acceptance">Parties &amp; Acceptance</a></li>
+<li><a href="#2-age-requirement-eligibility">Age Requirement &amp; Eligibility</a></li>
+<li><a href="#3-independent-third-party-status">Independent Third-Party Status</a></li>
+<li><a href="#4-license-grant-keys-hardware-binding">License Grant, Keys &amp; Hardware Binding</a></li>
+<li><a href="#5-server-rules-player-responsibility">Server Rules &amp; Player Responsibility</a></li>
+<li><a href="#6-subscription-periods-renewals">Subscription Periods &amp; Renewals</a></li>
+<li><a href="#7-intellectual-property-anti-decompilation">Intellectual Property &amp; Anti-Decompilation</a></li>
+<li><a href="#8-strict-prohibitions-restrictions">Strict Prohibitions &amp; Restrictions</a></li>
+<li><a href="#9-contractual-violations-fines-damages">Contractual Violations, Fines &amp; Damages</a></li>
+<li><a href="#10-technical-protections-monitoring">Technical Protections &amp; Monitoring</a></li>
+<li><a href="#11-privacy-policy-data-collection">Privacy Policy &amp; Data Collection</a></li>
+<li><a href="#12-refunds-replacement-policy">Refunds &amp; Replacement Policy</a></li>
+<li><a href="#13-governing-law-jurisdiction-disputes">Governing Law, Jurisdiction &amp; Disputes</a></li>
+<li><a href="#14-severability-waiver-amendments">Severability, Waiver &amp; Amendments</a></li>
+<li><a href="#15-indemnification-limitation-of-liability">Indemnification &amp; Limitation of Liability</a></li>
+<li><a href="#16-anti-piracy-enforcement-takedown-procedures">Anti-Piracy Enforcement &amp; Takedown Procedures</a></li>
+<li><a href="#17-contact-legal-notices">Contact &amp; Legal Notices</a></li>
+<li><a href="#18-acknowledgment-acceptance">Acknowledgment &amp; Acceptance</a></li>
+</ol>
 
-    <h3>2.2 Contractual Violations, Fines & Statutory Damages</h3>
-    <p>Any decompilation, reverse engineering, unauthorized extraction, distribution of decrypted binaries, or intellectual property theft constitutes a willful and material breach of this Agreement, as well as a violation of international copyright treaties and computer protection statutes.</p>
-    <div class="box" style="background:#fff;border-left:4px solid #b3261e;padding:16px">
-      <p style="margin:0;font-weight:600;color:#b3261e">Notice of Civil Liability & Contractual Liquidated Damages:</p>
-      <p style="margin:6px 0 0;font-size:15px;color:#141a2e">
-        Any user, individual, or entity found decompiling, cracking, reverse engineering, or copying code/logic from our software is subject to immediate permanent service termination, global HWID and IP blacklisting, DMCA enforcement, and contractual liquidated damages and civil penalties of up to <strong>$10,000 USD (₹5,00,000 INR)</strong> per violation, plus attorney fees, forensic investigation expenses, and all statutory damages permitted by law.
-      </p>
-    </div>
-  </section>
+<hr>
 
-  <section id="privacy" style="padding-top:32px">
-    <h2>3. Privacy Policy</h2>
-    <p>We respect your privacy and process only the minimal technical telemetry required to provide licensing and secure mod operation.</p>
+<h2 id="1-parties-acceptance">1. PARTIES &amp; ACCEPTANCE</h2>
 
-    <h3>3.1 Telemetry We Collect</h3>
-    <ul>
-      <li><strong>Discord Account Data:</strong> User ID, username, and avatar hash (obtained via official Discord OAuth2 authentication) to deliver licenses and identify buyers.</li>
-      <li><strong>Hardware Identifier (HWID):</strong> An anonymized, one-way SHA-256 hash of system identifiers used strictly to enforce per-tier device limits.</li>
-      <li><strong>Network IP Address:</strong> Collected during API interactions for fraud prevention, rate-limiting, and security blacklisting.</li>
-      <li><strong>Operational Telemetry:</strong> Chatgame solver logs and latency timestamps used to calibrate rolling prediction intervals and response delays.</li>
-    </ul>
+<p>This Comprehensive Legal Agreement ("Agreement") is a legally binding contract between:</p>
 
-    <h3>3.2 Data Usage & Protection</h3>
-    <p>Collected telemetry is utilized strictly for license validation, device counting, fraud mitigation, and bot DM key delivery. We do not sell, rent, monetize, or disclose your personal data to any marketing agencies or external third parties.</p>
+<ul>
+<li><strong>Licensor:</strong> Pritam Raj, an individual developer located in Bihar, India ("Developer", "we", "us", "Licensor")</li>
+<li><strong>Licensee:</strong> You, the purchaser, downloader, or user ("User", "you", "Licensee")</li>
+</ul>
 
-    <h3>3.3 Cookies & Storage</h3>
-    <p>We utilize stateless, cryptographically signed HTTP-only cookies (<code>cg_session</code>) solely to preserve your Discord authentication status across sessions. No third-party tracking or advertising cookies are utilized.</p>
+<div class="alert-box"><p><strong>BY PURCHASING, DOWNLOADING, INSTALLING, ACTIVATING, ACCESSING, OR USING ANY CAT GAME SOFTWARE, LICENSE KEY, MOD JAR, OR ONLINE SOLVER SERVICE, YOU ENTER INTO A LEGALLY BINDING CONTRACT AND AGREE TO BE BOUND BY THIS AGREEMENT.</strong></p></div>
 
-    <h3>3.4 Data Deletion Requests</h3>
-    <p>You may request the deletion of your account record and HWID device association upon license expiration by contacting support via our official Discord server.</p>
-  </section>
+<p>If you do not agree to every provision of this Agreement, do not purchase, download, install, or use this software.</p>
 
-  <section id="refunds" style="padding-top:32px">
-    <h2>4. Refunds & Replacement Policy</h2>
-    <p>Due to the digital, intangible nature of downloadable client software and cryptographically generated license keys, all delivered purchases are deemed non-refundable by default.</p>
+<hr>
 
-    <h3>4.1 Replacement & Technical Support Eligibility</h3>
-    <p>You are entitled to a key replacement or technical assistance under the following circumstances:</p>
-    <ul>
-      <li>Your generated key is defective or fails to activate upon immediate delivery;</li>
-      <li>You have upgraded or replaced your hardware device and require a legitimate HWID device reset;</li>
-      <li>A verified software defect prevents mod operation and our support team cannot provide a patch within 48 hours.</li>
-    </ul>
+<h2 id="2-age-requirement-eligibility-12">2. AGE REQUIREMENT &amp; ELIGIBILITY (12+)</h2>
 
-    <h3>4.2 Non-Refundable Situations</h3>
-    <p>Refunds will NOT be granted under any of the following conditions:</p>
-    <ul>
-      <li>Disciplinary actions, mutes, or bans incurred on third-party Minecraft servers;</li>
-      <li>Change of mind after payment has been verified and the license key has been delivered or activated;</li>
-      <li>Any breach of these terms, including key sharing, attempting to run on excess devices, or decompilation attempts;</li>
-      <li>Custom development requests after development work has commenced.</li>
-    </ul>
+<p>You must be at least <strong>twelve (12) years of age</strong> or older to:</p>
 
-    <h3>4.3 Submitting a Support Claim</h3>
-    <p>To request technical support or HWID resets, open a support ticket on our <a data-dc href="#">official Discord server</a> providing your order ID, transaction reference, and registered Discord username.</p>
-  </section>
+<ul>
+<li>Access our website or services</li>
+<li>Claim trial keys</li>
+<li>Purchase subscriptions</li>
+<li>Download any software</li>
+</ul>
+
+<p><strong>If you are between 12 and the age of majority in your jurisdiction</strong>, you represent that your legal guardian has reviewed and consented to these terms on your behalf.</p>
+
+<p>Any registration or use by individuals <strong>under 12 years of age</strong> is strictly unauthorized and constitutes immediate breach of this Agreement.</p>
+
+<hr>
+
+<h2 id="3-independent-third-party-status">3. INDEPENDENT THIRD-PARTY STATUS</h2>
+
+<p>Cat Game and its associated modifications (<strong>CatGame, CatFlip, CatPay, CatShield</strong>) are independent third-party utilities.</p>
+
+<p>We are <strong>not endorsed by, directly affiliated with, maintained, authorized, or sponsored by</strong>:</p>
+
+<ul>
+<li>Mojang AB</li>
+<li>Microsoft Corporation</li>
+<li>Any specific Minecraft server network</li>
+</ul>
+
+<p><strong>Minecraft</strong> is a registered trademark of Mojang AB.</p>
+
+<hr>
+
+<h2 id="4-license-grant-keys-hardware-binding">4. LICENSE GRANT, KEYS &amp; HARDWARE BINDING</h2>
+
+<h3 id="41-license-grant">4.1 License Grant</h3>
+
+<p>Subject to full payment and compliance with this Agreement, Pritam Raj grants you:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Non-Exclusive</strong></td>
+<td>Others may also purchase licenses</td>
+</tr>
+<tr>
+<td><strong>Non-Transferable</strong></td>
+<td>You cannot sell, gift, or transfer your license</td>
+</tr>
+<tr>
+<td><strong>Revocable</strong></td>
+<td>We may terminate for breach</td>
+</tr>
+<tr>
+<td><strong>Limited</strong></td>
+<td>Restricted to specified devices and uses</td>
+</tr>
+</tbody></table></div>
+
+<p><strong>No ownership is transferred.</strong> You license the right to <em>use</em> the software; you do not <em>own</em> it.</p>
+
+<h3 id="42-hardware-id-hwid-binding">4.2 Hardware ID (HWID) Binding</h3>
+
+<p>All license keys are <strong>cryptographically bound</strong> to unique hashed hardware IDs (HWID):</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Tier</th>
+<th>Device Limit</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Iron</strong></td>
+<td>1 active hardware device</td>
+</tr>
+<tr>
+<td><strong>Gold</strong></td>
+<td>2 active hardware devices</td>
+</tr>
+<tr>
+<td><strong>Diamond</strong></td>
+<td>5 active hardware devices</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="43-key-restrictions">4.3 Key Restrictions</h3>
+
+<p>Sharing, redistributing, leasing, publishing, sublicensing, or reselling any license key or downloaded mod file is <strong>strictly prohibited</strong> and results in:</p>
+
+<ul>
+<li>Immediate automated termination</li>
+<li>Permanent HWID and IP blacklisting</li>
+<li>No refund</li>
+<li>Potential legal action</li>
+</ul>
+
+<hr>
+
+<h2 id="5-server-rules-player-responsibility">5. SERVER RULES &amp; PLAYER RESPONSIBILITY</h2>
+
+<p>Multiplayer game servers maintain individual rules and policies regarding client modifications.</p>
+
+<p><strong>You are solely responsible</strong> for verifying that client utilities comply with the rules of the servers on which you play.</p>
+
+<p>Pritam Raj and Cat Game <strong>assume no responsibility or liability</strong> for server-side disciplinary actions, including:</p>
+
+<ul>
+<li>In-game mutes</li>
+<li>Kicks</li>
+<li>Temporary bans</li>
+<li>Permanent account suspensions</li>
+<li>Loss of in-game items, currency, or progress</li>
+</ul>
+
+<hr>
+
+<h2 id="6-subscription-periods-renewals">6. SUBSCRIPTION PERIODS &amp; RENEWALS</h2>
+
+<ul>
+<li>Weekly and monthly license keys remain active for their stated contractual duration from the moment of activation</li>
+<li><strong>No auto-renewal</strong> — access terminates automatically unless manually renewed</li>
+<li>Upon expiration, access to solver infrastructure and protected downloads terminates immediately</li>
+</ul>
+
+<hr>
+
+<h2 id="7-intellectual-property-anti-decompilation">7. INTELLECTUAL PROPERTY &amp; ANTI-DECOMPILATION</h2>
+
+<p>Cat Game client modifications, encrypted payloads, and backend solver architectures represent:</p>
+
+<ul>
+<li>Valuable <strong>trade secrets</strong></li>
+<li><strong>Proprietary algorithms</strong></li>
+<li><strong>Copyrighted intellectual property</strong></li>
+</ul>
+
+<p>All rights, title, and interest remain exclusively with <strong>Pritam Raj</strong>.</p>
+
+<h3 id="71-copyright-protection">7.1 Copyright Protection</h3>
+
+<p>This software is protected under:</p>
+
+<ul>
+<li>Indian Copyright Act, 1957</li>
+<li>Berne Convention for the Protection of Literary and Artistic Works</li>
+<li>WIPO Copyright Treaty (WCT)</li>
+<li>WIPO Performances and Phonograms Treaty (WPPT)</li>
+<li>Applicable international copyright treaties</li>
+</ul>
+
+<h3 id="72-trade-secret-protection">7.2 Trade Secret Protection</h3>
+
+<p>The following constitute confidential trade secrets:</p>
+
+<ul>
+<li>Source code and algorithms</li>
+<li>Pattern classifiers and item databases</li>
+<li>Timing heuristics and prediction intervals</li>
+<li>Encryption keys and methods</li>
+<li>Backend solver architecture</li>
+<li>Anti-tamper and obfuscation techniques</li>
+</ul>
+
+<hr>
+
+<h2 id="8-strict-prohibitions-restrictions">8. STRICT PROHIBITIONS &amp; RESTRICTIONS</h2>
+
+<p>You <strong>expressly agree</strong> that you shall <strong>NOT</strong>, under any circumstances, directly or indirectly:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Prohibited Action</th>
+</tr></thead><tbody>
+<tr>
+<td>8.1</td>
+<td><strong>Decompile, disassemble, reverse engineer, deobfuscate, decrypt, or unpack</strong> any portion of CatGame, CatFlip, or CatShield binaries</td>
+</tr>
+<tr>
+<td>8.2</td>
+<td><strong>Extract, dump, inspect, or tamper with</strong> embedded encrypted payloads (including <code>assets/catgame/.payload.enc</code>, <code>libcatshield.so</code>, or runtime memory bytecode)</td>
+</tr>
+<tr>
+<td>8.3</td>
+<td><strong>Intercept, spoof, replay, exploit, or create unauthorized emulators</strong> or alternative clients for our backend API endpoints</td>
+</tr>
+<tr>
+<td>8.4</td>
+<td><strong>Copy, reproduce, distribute, or publicly post</strong> our source code, algorithms, pattern classifiers, item databases, or timing heuristics</td>
+</tr>
+<tr>
+<td>8.5</td>
+<td><strong>Circumvent, bypass, or disable</strong> license authentication, HWID device limits, or anti-tamper mechanisms</td>
+</tr>
+<tr>
+<td>8.6</td>
+<td><strong>Modify, patch, inject, or alter</strong> any file, memory, or runtime behavior of the software</td>
+</tr>
+<tr>
+<td>8.7</td>
+<td><strong>Redistribute, resell, sublicense, lease, rent, or share</strong> the software or License Key</td>
+</tr>
+<tr>
+<td>8.8</td>
+<td><strong>Rebrand, repackage, or claim authorship</strong> of the software or any derivative work</td>
+</tr>
+<tr>
+<td>8.9</td>
+<td><strong>Publish or distribute</strong> cracked, modified, or "leaked" versions</td>
+</tr>
+<tr>
+<td>8.10</td>
+<td><strong>Use on more devices</strong> than your tier permits without explicit written authorization</td>
+</tr>
+<tr>
+<td>8.11</td>
+<td><strong>Share, sell, or transfer</strong> License Keys or HWID resets</td>
+</tr>
+<tr>
+<td>8.12</td>
+<td><strong>Use the software to develop competing products</strong> or extract algorithms, designs, or techniques</td>
+</tr>
+<tr>
+<td>8.13</td>
+<td><strong>Create derivative works</strong> based on decompiled or extracted code</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="814-derivative-works-attribution">8.14 Derivative Works &amp; Attribution</h3>
+
+<p>Any decompiled, modified, or derivative version of Cat Game software constitutes an <strong>infringing copy</strong>. Claiming authorship, rebranding, or substantial similarity to our proprietary algorithms, pattern classifiers, or timing heuristics violates this Agreement and applicable copyright law.</p>
+
+<hr>
+
+<h2 id="9-contractual-violations-fines-damages">9. CONTRACTUAL VIOLATIONS, FINES &amp; DAMAGES</h2>
+
+<p>Any decompilation, reverse engineering, unauthorized extraction, distribution of decrypted binaries, or intellectual property theft constitutes a <strong>willful and material breach</strong> of this Agreement, as well as a violation of:</p>
+
+<ul>
+<li>International copyright treaties</li>
+<li>Computer protection statutes</li>
+<li>Indian Information Technology Act, 2000</li>
+<li>Applicable criminal and civil laws</li>
+</ul>
+
+<h3 id="91-liquidated-damages">9.1 Liquidated Damages</h3>
+
+<p>Any user, individual, or entity found decompiling, cracking, reverse engineering, or copying code/logic from our software is subject to:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Penalty</th>
+<th>Amount</th>
+</tr></thead><tbody>
+<tr>
+<td>Contractual liquidated damages</td>
+<td>Up to <strong>$10,000 USD (₹5,00,000 INR)</strong> per violation</td>
+</tr>
+<tr>
+<td>Actual damages</td>
+<td>If greater than liquidated damages</td>
+</tr>
+<tr>
+<td>Attorney fees</td>
+<td>Full recovery</td>
+</tr>
+<tr>
+<td>Forensic investigation expenses</td>
+<td>Full recovery</td>
+</tr>
+<tr>
+<td>Statutory damages</td>
+<td>As permitted by law</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="92-additional-remedies">9.2 Additional Remedies</h3>
+
+<ul>
+<li>Immediate permanent service termination</li>
+<li>Global HWID and IP blacklisting</li>
+<li>DMCA enforcement and takedowns</li>
+<li>Criminal referral where applicable</li>
+<li>Public disclosure of infringement (naming and shaming)</li>
+</ul>
+
+<hr>
+
+<h2 id="10-technical-protections-monitoring">10. TECHNICAL PROTECTIONS &amp; MONITORING</h2>
+
+<p>You acknowledge and consent that the software:</p>
+
+<h3 id="101-protection-mechanisms">10.1 Protection Mechanisms</h3>
+
+<ul>
+<li>Contains <strong>encryption, obfuscation, and anti-tamper mechanisms</strong></li>
+<li>Includes runtime integrity checks and self-verification</li>
+<li>May detect debugger, decompiler, or analysis tool presence</li>
+<li>May self-terminate or disable features if tampering is detected</li>
+</ul>
+
+<h3 id="102-data-transmission">10.2 Data Transmission</h3>
+
+<p>The software may <strong>verify license status online</strong> and transmit:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Data</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td>License Key</td>
+<td>Authentication</td>
+</tr>
+<tr>
+<td>HWID (SHA-256 hashed)</td>
+<td>Device limit enforcement</td>
+</tr>
+<tr>
+<td>IP Address</td>
+<td>Fraud prevention, rate-limiting</td>
+</tr>
+<tr>
+<td>Version hash</td>
+<td>Update enforcement</td>
+</tr>
+<tr>
+<td>Timestamp</td>
+<td>Security logging</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="103-telemetry">10.3 Telemetry</h3>
+
+<ul>
+<li><strong>Chatgame solver logs</strong> and latency timestamps used to calibrate rolling prediction intervals</li>
+<li><strong>Operational telemetry</strong> for security and anti-piracy</li>
+<li><strong>No personal gameplay data</strong> collected beyond operational needs</li>
+</ul>
+
+<h3 id="104-no-interference">10.4 No Interference</h3>
+
+<p>You agree <strong>not to interfere</strong> with these protections. Attempting to do so constitutes material breach.</p>
+
+<hr>
+
+<h2 id="11-privacy-policy-data-collection">11. PRIVACY POLICY &amp; DATA COLLECTION</h2>
+
+<h3 id="111-data-we-collect">11.1 Data We Collect</h3>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Data Type</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Discord Account Data</strong></td>
+<td>User ID, username, avatar hash (via official Discord OAuth2)</td>
+<td>License delivery, buyer identification</td>
+</tr>
+<tr>
+<td><strong>Hardware Identifier (HWID)</strong></td>
+<td>Anonymized, one-way SHA-256 hash of system identifiers</td>
+<td>Per-tier device limit enforcement</td>
+</tr>
+<tr>
+<td><strong>Network IP Address</strong></td>
+<td>API interactions</td>
+<td>Fraud prevention, rate-limiting, security blacklisting</td>
+</tr>
+<tr>
+<td><strong>Operational Telemetry</strong></td>
+<td>Solver logs, latency timestamps</td>
+<td>Calibrate prediction intervals, response delays</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="112-data-usage-protection">11.2 Data Usage &amp; Protection</h3>
+
+<p>Collected telemetry is utilized <strong>strictly</strong> for:</p>
+
+<ul>
+<li>License validation</li>
+<li>Device counting</li>
+<li>Fraud mitigation</li>
+<li>Bot DM key delivery</li>
+<li>Security and anti-piracy</li>
+</ul>
+
+<p><strong>We do NOT:</strong></p>
+
+<ul>
+<li>Sell, rent, or monetize personal data</li>
+<li>Disclose data to marketing agencies</li>
+<li>Share data with external third parties (except as legally required)</li>
+</ul>
+
+<h3 id="113-data-anonymization">11.3 Data Anonymization</h3>
+
+<p>Solver logs and operational telemetry are:</p>
+
+<ul>
+<li><strong>Anonymized</strong> where possible</li>
+<li><strong>Ephemeral</strong> — deleted after calibration (maximum 72 hours)</li>
+<li><strong>Not linked</strong> to personal identity beyond license validation needs</li>
+</ul>
+
+<h3 id="114-cookies-storage">11.4 Cookies &amp; Storage</h3>
+
+<p>We utilize <strong>stateless, cryptographically signed HTTP-only cookies</strong> (<code>cg_session</code>) solely to preserve Discord authentication status across sessions.</p>
+
+<p><strong>No third-party tracking or advertising cookies</strong> are utilized.</p>
+
+<h3 id="115-data-deletion-requests">11.5 Data Deletion Requests</h3>
+
+<p>You may request deletion of your account record and HWID device association upon license expiration by contacting:</p>
+
+<ul>
+<li><strong>Email:</strong> itz0cat@gmail.com</li>
+<li><strong>Discord:</strong> [Official Discord server]</li>
+</ul>
+
+<hr>
+
+<h2 id="12-refunds-replacement-policy">12. REFUNDS &amp; REPLACEMENT POLICY</h2>
+
+<h3 id="121-default-policy">12.1 Default Policy</h3>
+
+<p>Due to the digital, intangible nature of downloadable client software and cryptographically generated license keys, <strong>all delivered purchases are deemed non-refundable by default</strong>.</p>
+
+<h3 id="122-replacement-support-eligibility">12.2 Replacement &amp; Support Eligibility</h3>
+
+<p>You are entitled to key replacement or technical assistance under:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Circumstance</th>
+<th>Eligibility</th>
+</tr></thead><tbody>
+<tr>
+<td>Defective key fails to activate upon immediate delivery</td>
+<td>✅ Eligible</td>
+</tr>
+<tr>
+<td>Hardware upgrade/replacement requiring HWID reset</td>
+<td>✅ Eligible</td>
+</tr>
+<tr>
+<td>Verified software defect, no patch within 48 hours</td>
+<td>✅ Eligible</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="123-non-refundable-situations">12.3 Non-Refundable Situations</h3>
+
+<p>Refunds will <strong>NOT</strong> be granted for:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Situation</th>
+<th>Reason</th>
+</tr></thead><tbody>
+<tr>
+<td>Server bans, mutes, or disciplinary actions</td>
+<td>User responsibility per Section 5</td>
+</tr>
+<tr>
+<td>Change of mind after key delivery/activation</td>
+<td>Digital goods</td>
+</tr>
+<tr>
+<td>Breach of terms (key sharing, excess devices, decompilation)</td>
+<td>Material breach</td>
+</tr>
+<tr>
+<td>Custom development after work commenced</td>
+<td>Services rendered</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="124-support-claims">12.4 Support Claims</h3>
+
+<p>To request technical support or HWID resets:</p>
+
+<ol class="legal-toc">
+<li><a href="#1-open-a-support-ticket-on-official-discord">Open a support ticket on official Discord</a></li>
+<li><a href="#2-provide-order-id-transaction-reference-registered-discord-username">Provide: Order ID, transaction reference, registered Discord username</a></li>
+<li><a href="#3-allow-24-48-hours-for-response">Allow 24-48 hours for response</a></li>
+</ol>
+
+<hr>
+
+<h2 id="13-governing-law-jurisdiction-disputes">13. GOVERNING LAW, JURISDICTION &amp; DISPUTES</h2>
+
+<h3 id="131-governing-law">13.1 Governing Law</h3>
+
+<p>This Agreement is governed by and construed in accordance with the laws of:</p>
+
+<blockquote><p><strong>India</strong> — specifically the State of Bihar, without regard to conflict of law principles.</p></blockquote>
+
+<h3 id="132-jurisdiction">13.2 Jurisdiction</h3>
+
+<p>Any dispute arising from or relating to this Agreement shall be resolved exclusively in the courts of:</p>
+
+<blockquote><p><strong>Bihar, India</strong></p></blockquote>
+
+<h3 id="133-arbitration-optional">13.3 Arbitration (Optional)</h3>
+
+<p>[Note: Consider adding arbitration clause for cost-effective dispute resolution]</p>
+
+<h3 id="134-injunctive-relief">13.4 Injunctive Relief</h3>
+
+<p>Pritam Raj may seek <strong>immediate injunctive relief</strong> for intellectual property violations in any jurisdiction without prior arbitration or mediation.</p>
+
+<h3 id="135-international-enforcement">13.5 International Enforcement</h3>
+
+<p>For violations occurring outside India:</p>
+
+<ul>
+<li>DMCA takedowns (United States)</li>
+<li>EUCD enforcement (European Union)</li>
+<li>WIPO dispute resolution</li>
+<li>Local copyright enforcement through treaty partners</li>
+</ul>
+
+<hr>
+
+<h2 id="14-severability-waiver-amendments">14. SEVERABILITY, WAIVER &amp; AMENDMENTS</h2>
+
+<h3 id="141-severability">14.1 Severability</h3>
+
+<p>If any provision of this Agreement is found to be <strong>unenforceable or invalid</strong>, that provision shall be modified to the minimum extent necessary to make it enforceable, and the <strong>remainder of the Agreement shall remain in full force and effect</strong>.</p>
+
+<h3 id="142-no-waiver">14.2 No Waiver</h3>
+
+<p>Failure to enforce any right or provision of this Agreement does <strong>not constitute a waiver</strong> of that right or provision.</p>
+
+<h3 id="143-entire-agreement">14.3 Entire Agreement</h3>
+
+<p>This Agreement constitutes the <strong>entire agreement</strong> between the parties and supersedes all prior agreements, understandings, and communications.</p>
+
+<h3 id="144-amendments">14.4 Amendments</h3>
+
+<p>Pritam Raj reserves the right to update this Agreement at any time. <strong>Continued use</strong> of the software after publication of updated terms constitutes <strong>acceptance</strong> of those terms.</p>
+
+<hr>
+
+<h2 id="15-indemnification-limitation-of-liability">15. INDEMNIFICATION &amp; LIMITATION OF LIABILITY</h2>
+
+<h3 id="151-indemnification">15.1 Indemnification</h3>
+
+<p>You agree to <strong>indemnify, defend, and hold harmless</strong> Pritam Raj from any claims, damages, losses, or expenses (including reasonable attorney fees) arising from:</p>
+
+<ul>
+<li>Your violation of this Agreement</li>
+<li>Your distribution of cracked or modified copies</li>
+<li>Your use of the software in violation of Minecraft's EULA or server rules</li>
+<li>Your infringement of any third-party rights</li>
+</ul>
+
+<h3 id="152-disclaimer-of-warranties">15.2 Disclaimer of Warranties</h3>
+
+<blockquote><p><strong>THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND.</strong></p></blockquote>
+
+<p>Pritam Raj expressly disclaims all warranties, express or implied, including:</p>
+
+<ul>
+<li>Merchantability</li>
+<li>Fitness for a particular purpose</li>
+<li>Non-infringement</li>
+<li>Compatibility with all Minecraft versions, mods, or servers</li>
+<li>Uninterrupted or error-free operation</li>
+</ul>
+
+<h3 id="153-limitation-of-liability">15.3 Limitation of Liability</h3>
+
+<p>To the maximum extent permitted by law:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Damage Type</th>
+<th>Liability</th>
+</tr></thead><tbody>
+<tr>
+<td>Indirect, incidental, special, or consequential damages</td>
+<td><strong>Excluded</strong></td>
+</tr>
+<tr>
+<td>Lost profits, data, goodwill, or account bans</td>
+<td><strong>Excluded</strong></td>
+</tr>
+<tr>
+<td>Total aggregate liability</td>
+<td><strong>Capped at amount paid</strong> for the license</td>
+</tr>
+</tbody></table></div>
+
+<p>Some jurisdictions do not allow these limitations; they apply to the fullest extent permitted by applicable law.</p>
+
+<hr>
+
+<h2 id="16-anti-piracy-enforcement-takedown-procedures">16. ANTI-PIRACY ENFORCEMENT &amp; TAKEDOWN PROCEDURES</h2>
+
+<h3 id="161-active-monitoring">16.1 Active Monitoring</h3>
+
+<p>Pritam Raj actively monitors for:</p>
+
+<ul>
+<li>Unauthorized distribution</li>
+<li>Cracked version uploads</li>
+<li>License key sharing</li>
+<li>Decompilation attempts</li>
+<li>Rebranded derivatives</li>
+</ul>
+
+<h3 id="162-enforcement-actions">16.2 Enforcement Actions</h3>
+
+<p>Violations may result in:</p>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Action</th>
+<th>Timeline</th>
+</tr></thead><tbody>
+<tr>
+<td>License termination and blacklisting</td>
+<td>Immediate</td>
+</tr>
+<tr>
+<td>DMCA takedown requests</td>
+<td>24-72 hours</td>
+</tr>
+<tr>
+<td>Platform reports (Discord, GitHub, etc.)</td>
+<td>24-72 hours</td>
+</tr>
+<tr>
+<td>Payment processor reports</td>
+<td>48-96 hours</td>
+</tr>
+<tr>
+<td>Legal action</td>
+<td>As warranted</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="163-evidence-preservation">16.3 Evidence Preservation</h3>
+
+<p>Pritam Raj maintains:</p>
+
+<ul>
+<li>Authentication server logs</li>
+<li>HWID blacklists</li>
+<li>Watermarked build records</li>
+<li>Timestamped distribution evidence</li>
+</ul>
+
+<h3 id="164-cooperation-with-platforms">16.4 Cooperation with Platforms</h3>
+
+<p>We cooperate fully with:</p>
+
+<ul>
+<li>Discord Trust &amp; Safety</li>
+<li>GitHub DMCA process</li>
+<li>CurseForge/Modrinth moderation</li>
+<li>Payment processor fraud departments</li>
+<li>Law enforcement when criminal activity is suspected</li>
+</ul>
+
+<hr>
+
+<h2 id="17-contact-legal-notices">17. CONTACT &amp; LEGAL NOTICES</h2>
+
+<h3 id="171-general-contact">17.1 General Contact</h3>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Method</th>
+<th>Details</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Email</strong></td>
+<td>itz0cat@gmail.com</td>
+</tr>
+<tr>
+<td><strong>Discord</strong></td>
+<td>[Official Discord server]</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td>https://itz0cat.vercel.app</td>
+</tr>
+</tbody></table></div>
+
+<h3 id="172-legal-notices">17.2 Legal Notices</h3>
+
+<p>For legal notices, DMCA requests, or formal complaints:</p>
+
+<blockquote><p><strong>Pritam Raj</strong> Bihar, India Email: itz0cat@gmail.com</p></blockquote>
+
+<h3 id="173-response-times">17.3 Response Times</h3>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Request Type</th>
+<th>Expected Response</th>
+</tr></thead><tbody>
+<tr>
+<td>Technical support</td>
+<td>24-48 hours</td>
+</tr>
+<tr>
+<td>HWID reset requests</td>
+<td>24-48 hours</td>
+</tr>
+<tr>
+<td>DMCA/takedown</td>
+<td>24 hours</td>
+</tr>
+<tr>
+<td>Legal notices</td>
+<td>48 hours</td>
+</tr>
+<tr>
+<td>Data deletion</td>
+<td>72 hours</td>
+</tr>
+</tbody></table></div>
+
+<hr>
+
+<h2 id="18-acknowledgment-acceptance">18. ACKNOWLEDGMENT &amp; ACCEPTANCE</h2>
+
+<h3 id="181-explicit-consent">18.1 Explicit Consent</h3>
+
+<p>By checking <strong>"I Agree"</strong> during purchase, installation, or first launch, you certify that:</p>
+
+<ul>
+<li>&lt;input type="checkbox" disabled&gt; You have read and understood this Agreement</li>
+<li>&lt;input type="checkbox" disabled&gt; You agree to be bound by all terms and conditions</li>
+<li>&lt;input type="checkbox" disabled&gt; You are at least 12 years old (or have parental consent)</li>
+<li>&lt;input type="checkbox" disabled&gt; You understand this software is <strong>closed source, encrypted, and protected</strong></li>
+<li>&lt;input type="checkbox" disabled&gt; You agree <strong>not to decompile, modify, redistribute, or rebrand</strong> this software</li>
+<li>&lt;input type="checkbox" disabled&gt; You understand violations may result in <strong>legal action and damages</strong></li>
+</ul>
+
+<h3 id="182-record-of-acceptance">18.2 Record of Acceptance</h3>
+
+<p>Pritam Raj maintains records of:</p>
+
+<ul>
+<li>Timestamp of acceptance</li>
+<li>IP address at acceptance</li>
+<li>HWID at acceptance</li>
+<li>Discord ID at acceptance</li>
+</ul>
+
+<hr>
+
+<h2 id="appendix-a-defined-terms">APPENDIX A: DEFINED TERMS</h2>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Term</th>
+<th>Definition</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>"Software"</strong></td>
+<td>CatGame, CatFlip, CatPay, CatShield, and all associated files</td>
+</tr>
+<tr>
+<td><strong>"License Key"</strong></td>
+<td>Unique activation code issued upon purchase</td>
+</tr>
+<tr>
+<td><strong>"HWID"</strong></td>
+<td>Hardware Identifier — SHA-256 hash of system identifiers</td>
+</tr>
+<tr>
+<td><strong>"Closed Source"</strong></td>
+<td>Source code not provided; only compiled, obfuscated, encrypted binaries</td>
+</tr>
+<tr>
+<td><strong>"Authorized Device"</strong></td>
+<td>Machine registered to your License Key via HWID binding</td>
+</tr>
+<tr>
+<td><strong>"Derivative Work"</strong></td>
+<td>Any work based upon, decompiled from, or substantially similar to the Software</td>
+</tr>
+<tr>
+<td><strong>"Material Breach"</strong></td>
+<td>Violation of Sections 8, 9, or 10 that defeats the purpose of this Agreement</td>
+</tr>
+</tbody></table></div>
+
+<hr>
+
+<h2 id="appendix-b-version-history">APPENDIX B: VERSION HISTORY</h2>
+
+<div class="tbl-wrap"><table>
+<thead><tr>
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr></thead><tbody>
+<tr>
+<td>1.0</td>
+<td>October 2026</td>
+<td>Initial comprehensive merge</td>
+</tr>
+</tbody></table></div>
+
+<hr>
+
+<p><strong>© 2026 Pritam Raj. All Rights Reserved.</strong></p>
+
+<p><em>This document is legally binding. Unauthorized reproduction or distribution of this Agreement is prohibited.</em></p>
+  </div>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Cat Game. Not affiliated with Mojang or Microsoft.</span>
-    <a href="/legal#terms">Terms</a>
-    <a href="/legal#intellectual-property">Anti-Decompilation</a>
-    <a href="/legal#privacy">Privacy</a>
-    <a href="/legal#refunds">Refunds</a>
+    <span>© 2026 Pritam Raj. All rights reserved. Not affiliated with Mojang or Microsoft.</span>
+    <a href="/legal#1-parties-acceptance">Terms</a>
+    <a href="/legal#7-intellectual-property-anti-decompilation">Anti-Decompilation</a>
+    <a href="/legal#11-privacy-policy-data-collection">Privacy</a>
+    <a href="/legal#12-refunds-replacement-policy">Refunds</a>
     <a data-dc href="#">Discord</a>
   </div>
 </footer>

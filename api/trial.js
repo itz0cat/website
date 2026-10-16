@@ -1,4 +1,4 @@
-const { E, session, redis, createKey, dm } = require('./_lib');
+const { E, session, redis, createKey, dm, bot } = require('./_lib');
 const HOURS = 2;
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
@@ -19,5 +19,24 @@ module.exports = async (req, res) => {
   const cmd = product === 'catgame' ? `/cat key ${key}` : `/catflip license ${key}`;
   const sent = await dm(s.id, { embeds: [{ title: `Your ${name} trial key`, color: 0x6ba4e8,
     description: `This key lasts ${HOURS} hours.\n\`${key}\`\n\nIn game, run:\n\`${cmd}\`\n\nLike it? Plans start at ₹20 a week in the store.` }] });
+
+  if (E.ADMIN_CHANNEL_ID) {
+    await bot(`/channels/${E.ADMIN_CHANNEL_ID}/messages`, 'POST', {
+      allowed_mentions: { parse: [] },
+      embeds: [{
+        title: `Trial Claimed: ${name}`,
+        color: 0x12805c,
+        fields: [
+          { name: 'Product', value: name, inline: true },
+          { name: 'Tier', value: (E.TRIAL_TIER || 'gold').toUpperCase(), inline: true },
+          { name: 'Duration', value: `${HOURS} Hours`, inline: true },
+          { name: 'User', value: `<@${s.id}> (${s.name})`, inline: true },
+          { name: 'Key', value: '`' + key + '`', inline: false }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    }).catch(() => {});
+  }
+
   res.json({ ok: true, dm: sent, ...(sent ? {} : { key, cmd }) });
 };

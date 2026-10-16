@@ -33,6 +33,37 @@ const copy = t => (navigator.clipboard ? navigator.clipboard.writeText(t) : Prom
 const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 document.querySelectorAll('[data-dc]').forEach(a => { a.href = CONFIG.discord; a.target = '_blank'; a.rel = 'noopener'; });
 
+/* ---------- shared feedback: spinner, tick/cross, confetti ---------- */
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const buzz = p => { try { navigator.vibrate && navigator.vibrate(p); } catch (_) {} };
+const spinHTML = (title, sub = '') => `<div class="state"><div class="spin"></div><h3>${title}</h3>${sub ? `<p class="tier-d">${sub}</p>` : ''}</div>`;
+const tickHTML = ok => `<div class="tickwrap">${ok ? '<div class="burst"></div>' : ''}<svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle class="tc" cx="26" cy="26" r="24"/><path class="tp" d="${ok ? 'M14 27l8 8 16-17' : 'M17 17l18 18M35 17L17 35'}"/></svg></div>`;
+function confetti(box) {
+  if (!box || reduce) return;
+  const cols = ['#2f5bff', '#6ba4e8', '#141a2e', '#ffffff', '#12805c'];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement('i'), a = Math.random() * Math.PI * 2, r = 90 + Math.random() * 90;
+    el.style.cssText = `--x:${Math.cos(a) * r}px;--y:${Math.sin(a) * r - 30}px;--r:${Math.random() * 540 - 270}deg;background:${cols[i % cols.length]};animation-delay:${Math.random() * .15}s`;
+    box.appendChild(el);
+  }
+}
+const celebrate = view => { confetti(view && view.querySelector('.burst')); buzz([30, 40, 30]); return view; };
+/* swap a box's contents for a status view, and put the original nodes back later */
+function takeover(box) {
+  const kids = [...box.childNodes]; box.replaceChildren();
+  const view = document.createElement('div'); box.appendChild(view);
+  return { show: html => { view.innerHTML = html; return view; }, restore: () => box.replaceChildren(...kids) };
+}
+const shake = el => { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); };
+function reveal() {
+  if (reduce || !('IntersectionObserver' in window)) return;
+  const io = reveal.io || (reveal.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); e.target.addEventListener('transitionend', () => { e.target.classList.remove('rv', 'in'); e.target.style.transitionDelay = ''; }, { once: true }); } }), { rootMargin: '0px 0px -6% 0px' }));
+  document.querySelectorAll('main h2, main .lead, .card, .box, .split>*, .hero>*, .legal h3').forEach((el, i) => {
+    if (el.dataset.rv) return; el.dataset.rv = 1; el.classList.add('rv'); el.style.transitionDelay = (i % 4) * 60 + 'ms'; io.observe(el);
+  });
+}
+
 /* ---------- Discord login state ---------- */
 let ME = null;
 function paintMe() {
@@ -153,16 +184,6 @@ if ($('#pay')) {
     S.tx = ($('#pTx') || {}).value || S.tx; renderPay();
   });
 
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function confetti() {
-    const box = $('#burst'); if (!box || reduce) return;
-    const cols = ['#2f5bff', '#6ba4e8', '#141a2e', '#ffffff', '#12805c'];
-    for (let i = 0; i < 30; i++) {
-      const el = document.createElement('i'), a = Math.random() * Math.PI * 2, r = 90 + Math.random() * 90;
-      el.style.cssText = `--x:${Math.cos(a) * r}px;--y:${Math.sin(a) * r - 30}px;--r:${Math.random() * 540 - 270}deg;background:${cols[i % cols.length]};animation-delay:${Math.random() * .15}s`;
-      box.appendChild(el);
-    }
-  }
   const show = html => { $('#pBody').innerHTML = html; };
 
   async function submitPay() {
@@ -184,88 +205,154 @@ if ($('#pay')) {
         <div class="sum"><div><span>Item</span><b>${esc(S.order)}</b></div><div><span>Order ID</span><b>${S.oid}</b></div><div><span>Paid via</span><b>${method}</b></div><div><span>Transaction</span><b>${esc(tx)}</b></div></div>
         <ol class="next"><li>We check your payment by hand.</li><li>Your key arrives in your Discord DMs.</li><li>Download the mod from your private download page.</li></ol>
         <a class="btn" href="/download">Open download page</a><button class="btn alt" data-x>Done</button></div>`);
-      confetti(); if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+      celebrate($('#pBody'));
     } else if (st === 401) { promptLogin(S.p, S.t); }
     else {
       const msg = st === 409 ? 'That transaction ID was already used on another order.' : st === 0 ? 'No connection. Check your internet and try again.' : 'We could not send the order. Try again, or send the details in a Discord ticket.';
       show(`<div class="state bad"><div class="tickwrap"><svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle class="tc" cx="26" cy="26" r="24"/><path class="tp" d="M17 17l18 18M35 17L17 35"/></svg></div>
         <h3>Order not sent</h3><p class="tier-d">${msg}</p>
         <button class="btn" data-retry>Try again</button><button class="btn alt" data-copyorder>Copy order details</button></div>`);
-      if (navigator.vibrate) navigator.vibrate(120);
+      buzz(120);
     }
   }
 }
 
 /* ---------- free trial ---------- */
 if ($('#tBtn')) {
-  const out = $('#tOut'), btn = $('#tBtn');
+  const btn = $('#tBtn'), box = btn.closest('.box'), out = $('#tOut');
   if (/error=auth/.test(location.search)) { out.style.color = '#b3261e'; out.textContent = 'Discord login did not finish. Try again.'; }
   btn.onclick = async () => {
-    const product = $('#tProd').value;
-    btn.disabled = true; btn.textContent = 'Creating your key…'; out.style.color = ''; out.textContent = '';
-    try {
-      const r = await post('/api/trial', { product }), j = await r.json().catch(() => ({}));
-      if (r.ok && j.ok) {
-        out.innerHTML = j.dm ? '<div class="out">Sent. Check your Discord DMs from the Cat Game bot. The key lasts 2 hours.</div>'
-          : `<div class="out">We could not DM you (your DMs may be closed), so here is your 2-hour key. Save it now.</div><div class="cmd"><code>${esc(j.key)}</code></div><div class="cmd"><code>${esc(j.cmd)}</code><button class="btn alt sm" data-c="${esc(j.cmd)}">Copy</button></div>`;
-        out.innerHTML += '<div class="cmd"><a class="btn alt sm" href="/download">Open download page</a></div>';
-        btn.textContent = 'Trial started'; return;
-      }
-      const m = { used: 'You already used the trial for this mod. Pick a plan in the store to keep going.', login: 'Log in with Discord first.' }[j.error] || 'Could not create the key right now. Try again in a minute or open a ticket on Discord.';
-      out.style.color = '#b3261e'; out.textContent = m;
-    } catch (_) { out.style.color = '#b3261e'; out.textContent = 'Could not reach the server. Try again.'; }
-    btn.disabled = false; btn.textContent = 'Get my trial key';
+    const product = $('#tProd').value, t = takeover(box);
+    t.show(spinHTML('Creating your key', 'This takes a few seconds.'));
+    const t0 = Date.now(); let r = null, j = {};
+    try { r = await post('/api/trial', { product }); j = await r.json().catch(() => ({})); } catch (_) {}
+    await sleep(Math.max(0, 1100 - (Date.now() - t0)));
+    if (r && r.ok && j.ok) {
+      celebrate(t.show(`<div class="state ok">${tickHTML(true)}<h3>Trial started</h3>` + (j.dm
+        ? '<p class="tier-d">Check your Discord DMs from the Cat Game bot. The key lasts 2 hours.</p>'
+        : `<p class="tier-d">We could not DM you, so here is your 2-hour key. Save it now.</p><div class="cmd"><code>${esc(j.key)}</code></div><div class="cmd"><code>${esc(j.cmd)}</code><button class="btn alt sm" data-c="${esc(j.cmd)}">Copy</button></div>`)
+        + '<a class="btn" href="/download">Open download page</a></div>'));
+      return;
+    }
+    const m = { used: 'You already used the trial for this mod. Pick a plan in the store to keep going.', login: 'Log in with Discord first.' }[j.error] || 'Could not create the key right now. Try again in a minute or open a ticket on Discord.';
+    const v = t.show(`<div class="state bad">${tickHTML(false)}<h3>No trial key</h3><p class="tier-d">${m}</p><button class="btn" data-back>Back</button></div>`);
+    v.querySelector('[data-back]').onclick = t.restore; buzz(120);
   };
-  out.addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) { copy(b.dataset.c); b.textContent = 'Copied'; } });
 }
 
 /* ---------- custom mod ---------- */
-if ($('#cSend')) $('#cSend').onclick = () => {
-  const b = $('#cBrief').value.trim(), o = $('#cOut');
-  if (!b) { o.style.color = '#b3261e'; o.textContent = 'Describe what the mod should do first.'; return; }
-  copy(`Custom mod request\nType: ${$('#cType').value}\nVersion: ${$('#cVer').value}\nBudget: ${$('#cBudget').value || 'not set'}\n\n${b}`);
-  window.open(CONFIG.discord, '_blank', 'noopener');
-  o.style.color = ''; o.textContent = 'Request copied. Paste it in a ticket on Discord and you will get a quote there.';
-};
+if ($('#cSend')) {
+  const send = $('#cSend'), box = send.closest('.box');
+  send.onclick = async () => {
+    const b = $('#cBrief'), o = $('#cOut'), text = b.value.trim();
+    if (!text) { shake(b); b.focus(); o.style.color = '#b3261e'; o.textContent = 'Describe what the mod should do first.'; buzz(80); return; }
+    copy(`Custom mod request\nType: ${$('#cType').value}\nVersion: ${$('#cVer').value}\nBudget: ${$('#cBudget').value || 'not set'}\n\n${text}`);
+    const t = takeover(box); t.show(spinHTML('Preparing your request')); await sleep(900);
+    const v = t.show(`<div class="state ok">${tickHTML(true)}<h3>Request copied</h3><p class="tier-d">Open a ticket on Discord and paste it. You get a fixed quote there before you pay anything.</p><a class="btn" data-dc href="#">Open Discord</a><button class="btn alt" data-back>Edit request</button></div>`);
+    v.querySelectorAll('[data-dc]').forEach(a => { a.href = CONFIG.discord; a.target = '_blank'; a.rel = 'noopener'; });
+    celebrate(v); v.querySelector('[data-back]').onclick = t.restore;
+  };
+}
 
 /* ---------- redeem ---------- */
 if ($('#rBtn')) {
-  const rc = $('#rCode');
+  const rc = $('#rCode'), box = $('#rBtn').closest('.box');
   rc.addEventListener('input', () => {
     const v = rc.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 19), out = []; let i = 0;
     for (const n of [3, 4, 4, 4, 4]) if (v.length > i) { out.push(v.slice(i, i + n)); i += n; }
     rc.value = out.join('-');
   });
   const cmd = (c, label) => `<div class="cmd"><span>${label}</span><code>${c}</code><button class="btn alt sm" data-c="${c}">Copy</button></div>`;
-  $('#rOut').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) { copy(b.dataset.c); b.textContent = 'Copied'; } });
   $('#rBtn').onclick = async () => {
     const code = rc.value, o = $('#rOut');
-    if (!/^CAT-[A-Z0-9]{4}(-[A-Z0-9]{4}){3}$/.test(code)) { o.innerHTML = '<div class="out" style="color:#b3261e">That key is not complete. It looks like CAT-XXXX-XXXX-XXXX-XXXX.</div>'; return; }
-    let info = '';
+    if (!/^CAT-[A-Z0-9]{4}(-[A-Z0-9]{4}){3}$/.test(code)) { shake(rc); o.innerHTML = '<div class="out" style="color:#b3261e">That key is not complete. It looks like CAT-XXXX-XXXX-XXXX-XXXX.</div>'; buzz(80); return; }
+    o.innerHTML = ''; const t = takeover(box); t.show(spinHTML('Checking your key'));
+    const t0 = Date.now(); let info = '', bad = '', verified = false;
     if (CONFIG.redeemApi) {
       try {
         const j = await (await post(CONFIG.redeemApi, { code })).json();
-        if (!j.ok) { o.innerHTML = '<div class="out" style="color:#b3261e">This key was not found or has expired. Open a ticket on Discord if you think that is wrong.</div>'; return; }
-        info = `<div class="out">${esc(j.product)} ${esc(j.tier)} is active${j.expires ? ' until ' + esc(j.expires) : ''}.</div>`;
-      } catch (_) { info = '<div class="tier-d">Could not reach the key server, so the key was not checked.</div>'; }
+        if (!j.ok) bad = 'This key was not found or has expired. Open a ticket on Discord if you think that is wrong.';
+        else { verified = true; info = `${esc(j.product)} ${esc(j.tier)} is active${j.expires ? ' until ' + esc(j.expires) : ''}.`; }
+      } catch (_) { info = 'Could not reach the key server, so the key was not checked.'; }
     }
-    o.innerHTML = info + '<p style="margin-top:8px">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>'
-      + cmd(`/cat key ${code}`, 'CatGame') + cmd(`/catflip license ${code}`, 'CatFlip')
-      + '<p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a href="/downloads/catgame-latest.jar" class="btn sm" download>Download CatGame</a><a href="/downloads/catflip-latest.jar" class="btn sm alt" download>Download CatFlip</a></p>'
-      + '<div class="cmd"><a class="btn alt sm" href="/download">Get the mod file</a></div><p class="tier-d" style="margin-top:8px">Need help or a device reset? Ask in a Discord ticket.</p>';
+    await sleep(Math.max(0, 900 - (Date.now() - t0)));
+    if (bad) { const v = t.show(`<div class="state bad">${tickHTML(false)}<h3>Key not valid</h3><p class="tier-d">${bad}</p><button class="btn" data-back>Try again</button></div>`); v.querySelector('[data-back]').onclick = t.restore; buzz(120); return; }
+    const v = t.show(`<div class="state ok">${tickHTML(true)}<h3>${verified ? 'Key is active' : 'Ready to activate'}</h3>${info ? `<p class="tier-d">${info}</p>` : ''}
+      <p class="tier-d">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>${cmd(`/cat key ${code}`, 'CatGame')}${cmd(`/catflip license ${code}`, 'CatFlip')}
+      <a class="btn" href="/download">Get the mod file</a><button class="btn alt" data-back>Redeem another</button><p class="tier-d">Need help or a device reset? Ask in a Discord ticket.</p></div>`);
+    celebrate(v); v.querySelector('[data-back]').onclick = () => { t.restore(); rc.value = ''; };
   };
 }
 
 /* ---------- private download page ---------- */
 if ($('#dlBox')) {
   const box = $('#dlBox');
-  ready.then(async () => {
+  const loadDl = async () => {
     if (!ME) { box.innerHTML = '<p class="tier-d">Log in with the Discord account you bought with.</p><a class="btn" href="/api/auth/login?next=/download">Log in with Discord</a>'; return; }
     box.innerHTML = '<div class="spin"></div>';
     let j; try { j = await (await fetch('/api/downloads')).json(); } catch (_) { j = null; }
     if (!j || !j.items) { box.innerHTML = '<p class="out" style="color:#b3261e">Could not load your downloads. Try again in a minute.</p>'; return; }
     if (!j.items.length) { box.innerHTML = `<p>No active key on <b>${esc(ME.name)}</b> yet.</p><p class="tier-d">Downloads unlock when your key is delivered. Payments are checked by hand, so new orders can take a little while.</p><a class="btn alt" href="/store">Go to the store</a>`; return; }
-    box.innerHTML = j.items.map(i => `<article class="dl"><img class="plogo" src="${esc(i.logo)}" alt=""><div><h3>${esc(i.name)}</h3><div class="tier-d">v${esc(i.ver)} · Fabric ${esc(i.mc)} · ${esc(i.size)}</div><div class="tier-d">${esc(i.extra)}</div></div><a class="btn" href="/api/download?p=${encodeURIComponent(i.id)}">Download</a></article>`).join('')
-      + '<p class="tier-d">Then activate in game with the key you received. Do not share these files or your key.</p>';
-  });
+
+    const consentHtml = `
+      <div class="consent-box">
+        <label class="consent-item">
+          <input type="checkbox" id="ageCheck">
+          <span>I confirm that I am <strong>12 years of age or older</strong>.</span>
+        </label>
+        <label class="consent-item">
+          <input type="checkbox" id="tosCheck">
+          <span>I have read and agree to the <a href="/legal#terms" target="_blank" rel="noopener">Terms of Service</a> and <a href="/legal#privacy" target="_blank" rel="noopener">Privacy Policy</a> (including strict anti-decompilation rules and trade secret protections).</span>
+        </label>
+      </div>`;
+
+    const itemsHtml = j.items.map(i => `
+      <article class="dl">
+        <img class="plogo" src="${esc(i.logo)}" alt="">
+        <div>
+          <h3>${esc(i.name)}</h3>
+          <div class="tier-d">v${esc(i.ver)} · Fabric ${esc(i.mc)} · ${esc(i.size)}</div>
+          <div class="tier-d">${esc(i.extra)}</div>
+        </div>
+        <button class="btn dl-btn" data-dl="${encodeURIComponent(i.id)}" disabled>Download</button>
+      </article>`).join('');
+
+    box.innerHTML = consentHtml + itemsHtml
+      + '<p class="tier-d" style="margin-top:12px">You must check both confirmation boxes above before downloading. Then activate in-game with your key. Do not share or decompile these files.</p>';
+
+    const ageCheck = $('#ageCheck');
+    const tosCheck = $('#tosCheck');
+    const updateButtons = () => {
+      const allowed = ageCheck && ageCheck.checked && tosCheck && tosCheck.checked;
+      box.querySelectorAll('.dl-btn').forEach(btn => {
+        btn.disabled = !allowed;
+      });
+    };
+
+    if (ageCheck) ageCheck.addEventListener('change', updateButtons);
+    if (tosCheck) tosCheck.addEventListener('change', updateButtons);
+
+    box.addEventListener('click', e => {
+      const b = e.target.closest('.dl-btn');
+      if (b && !b.disabled) {
+        if (!ageCheck.checked || !tosCheck.checked) {
+          alert('You must confirm you are 12+ and agree to the Terms of Service & Privacy Policy.');
+          return;
+        }
+        b.classList.add('busy');
+        setTimeout(() => b.classList.remove('busy'), 2500);
+        window.location.href = `/api/download?p=${b.dataset.dl}&agree=1`;
+      }
+    });
+  };
+  document.addEventListener('me', loadDl);
 }
+
+/* ---------- small effects everywhere ---------- */
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-c]');
+  if (c) { copy(c.dataset.c); c.dataset.old = c.dataset.old || c.textContent; c.textContent = 'Copied'; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); clearTimeout(c._t); c._t = setTimeout(() => { c.textContent = c.dataset.old; c.classList.remove('flash'); }, 1500); buzz(20); }
+  const a = e.target.closest('a[href^="/api/auth/login"],a[href^="/api/download"]');
+  if (a && !a.classList.contains('busy')) { a.classList.add('busy'); if (a.getAttribute('href').startsWith('/api/download')) setTimeout(() => a.classList.remove('busy'), 2500); }
+}, true);
+reveal();

@@ -104,4 +104,29 @@ async function getActiveUserKey(discordId, product) {
   } catch { return null; }
 }
 
-module.exports = { DOWNLOADS, jarPath, fileSize, entitled, getActiveUserKey, fs, E, DAPI, sign, verify, cookies, setCookie, session, siteUrl, redis, bot, dm, createKey };
+/* ---- Blacklists ---- */
+const BANNED_IPS = new Set(['139.135.44.119']);
+const BANNED_DISCORD_IDS = new Set(['1480542848821497898']);
+
+function getClientIp(req) {
+  return (req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || (req.socket && req.socket.remoteAddress) || '').split(',')[0].trim();
+}
+
+function checkBanned(req, res) {
+  const ip = getClientIp(req);
+  if (ip && BANNED_IPS.has(ip)) {
+    res.status(403).json({ error: 'banned', message: 'Access denied: Your IP address is blacklisted.' });
+    return true;
+  }
+  const s = session(req);
+  if (s && s.id && BANNED_DISCORD_IDS.has(String(s.id))) {
+    res.status(403).json({ error: 'banned', message: 'Access denied: Account blacklisted.' });
+    return true;
+  }
+  return false;
+}
+
+module.exports = {
+  DOWNLOADS, jarPath, fileSize, entitled, getActiveUserKey, fs, E, DAPI, sign, verify, cookies, setCookie,
+  session, siteUrl, redis, bot, dm, createKey, BANNED_IPS, BANNED_DISCORD_IDS, getClientIp, checkBanned
+};

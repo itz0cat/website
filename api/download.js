@@ -1,5 +1,6 @@
-const { session, entitled, DOWNLOADS, jarPath, fs } = require('./_lib');
+const { session, entitled, DOWNLOADS, jarPath, fs, checkBanned } = require('./_lib');
 module.exports = async (req, res) => {
+  if (checkBanned(req, res)) return;
   res.setHeader('Cache-Control', 'private, no-store');
   const s = session(req), d = DOWNLOADS[String(req.query.p || '')];
   if (!s) return res.redirect(302, '/download');

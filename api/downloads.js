@@ -1,5 +1,6 @@
-const { session, entitled, DOWNLOADS, fileSize } = require('./_lib');
+const { session, entitled, DOWNLOADS, fileSize, checkBanned } = require('./_lib');
 module.exports = async (req, res) => {
+  if (checkBanned(req, res)) return;
   res.setHeader('Cache-Control', 'no-store');
   const s = session(req);
   if (!s) return res.status(401).json({ error: 'login' });

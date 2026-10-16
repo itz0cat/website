@@ -1,6 +1,7 @@
-const { E, session, redis, createKey, dm, bot, siteUrl, getActiveUserKey } = require('./_lib');
+const { E, session, redis, createKey, dm, bot, siteUrl, getActiveUserKey, checkBanned } = require('./_lib');
 const HOURS = 2;
 module.exports = async (req, res) => {
+  if (checkBanned(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
   const s = session(req);
   if (!s) return res.status(401).json({ error: 'login' });

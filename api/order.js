@@ -1,6 +1,7 @@
-const { E, session, redis, bot, dm, siteUrl } = require('./_lib');
+const { E, session, redis, bot, dm, siteUrl, checkBanned } = require('./_lib');
 const clean = (v, n = 120) => String(v || '').replace(/[`@\n\r]/g, ' ').trim().slice(0, n);
 module.exports = async (req, res) => {
+  if (checkBanned(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
   if (!E.ADMIN_CHANNEL_ID) return res.status(500).json({ error: 'not_configured' });
   const b = req.body || {}, s = session(req);

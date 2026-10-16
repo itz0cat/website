@@ -1,6 +1,7 @@
 const crypto = require('crypto');
-const { E, sign, setCookie, siteUrl } = require('../_lib');
+const { E, sign, setCookie, siteUrl, checkBanned } = require('../_lib');
 module.exports = (req, res) => {
+  if (checkBanned(req, res)) return;
   const state = crypto.randomBytes(16).toString('hex');
   const next = String(req.query.next || '/trial');
   const safe = next.startsWith('/') && !next.startsWith('//') ? next : '/trial';

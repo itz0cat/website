@@ -113,11 +113,25 @@ function getClientIp(req) {
 }
 
 function checkBanned(req, res) {
-  const ip = getClientIp(req);
-  if (ip && BANNED_IPS.has(ip)) {
-    res.status(403).json({ error: 'banned', message: 'Access denied: Your IP address is blacklisted.' });
-    return true;
+  const forwarded = req.headers['x-forwarded-for'] || '';
+  const realIp = req.headers['x-real-ip'] || '';
+  const socketIp = (req.socket && req.socket.remoteAddress) || '';
+  const vercelIp = req.headers['x-vercel-forwarded-for'] || '';
+
+  const allIps = [
+    ...forwarded.split(',').map(s => s.trim()),
+    ...vercelIp.split(',').map(s => s.trim()),
+    realIp.trim(),
+    socketIp.trim()
+  ].filter(Boolean);
+
+  for (const ip of allIps) {
+    if (BANNED_IPS.has(ip)) {
+      res.status(403).json({ error: 'banned', message: 'Access denied: Your IP address is blacklisted.' });
+      return true;
+    }
   }
+
   const s = session(req);
   if (s && s.id && BANNED_DISCORD_IDS.has(String(s.id))) {
     res.status(403).json({ error: 'banned', message: 'Access denied: Account blacklisted.' });

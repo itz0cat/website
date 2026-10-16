@@ -1,8 +1,5 @@
 .vercel
 node_modules
-.DS_Store
-*.log
-momentum/
-
-.offline_jars_backup/
-graphify-out/
+.env
+.offline_jars_backup
+graphify-out

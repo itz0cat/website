@@ -1,5 +1,16 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "trailingSlash": false
+  "functions": { "api/*.js": { "maxDuration": 60 }, "api/auth/*.js": { "maxDuration": 30 } },
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/store/catgame", "destination": "/store", "permanent": true },
+    { "source": "/store/catflip", "destination": "/store", "permanent": true },
+    { "source": "/store/catpay", "destination": "/store", "permanent": true },
+    { "source": "/download", "destination": "/redeem", "permanent": true },
+    { "source": "/downloads", "destination": "/redeem", "permanent": true },
+    { "source": "/terms", "destination": "/legal#terms", "permanent": true },
+    { "source": "/refunds", "destination": "/legal#refunds", "permanent": true },
+    { "source": "/maintenance", "destination": "/", "permanent": false }
+  ]
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom mods | Cat Game</title><meta name="description" content="Get a Minecraft mod, plugin or bot built to order.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐱</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/style.css"></head>
+<body>
+<header><div class="wrap"><a class="logo" href="/">Cat Game</a><nav><a href="/store">Store</a><a href="/custom" aria-current="page">Custom</a><a href="/redeem">Redeem</a><a href="/trial" class="trial">Free trial</a></nav><div id="acct"></div></div></header>
+<main class="wrap"><section id="custom">
+    <h2>Custom mods</h2>
+    <div class="split">
+      <div>
+        <p class="lead">Tell me what you want the mod to do. I reply with a fixed price and a delivery date before you pay anything.</p>
+        <ul>
+          <li>Fabric client mods, HUDs and config screens</li>
+          <li>Server plugins for Paper and Spigot</li>
+          <li>Discord bots and automation that go with them</li>
+        </ul>
+        <p class="lead">You get the source for anything built exclusively for you. Pay half to start and half on delivery, by UPI or crypto.</p>
+      </div>
+      <div class="box">
+        <label>What should it do?<textarea id="cBrief" placeholder="Example: a HUD that shows my armor durability and warns me at 10%"></textarea></label>
+        <div class="two">
+          <label>Minecraft version<select id="cVer"><option>1.21.11</option><option>1.21.x</option><option>1.20.x</option><option>Other</option></select></label>
+          <label>Type<select id="cType"><option>Fabric mod</option><option>Forge / NeoForge mod</option><option>Paper plugin</option><option>Discord bot</option></select></label>
+        </div>
+        <label>Budget (optional)<input id="cBudget" placeholder="₹ or $"></label>
+        <button class="btn" id="cSend">Send on Discord</button>
+        <div class="out" id="cOut" role="status"></div>
+      </div>
+    </div>
+  </section></main>
+<footer><div class="wrap"><span>© 2026 Cat Game. Not affiliated with Mojang or Microsoft.</span><a href="/legal#terms">Terms</a><a href="/legal#refunds">Refunds</a><a data-dc href="#">Discord</a></div></footer>
+<script src="/assets/site.js"></script>
+</body></html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free trial | Cat Game</title><meta name="description" content="Try CatGame or CatFlip free for 2 hours. Log in with Discord to get your key.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐱</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/style.css"></head>
+<body>
+<header><div class="wrap"><a class="logo" href="/">Cat Game</a><nav><a href="/store">Store</a><a href="/custom">Custom</a><a href="/redeem">Redeem</a><a href="/trial" class="trial" aria-current="page">Free trial</a></nav><div id="acct"></div></div></header>
+<main class="wrap"><section id="trial">
+<h2>Free 2-hour trial</h2>
+<div class="split">
+<div><p class="lead">Try CatGame or CatFlip before you buy. Log in with Discord and the Cat Game bot sends your key by DM. One trial per mod for each Discord account.</p>
+<p class="tier-d">Logging in adds you to the Cat Game Discord server so the bot can message you. We only read your username and ID.</p></div>
+<div class="box">
+<div data-out><a class="btn" data-login href="/api/auth/login?next=/trial">Log in with Discord</a></div>
+<div data-in hidden style="display:grid;gap:12px"><label>Mod<select id="tProd"><option value="catgame">CatGame</option><option value="catflip">CatFlip</option></select></label>
+<button class="btn" id="tBtn">Get my trial key</button></div>
+<div id="tOut" class="out" role="status"></div>
+</div></div></section></main>
+<footer><div class="wrap"><span>© 2026 Cat Game. Not affiliated with Mojang or Microsoft.</span><a href="/legal#terms">Terms</a><a href="/legal#refunds">Refunds</a><a data-dc href="#">Discord</a></div></footer>
+<script src="/assets/site.js"></script>
+</body></html>

@@ -1,29 +1,17 @@
-# 🐾 Cat Game — Mod Key Store & Landing Page
+# Cat Game site
 
-Official Material Design 3 storefront and key management portal for **Cat Game**, the high-performance Fabric mod (1.21.x) for Minecraft chat games.
+Pages: `/` home, `/store`, `/custom`, `/redeem`, `/trial`, `/legal`. Shared code in `assets/`, serverless API in `api/`.
 
-## 🚀 Features
+## 1. Payments
+Edit `CONFIG` at the top of `assets/site.js` (UPI ID now, crypto addresses later).
+Paid orders are posted to your private admin channel with the buyer's UTR. You verify the payment, then deliver the key.
 
-- **Strict Material Design 3 (M3)** with dynamic Material You accent palettes matching user customizations.
-- **Dynamic Accent Color Picker**: Built-in 8-swatch Material palette + custom HTML5 color picker with persistent state via localStorage.
-- **Tier-Wise Licensing Showcase**:
-  - 🥉 **Iron Tier**: ₹80 / $4.99 (Lifetime Permanent, 4.0s safe human delay, 1 device).
-  - 🥇 **Gold Tier**: ₹20 / Week or ₹70 / Month (2.5s speed, down to 2.0s via `/cat delay`, 2 devices, high priority cloud queue).
-  - 💎 **Diamond Tier**: ₹40 / Week or ₹140 / Month (0.8s near-instant, down to 0.1s, 5 devices, VIP zero-delay queue, 24/7 custom trivia).
-- **Direct Discord Checkout**: Seamless redirect to Discord ticket channel (`https://discord.gg/Ga6y7rzd5u`) for instant key generation and delivery.
-- **Multi-Page Architecture**:
-  - `/` → Redirects automatically to `/store`
-  - `/store` → Official Storefront & Feature Showcase
-  - `/terms` → Terms of Service & EULA compliance
-  - `/refunds` → Digital goods refund & replacement policy
-- **1-Click Command Copier**: In-game setup (`/cat key <key>`, `/cat delay <seconds>`, `/cat status`).
+## 2. Discord login + free trial
+1. Discord Developer Portal > your app > OAuth2 > add redirect `https://YOUR-SITE/api/auth/callback`.
+2. The bot must be in your server with the "Create Invite" permission (needed to add members).
+3. Add every variable from `.env.example` in Vercel, then redeploy.
+4. `createKey()` in `api/_lib.js` already calls catcore's `/admin/create-key` and `/admin/set-key-expiry`.
 
-## 🌐 Deployment (Vercel)
+Login adds the user to your server, then the bot DMs the 2-hour key. If their DMs are closed, the key is shown on the page instead.
 
-Configured with `vercel.json` for instant Vercel deployment with clean URLs and root-to-store redirection.
-
-```bash
-vercel --prod
-```
-
-© 2026 Cat Game. All rights reserved.
+Deploy: `vercel --prod`

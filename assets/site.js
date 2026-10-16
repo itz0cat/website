@@ -108,13 +108,20 @@ if ($('#pay')) {
     $('#pBody').innerHTML = `
       <h3 id="pTitle">Log in to order<button class="btn alt sm" data-x aria-label="Close">Close</button></h3>
       <div style="text-align:center;padding:12px 0 6px">
-        <div style="font-size:40px;margin-bottom:10px">🐱</div>
+        <div style="display:flex;justify-content:center;margin-bottom:14px">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="#2f5bff">
+            <ellipse cx="12" cy="15" rx="5" ry="4"/>
+            <circle cx="6.5" cy="9.5" r="2"/>
+            <circle cx="10" cy="6.5" r="2"/>
+            <circle cx="14" cy="6.5" r="2"/>
+            <circle cx="17.5" cy="9.5" r="2"/>
+          </svg>
+        </div>
         <p style="margin-bottom:18px;font-size:15px;color:var(--mute);line-height:1.5">
-          Please log in with Discord first so your license key and download link can be delivered directly to your Discord DMs after payment.
+          Discord login is required before purchasing <b>${esc(p ? p.name : 'your mod')}</b>. Your verified license key and private download link will be delivered directly to your Discord DMs.
         </p>
         <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
-          <a class="btn" style="width:100%;max-width:280px;text-align:center" href="/api/auth/login?next=${returnUrl}">Log in with Discord</a>
-          <button class="btn alt sm" data-guest="${key}" data-gtier="${tier}">Continue without login</button>
+          <a class="btn" style="width:100%;max-width:280px;text-align:center" href="/api/auth/login?next=${returnUrl}">Log in with Discord to Order</a>
         </div>
       </div>`;
     dlg.showModal();
@@ -126,13 +133,21 @@ if ($('#pay')) {
     if (buy && P[buy]) {
       const tier = +(params.get('tier') || 0);
       history.replaceState(null, '', location.pathname);
-      openPay(buy, tier);
+      if (!ME) {
+        promptLogin(buy, tier);
+      } else {
+        openPay(buy, tier);
+      }
     }
   }
   document.addEventListener('me', checkUrlBuy);
   checkUrlBuy();
 
   function openPay(key, tier = 0) {
+    if (!ME) {
+      promptLogin(key, tier);
+      return;
+    }
     Object.assign(S, {
       p: key,
       t: Math.min(tier, P[key].tiers.length - 1),
@@ -146,6 +161,10 @@ if ($('#pay')) {
   }
 
   function renderPay() {
+    if (!ME) {
+      promptLogin(S.p, S.t);
+      return;
+    }
     const p = P[S.p], t = p.tiers[S.t], [inr, usd] = amount(), once = !!t.o, hasCrypto = CONFIG.crypto.length > 0;
     const order = `${p.name} ${t.n}${once ? '' : S.per === 'w' ? ' (week)' : ' (month)'}`;
     const on = v => `aria-pressed="${v}"`;
@@ -167,8 +186,7 @@ if ($('#pay')) {
       <div><code>${c.addr}</code> <button class="btn alt sm" data-c="${c.addr}">Copy</button></div>
       <div class="tier-d">Network fees are on you. Send on the exact network shown, or the payment is lost.</div>`}</div>
     <label>Transaction ID (UTR or hash)<input id="pTx" autocomplete="off" inputmode="text"></label>
-    ${ME ? `<div class="tier-d">Logged in as <b>${esc(ME.name)}</b>. Your key will be sent to you by DM.</div>`
-         : `<label>Your Discord username<input id="pDc" autocomplete="off"></label><div class="tier-d"><a data-login href="#">Log in with Discord</a> to get your key by DM automatically.</div>`}
+    <div class="tier-d">Logged in as <b>${esc(ME.name)}</b>. Your license key and download link will be delivered directly to your Discord DMs.</div>
     <button class="btn" id="pGo">I've paid, send my order</button>
     <div class="out" id="pOut" role="status"></div>`;
     if (S.method === 'upi' && window.QRCode) new QRCode($('#qr'), { text: upiLink, width: 160, height: 160 });
@@ -181,7 +199,6 @@ if ($('#pay')) {
     const b = e.target.closest('button'); if (!b) return;
     const d = b.dataset;
     if ('x' in d) return dlg.close();
-    if (d.guest) { openPay(d.guest, +d.gtier || 0); return; }
     if (d.c) { copy(d.c); b.textContent = 'Copied'; return; }
     if (b.id === 'pGo') return submitPay(b);
     if (d.t) S.t = +d.t; else if (d.per) S.per = d.per; else if (d.m) S.method = d.m; else if (d.cr) S.crypto = +d.cr; else return;
@@ -189,16 +206,20 @@ if ($('#pay')) {
   });
 
   async function submitPay(btn) {
-    const tx = $('#pTx').value.trim(), dc = ME ? ME.name : ($('#pDc') ? $('#pDc').value.trim() : ''), out = $('#pOut');
+    if (!ME) {
+      promptLogin(S.p, S.t);
+      return;
+    }
+    const tx = $('#pTx').value.trim(), dc = ME.name, out = $('#pOut');
     const fail = m => { out.style.color = '#b3261e'; out.textContent = m; };
     if (!tx) return fail('Enter the transaction ID (UTR).');
-    if (!dc) return fail('Enter your Discord username or log in above.');
     const method = S.method === 'upi' ? 'UPI' : CONFIG.crypto[S.crypto].name;
     btn.disabled = true; btn.textContent = 'Sending…'; out.textContent = '';
     try {
       const r = await post('/api/order', { oid: S.oid, order: S.order, amount: S.amt, method, txn: tx, discord: dc });
-      if (r.ok) { out.style.color = ''; out.textContent = 'Order sent! We verify the transaction, then your key arrives on Discord.'; btn.textContent = 'Order sent'; return; }
+      if (r.ok) { out.style.color = ''; out.textContent = 'Order sent! We verify the transaction, then your key arrives in your Discord DMs.'; btn.textContent = 'Order sent'; return; }
       if (r.status === 409) { fail('That transaction ID was already used on another order.'); }
+      else if (r.status === 401) { fail('You must be logged in with Discord to order.'); promptLogin(S.p, S.t); }
       else throw new Error('api');
     } catch (_) {
       copy(`Order ${S.oid}\n${S.order}: ${S.amt}\nMethod: ${method}\nTxn: ${tx}\nDiscord: ${dc}`);

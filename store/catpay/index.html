@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CatPay: Client-Side /pay Simulator | Cat Game</title>
   <meta name="description" content="Client-side Minecraft /pay simulator matching server currency glyphs and colors. Ideal for tutorials and video content.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐱</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bff'><ellipse cx='12' cy='15' rx='5' ry='4'/><circle cx='6.5' cy='9.5' r='2'/><circle cx='10' cy='6.5' r='2'/><circle cx='14' cy='6.5' r='2'/><circle cx='17.5' cy='9.5' r='2'/></svg>">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
@@ -22,14 +22,22 @@
     .tier-card h3{font-size:1.6rem}
     .tier-card .desc{color:var(--mute);font-size:14.5px;margin:8px 0 14px}
     .tier-card ul{list-style:none;padding:0;font-size:14.5px;display:grid;gap:8px;margin-bottom:20px}
-    .tier-card li::before{content:"✓ ";color:var(--ok);font-weight:800}
+    .tier-card li::before{content:"+ ";color:var(--blue);font-weight:700}
     @media(max-width:820px){.tier-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <a class="logo" href="/">Cat Game</a>
+    <a class="logo" href="/">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:text-bottom;margin-right:6px">
+        <ellipse cx="12" cy="15" rx="5" ry="4"/>
+        <circle cx="6.5" cy="9.5" r="2"/>
+        <circle cx="10" cy="6.5" r="2"/>
+        <circle cx="14" cy="6.5" r="2"/>
+        <circle cx="17.5" cy="9.5" r="2"/>
+      </svg>Cat Game
+    </a>
     <nav>
       <a href="/store" aria-current="page">Store</a>
       <a href="/custom">Custom</a>
@@ -54,17 +62,17 @@
           The ultimate simulation tool for Minecraft content creators, YouTubers, and video editors. Accurately simulates incoming payment announcements, server currency symbols, and custom hex formatting.
         </p>
         <div class="badge-row">
-          <span class="badge-tag">🎥 Creator & YouTube Ready</span>
-          <span class="badge-tag">💎 Custom Server Glyphs (\uE058)</span>
-          <span class="badge-tag">⌨️ Stealth Keybinds</span>
-          <span class="badge-tag">🌐 100% Offline (No Key / HWID)</span>
+          <span class="badge-tag">Creator & YouTube Ready</span>
+          <span class="badge-tag">Custom Server Glyphs (\uE058)</span>
+          <span class="badge-tag">Stealth Keybinds</span>
+          <span class="badge-tag">100% Offline (No Key / HWID)</span>
         </div>
         <div class="row" style="margin-top:20px">
           <a class="btn" href="#tiers">Get Lifetime Access</a>
         </div>
       </div>
       <div class="chat" style="display:flex;flex-direction:column;justify-content:center;gap:10px" aria-label="CatPay in-game preview">
-        <div><s>[Economy]</s> <i style="color:#f6c344">⚡ You received</i> <b>$10,000,000</b> <i>from</i> <s>Notch</s></div>
+        <div><s>[Economy]</s> <i style="color:#f6c344">You received</i> <b>$10,000,000</b> <i>from</i> <s>Notch</s></div>
         <div><s>[Server]</s> <i>Balance updated:</i> <b style="color:#8fe0b4">$25,480,000</b></div>
         <div><s>[CatPay]</s> <i>Silent trigger activated (F8 stealth keybind)</i></div>
       </div>
@@ -78,22 +86,22 @@
 
     <div class="feat-grid">
       <article class="feat-card">
-        <h4>🎨 Exact Glyph & Hex Matching</h4>
+        <h4>Exact Glyph & Hex Matching</h4>
         <p>Pre-configured support for BananaSMP custom currency glyphs (<code>\uE058</code>), DonutSMP, and modern MiniMessage gradient formats.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🔢 Shorthand Notation Support</h4>
+        <h4>Shorthand Notation Support</h4>
         <p>Accepts natural commands like <code>/catpay fake 10m</code> or <code>/catpay fake 1.5b</code> and outputs properly formatted comma-separated numbers.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🕶️ Stealth Hotkey Control</h4>
+        <h4>Stealth Hotkey Control</h4>
         <p>Trigger fake transactions instantly while recording without opening the chat box or looking suspicious on stream.</p>
       </article>
 
       <article class="feat-card">
-        <h4>💻 100% Offline & Universal</h4>
+        <h4>100% Offline & Universal</h4>
         <p>No keys, no cloud backend, no weekly renewal fees. Once purchased, the mod is yours forever across all your PCs.</p>
       </article>
     </div>
@@ -102,7 +110,7 @@
   <!-- Tiers Breakdown -->
   <section id="tiers">
     <h2>Select your CatPay License</h2>
-    <p class="lead">One-time payment. No recurring subscriptions.</p>
+    <p class="lead">Discord login required before purchase. Download link and setup instructions sent to your Discord DMs.</p>
 
     <div class="tier-grid">
       <!-- Standard -->

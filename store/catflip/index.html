@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CatFlip: Coinflip Bankroll & Win-Rate HUD | Cat Game</title>
   <meta name="description" content="DeluxeCoinflip manager for Minecraft. Features isolated bankroll vault, automatic loss cutoff, and real-time win-rate HUD.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐱</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bff'><ellipse cx='12' cy='15' rx='5' ry='4'/><circle cx='6.5' cy='9.5' r='2'/><circle cx='10' cy='6.5' r='2'/><circle cx='14' cy='6.5' r='2'/><circle cx='17.5' cy='9.5' r='2'/></svg>">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
@@ -22,15 +22,23 @@
     .tier-card h3{font-size:1.6rem}
     .tier-card .desc{color:var(--mute);font-size:14.5px;margin:8px 0 14px}
     .tier-card ul{list-style:none;padding:0;font-size:14.5px;display:grid;gap:8px;margin-bottom:20px}
-    .tier-card li::before{content:"✓ ";color:var(--ok);font-weight:800}
-    .callout-box{background:var(--paper);border:2px dashed var(--ink);border-radius:14px;padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;gap:16px;margin:40px 0}
+    .tier-card li::before{content:"+ ";color:var(--blue);font-weight:700}
+    .callout-box{background:var(--paper);border:2px dashed var(--ink);border-radius:14px;padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin:40px 0}
     @media(max-width:820px){.tier-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <a class="logo" href="/">Cat Game</a>
+    <a class="logo" href="/">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:text-bottom;margin-right:6px">
+        <ellipse cx="12" cy="15" rx="5" ry="4"/>
+        <circle cx="6.5" cy="9.5" r="2"/>
+        <circle cx="10" cy="6.5" r="2"/>
+        <circle cx="14" cy="6.5" r="2"/>
+        <circle cx="17.5" cy="9.5" r="2"/>
+      </svg>Cat Game
+    </a>
     <nav>
       <a href="/store" aria-current="page">Store</a>
       <a href="/custom">Custom</a>
@@ -55,14 +63,14 @@
           The ultimate coinflip companion for DeluxeCoinflip SMP servers. Never drain your purse: strict vault isolation, automatic 5-loss cutoff, and on-screen profit statistics.
         </p>
         <div class="badge-row">
-          <span class="badge-tag">🪙 DeluxeCoinflip Compatible</span>
-          <span class="badge-tag">🏦 Isolated Bankroll Vault</span>
-          <span class="badge-tag">🛑 Auto Loss Cutoff</span>
-          <span class="badge-tag">📊 Live Profit HUD</span>
+          <span class="badge-tag">DeluxeCoinflip Compatible</span>
+          <span class="badge-tag">Isolated Bankroll Vault</span>
+          <span class="badge-tag">Auto Loss Cutoff</span>
+          <span class="badge-tag">Live Profit HUD</span>
         </div>
         <div class="row" style="margin-top:20px">
           <a class="btn" href="#tiers">Choose a Plan</a>
-          <a class="btn alt" href="/downloads/catflip-latest.jar" download>Download Mod</a>
+          <a class="btn alt" href="/redeem">Redeem Key to Download</a>
         </div>
       </div>
       <div class="chat" style="display:flex;flex-direction:column;justify-content:center;gap:10px" aria-label="CatFlip HUD demo">
@@ -81,32 +89,32 @@
 
     <div class="feat-grid">
       <article class="feat-card">
-        <h4>🏦 Isolated Vault System</h4>
+        <h4>Isolated Vault System</h4>
         <p>Set a strict bankroll allowance (e.g. $500,000). CatFlip plays strictly from this dedicated pool and never allows bets that dip into your main wallet.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🛑 Automatic Loss Cutoff</h4>
+        <h4>Automatic Loss Cutoff</h4>
         <p>Hard stop mechanism: if you encounter 5 consecutive losses or a 50% bankroll drawdown, the mod instantly pauses flips to prevent emotional tilt.</p>
       </article>
 
       <article class="feat-card">
-        <h4>📊 Real-Time Screen HUD</h4>
+        <h4>Real-Time Screen HUD</h4>
         <p>Clean on-screen widget displaying total session profit/loss, win streak, win rate %, and estimated expected value (EV) in real time.</p>
       </article>
 
       <article class="feat-card">
-        <h4>📈 Smart Kelly Sizing</h4>
+        <h4>Smart Kelly Sizing</h4>
         <p>Mathematical bankroll sizing algorithms calculate the optimal wager amount based on your bankroll and server coinflip commission tax.</p>
       </article>
 
       <article class="feat-card">
-        <h4>⚡ DeluxeCoinflip Integration</h4>
+        <h4>DeluxeCoinflip Integration</h4>
         <p>Interprets server GUI announcements, inventory click events, and chat outcomes across all major server implementations.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🔒 Anti-Detection Safeguards</h4>
+        <h4>Anti-Detection Safeguards</h4>
         <p>Micro-delays on GUI interactions and click jitter prevent servers from flagging rapid automated bets.</p>
       </article>
     </div>
@@ -115,7 +123,7 @@
   <!-- Tiers Breakdown -->
   <section id="tiers">
     <h2>Select your CatFlip Tier</h2>
-    <p class="lead">Delivered automatically to Discord upon transaction verification.</p>
+    <p class="lead">Discord login required before purchase. Keys and mod downloads delivered directly to your Discord DMs.</p>
 
     <div class="tier-grid">
       <!-- Iron -->
@@ -170,6 +178,15 @@
       </article>
     </div>
   </section>
+
+  <!-- Key Redemption Banner (Buyers Only) -->
+  <div class="callout-box">
+    <div>
+      <h3 style="font-size:1.4rem">Already purchased or received a key?</h3>
+      <p style="color:var(--mute);margin-top:4px">Redeem your license key to verify active status and unlock secure buyer mod downloads.</p>
+    </div>
+    <a class="btn" href="/redeem">Redeem Key to Download →</a>
+  </div>
 </main>
 
 <footer>

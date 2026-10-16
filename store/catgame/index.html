@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CatGame: Chat Games Solver | Cat Game</title>
   <meta name="description" content="Human-like Fabric Minecraft mod that automatically solves chat games: math, anagrams, trivia, and gap-filling.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐱</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bff'><ellipse cx='12' cy='15' rx='5' ry='4'/><circle cx='6.5' cy='9.5' r='2'/><circle cx='10' cy='6.5' r='2'/><circle cx='14' cy='6.5' r='2'/><circle cx='17.5' cy='9.5' r='2'/></svg>">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
@@ -22,7 +22,7 @@
     .tier-card h3{font-size:1.6rem}
     .tier-card .desc{color:var(--mute);font-size:14.5px;margin:8px 0 14px}
     .tier-card ul{list-style:none;padding:0;font-size:14.5px;display:grid;gap:8px;margin-bottom:20px}
-    .tier-card li::before{content:"✓ ";color:var(--ok);font-weight:800}
+    .tier-card li::before{content:"+ ";color:var(--blue);font-weight:700}
     .callout-box{background:var(--paper);border:2px dashed var(--ink);border-radius:14px;padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin:40px 0}
     @media(max-width:820px){.tier-grid{grid-template-columns:1fr}}
   </style>
@@ -30,7 +30,15 @@
 <body>
 <header>
   <div class="wrap">
-    <a class="logo" href="/">Cat Game</a>
+    <a class="logo" href="/">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:text-bottom;margin-right:6px">
+        <ellipse cx="12" cy="15" rx="5" ry="4"/>
+        <circle cx="6.5" cy="9.5" r="2"/>
+        <circle cx="10" cy="6.5" r="2"/>
+        <circle cx="14" cy="6.5" r="2"/>
+        <circle cx="17.5" cy="9.5" r="2"/>
+      </svg>Cat Game
+    </a>
     <nav>
       <a href="/store" aria-current="page">Store</a>
       <a href="/custom">Custom</a>
@@ -55,15 +63,15 @@
           The fastest and most natural chat games solver for Fabric 1.21. Detects unscramble, math equations, fill-in-the-gap, reverse words, and trivia with customizable anti-ban delay jitter.
         </p>
         <div class="badge-row">
-          <span class="badge-tag">⚡ Fabric 1.21.11 & 1.21.x</span>
-          <span class="badge-tag">🛡️ Anti-Detection Jitter</span>
-          <span class="badge-tag">⏱️ 20s Cooldown Radar</span>
-          <span class="badge-tag">🔒 HWID Locked</span>
+          <span class="badge-tag">Fabric 1.21.11 & 1.21.x</span>
+          <span class="badge-tag">Anti-Detection Jitter</span>
+          <span class="badge-tag">20s Cooldown Radar</span>
+          <span class="badge-tag">HWID Locked</span>
         </div>
         <div class="row" style="margin-top:20px">
           <a class="btn" href="#tiers">Choose a Plan</a>
           <a class="btn alt" href="/trial">Try 2h Free Trial</a>
-          <a class="btn alt" href="/downloads/catgame-latest.jar" download>Download Mod</a>
+          <a class="btn alt" href="/redeem">Redeem Key to Download</a>
         </div>
       </div>
       <div class="chat" id="chat" aria-label="CatGame gameplay preview" role="img"></div>
@@ -77,32 +85,32 @@
 
     <div class="feat-grid">
       <article class="feat-card">
-        <h4>🎯 5 Adaptive Solver Engines</h4>
+        <h4>5 Adaptive Solver Engines</h4>
         <p>Instantly classifies and solves unscramble/anagrams, fill-the-blanks (<code>o_a__e</code> → <code>orange</code>), reverse words (<code>olleH</code> → <code>Hello</code>), math expressions, and typing challenges.</p>
       </article>
 
       <article class="feat-card">
-        <h4>📚 2,466+ Item Dictionary</h4>
+        <h4>2,466+ Item Dictionary</h4>
         <p>Pre-indexed database covering every item, block, potion, mob, and custom enchantment in modern Minecraft 1.21, solving word puzzles in milliseconds.</p>
       </article>
 
       <article class="feat-card">
-        <h4>📡 20s Cooldown Radar HUD</h4>
+        <h4>20s Cooldown Radar HUD</h4>
         <p>Predictive rolling server interval monitor. Displays a discreet countdown HUD and warns you 20 seconds before the next chat game begins so you're ready.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🤖 AI-Powered Trivia Solver</h4>
+        <h4>AI-Powered Trivia Solver</h4>
         <p>Diamond tier exclusive: passes complex trivia and riddle questions to a dedicated fast AI model to solve obscure server questions that simple dictionaries miss.</p>
       </article>
 
       <article class="feat-card">
-        <h4>🎲 Anti-Detection Human Delays</h4>
+        <h4>Anti-Detection Human Delays</h4>
         <p>Randomized micro-jitter emulation mimics human reaction times and keyboard typing speed. Fully configurable in-game down to your reaction preferences.</p>
       </article>
 
       <article class="feat-card">
-        <h4>⚙️ In-Game Command Console</h4>
+        <h4>In-Game Command Console</h4>
         <p>Manage your license key and configuration seamlessly with <code>/cat key &lt;code&gt;</code>, <code>/cat delay &lt;seconds&gt;</code>, <code>/cat status</code>, and <code>/cat toggle</code>.</p>
       </article>
     </div>
@@ -111,7 +119,7 @@
   <!-- Tiers Breakdown -->
   <section id="tiers">
     <h2>Select your CatGame Tier</h2>
-    <p class="lead">Upgrade or change plans anytime. All keys are delivered instantly after payment.</p>
+    <p class="lead">Discord login required before purchase. License key and download link are sent straight to your Discord DMs.</p>
 
     <div class="tier-grid">
       <!-- Iron -->
@@ -168,13 +176,13 @@
     </div>
   </section>
 
-  <!-- Trial Banner -->
+  <!-- Key Redemption Banner (Buyers Only) -->
   <div class="callout-box">
     <div>
-      <h3 style="font-size:1.4rem">Want to test CatGame first?</h3>
-      <p style="color:var(--mute);margin-top:4px">Claim a free 2-hour Gold key right now. No credit card or payment required.</p>
+      <h3 style="font-size:1.4rem">Already purchased or received a key?</h3>
+      <p style="color:var(--mute);margin-top:4px">Redeem your license key to verify active status and unlock secure buyer mod downloads.</p>
     </div>
-    <a class="btn" href="/trial">Claim Free 2h Trial →</a>
+    <a class="btn" href="/redeem">Redeem Key to Download →</a>
   </div>
 </main>
 

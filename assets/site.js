@@ -64,19 +64,87 @@ if ($('#chat')) {
 }
 
 /* ---------- store + checkout ---------- */
-if ($('#products')) {
-  $('#products').innerHTML = Object.entries(P).map(([k, p]) => {
-    const t = p.tiers[0], first = t.o || t.w;
-    return `<article class="card"><span class="chip">${p.chip}</span><h3>${p.name}</h3><p>${p.blurb}</p>
-    <ul>${p.pts.map(x => `<li>${x}</li>`).join('')}</ul>
-    <div class="price"><small>from</small> ₹${first[0]}${t.o ? '' : ' <small>/ week</small>'}</div>
-    <button class="btn" data-buy="${k}">Buy ${p.name}</button></article>`;
-  }).join('');
-  document.addEventListener('click', e => { const b = e.target.closest('[data-buy]'); if (b) openPay(b.dataset.buy); });
-
-  const S = {}, dlg = $('#pay');
+if ($('#pay')) {
+  const dlg = $('#pay');
+  const S = {};
   const amount = () => { const t = P[S.p].tiers[S.t]; return t.o || t[S.per]; };
-  function openPay(key) { Object.assign(S, { p: key, t: 0, per: 'w', method: 'upi', crypto: 0, oid: 'CG' + Date.now().toString(36).toUpperCase().slice(-6) }); renderPay(); dlg.showModal(); }
+
+  if ($('#products')) {
+    $('#products').innerHTML = Object.entries(P).map(([k, p]) => {
+      const t = p.tiers[0], first = t.o || t.w;
+      return `<article class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <span class="chip">${p.chip}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--mute);letter-spacing:0.02em">FABRIC 1.21.11</span>
+        </div>
+        <h3>${p.name}</h3>
+        <p>${p.blurb}</p>
+        <ul>${p.pts.map(x => `<li>${x}</li>`).join('')}</ul>
+        <div class="price"><small>from</small> ₹${first[0]}${t.o ? '' : ' <small>/ week</small>'}</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">
+          <button class="btn" data-buy="${k}">Buy ${p.name}</button>
+          <a href="/store/${k}" class="btn alt sm">Details & Perks →</a>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-buy]');
+    if (b) {
+      const key = b.dataset.buy;
+      const tier = b.dataset.tier !== undefined ? +b.dataset.tier : 0;
+      if (!ME) {
+        promptLogin(key, tier);
+      } else {
+        openPay(key, tier);
+      }
+    }
+  });
+
+  function promptLogin(key, tier = 0) {
+    const p = P[key];
+    const returnUrl = encodeURIComponent(`${location.pathname}?buy=${key}&tier=${tier}`);
+    $('#pBody').innerHTML = `
+      <h3 id="pTitle">Log in to order<button class="btn alt sm" data-x aria-label="Close">Close</button></h3>
+      <div style="text-align:center;padding:12px 0 6px">
+        <div style="font-size:40px;margin-bottom:10px">🐱</div>
+        <p style="margin-bottom:18px;font-size:15px;color:var(--mute);line-height:1.5">
+          Please log in with Discord first so your license key and download link can be delivered directly to your Discord DMs after payment.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
+          <a class="btn" style="width:100%;max-width:280px;text-align:center" href="/api/auth/login?next=${returnUrl}">Log in with Discord</a>
+          <button class="btn alt sm" data-guest="${key}" data-gtier="${tier}">Continue without login</button>
+        </div>
+      </div>`;
+    dlg.showModal();
+  }
+
+  function checkUrlBuy() {
+    const params = new URLSearchParams(location.search);
+    const buy = params.get('buy');
+    if (buy && P[buy]) {
+      const tier = +(params.get('tier') || 0);
+      history.replaceState(null, '', location.pathname);
+      openPay(buy, tier);
+    }
+  }
+  document.addEventListener('me', checkUrlBuy);
+  checkUrlBuy();
+
+  function openPay(key, tier = 0) {
+    Object.assign(S, {
+      p: key,
+      t: Math.min(tier, P[key].tiers.length - 1),
+      per: 'w',
+      method: 'upi',
+      crypto: 0,
+      oid: 'CG' + Date.now().toString(36).toUpperCase().slice(-6)
+    });
+    renderPay();
+    dlg.showModal();
+  }
+
   function renderPay() {
     const p = P[S.p], t = p.tiers[S.t], [inr, usd] = amount(), once = !!t.o, hasCrypto = CONFIG.crypto.length > 0;
     const order = `${p.name} ${t.n}${once ? '' : S.per === 'w' ? ' (week)' : ' (month)'}`;
@@ -107,31 +175,35 @@ if ($('#products')) {
     document.querySelectorAll('#pBody [data-login]').forEach(a => a.href = '/api/auth/login?next=' + encodeURIComponent(location.pathname));
     S.order = order; S.amt = `₹${inr} / $${usd}`;
   }
+
   dlg.addEventListener('click', e => {
     if (e.target === dlg) return dlg.close();
     const b = e.target.closest('button'); if (!b) return;
     const d = b.dataset;
     if ('x' in d) return dlg.close();
+    if (d.guest) { openPay(d.guest, +d.gtier || 0); return; }
     if (d.c) { copy(d.c); b.textContent = 'Copied'; return; }
     if (b.id === 'pGo') return submitPay(b);
     if (d.t) S.t = +d.t; else if (d.per) S.per = d.per; else if (d.m) S.method = d.m; else if (d.cr) S.crypto = +d.cr; else return;
     renderPay();
   });
+
   async function submitPay(btn) {
     const tx = $('#pTx').value.trim(), dc = ME ? ME.name : ($('#pDc') ? $('#pDc').value.trim() : ''), out = $('#pOut');
     const fail = m => { out.style.color = '#b3261e'; out.textContent = m; };
-    if (!tx || !dc) return fail('Enter the transaction ID' + (ME ? '.' : ' and your Discord username.'));
+    if (!tx) return fail('Enter the transaction ID (UTR).');
+    if (!dc) return fail('Enter your Discord username or log in above.');
     const method = S.method === 'upi' ? 'UPI' : CONFIG.crypto[S.crypto].name;
     btn.disabled = true; btn.textContent = 'Sending…'; out.textContent = '';
     try {
       const r = await post('/api/order', { oid: S.oid, order: S.order, amount: S.amt, method, txn: tx, discord: dc });
-      if (r.ok) { out.style.color = ''; out.textContent = 'Order sent. We check the payment by hand, then your key arrives on Discord.'; btn.textContent = 'Order sent'; return; }
+      if (r.ok) { out.style.color = ''; out.textContent = 'Order sent! We verify the transaction, then your key arrives on Discord.'; btn.textContent = 'Order sent'; return; }
       if (r.status === 409) { fail('That transaction ID was already used on another order.'); }
       else throw new Error('api');
     } catch (_) {
       copy(`Order ${S.oid}\n${S.order}: ${S.amt}\nMethod: ${method}\nTxn: ${tx}\nDiscord: ${dc}`);
       window.open(CONFIG.discord, '_blank', 'noopener');
-      out.style.color = ''; out.textContent = 'Could not reach the order system, so your order was copied. Paste it in a Discord ticket.';
+      out.style.color = ''; out.textContent = 'Could not reach order server. Order details copied to clipboard; paste into a Discord ticket.';
     }
     btn.disabled = false; btn.textContent = "I've paid, send my order";
   }

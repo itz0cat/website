@@ -90,4 +90,18 @@ async function entitled(discordId) {
   return out;
 }
 
-module.exports = { DOWNLOADS, jarPath, fileSize, entitled, fs, E, DAPI, sign, verify, cookies, setCookie, session, siteUrl, redis, bot, dm, createKey };
+async function getActiveUserKey(discordId, product) {
+  try {
+    const r = await fetch(E.CATCORE_API_URL.replace(/\/$/, '') + '/keys', { headers: { 'X-Admin-Secret': E.CATCORE_ADMIN_TOKEN } });
+    if (!r.ok) return null;
+    const { keys = {} } = await r.json(), now = Date.now(), prod = String(product).toLowerCase();
+    for (const [kStr, k] of Object.entries(keys)) {
+      if (String(k.discordId || '') !== String(discordId) || k.status !== 'ACTIVE') continue;
+      if (k.expiresAt && new Date(k.expiresAt).getTime() <= now) continue;
+      if ((k.products || []).map(p => String(p).toLowerCase()).includes(prod)) return kStr;
+    }
+    return null;
+  } catch { return null; }
+}
+
+module.exports = { DOWNLOADS, jarPath, fileSize, entitled, getActiveUserKey, fs, E, DAPI, sign, verify, cookies, setCookie, session, siteUrl, redis, bot, dm, createKey };

@@ -1,4 +1,4 @@
-const { E, session, redis, createKey, dm, bot, siteUrl } = require('./_lib');
+const { E, session, redis, createKey, dm, bot, siteUrl, getActiveUserKey } = require('./_lib');
 const HOURS = 2;
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
@@ -8,8 +8,17 @@ module.exports = async (req, res) => {
   if (!['catgame', 'catflip'].includes(product)) return res.status(400).json({ error: 'product' });
 
   const flag = `trial:${product}:${s.id}`;
-  try { if ((await redis('SET', flag, Date.now(), 'NX')) !== 'OK') return res.status(409).json({ error: 'used' }); }
-  catch { return res.status(500).json({ error: 'storage' }); }
+  try {
+    if ((await redis('SET', flag, Date.now(), 'NX')) !== 'OK') {
+      const existingKey = await getActiveUserKey(s.id, product);
+      if (existingKey) {
+        const name = product === 'catgame' ? 'CatGame' : 'CatFlip';
+        const cmd = product === 'catgame' ? `/cat key ${existingKey}` : `/catflip license ${existingKey}`;
+        return res.json({ ok: true, dm: false, key: existingKey, cmd, existing: true });
+      }
+      return res.status(409).json({ error: 'used' });
+    }
+  } catch { return res.status(500).json({ error: 'storage' }); }
 
   let key;
   try { key = await createKey({ product, tier: E.TRIAL_TIER || 'gold', hours: HOURS, discordId: s.id, name: s.name, note: 'website trial' }); }

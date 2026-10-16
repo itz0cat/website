@@ -1,11 +1,19 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "functions": { "api/*.js": { "maxDuration": 60 }, "api/auth/*.js": { "maxDuration": 30 } },
   "trailingSlash": false,
+  "outputDirectory": "public",
+  "functions": {
+    "api/download.js": { "maxDuration": 60, "includeFiles": "private/jars/**" },
+    "api/*.js": { "maxDuration": 60 },
+    "api/auth/*.js": { "maxDuration": 30 }
+  },
+  "headers": [
+    { "source": "/download", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+  ],
   "redirects": [
-    { "source": "/download", "destination": "/redeem", "permanent": true },
-    { "source": "/downloads", "destination": "/redeem", "permanent": true },
+    { "source": "/downloads", "destination": "/download", "permanent": true },
     { "source": "/terms", "destination": "/legal#terms", "permanent": true },
     { "source": "/refunds", "destination": "/legal#refunds", "permanent": true },
     { "source": "/maintenance", "destination": "/", "permanent": false }

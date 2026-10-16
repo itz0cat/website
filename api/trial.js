@@ -1,4 +1,4 @@
-const { E, session, redis, createKey, dm, bot } = require('./_lib');
+const { E, session, redis, createKey, dm, bot, siteUrl } = require('./_lib');
 const HOURS = 2;
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   const name = product === 'catgame' ? 'CatGame' : 'CatFlip';
   const cmd = product === 'catgame' ? `/cat key ${key}` : `/catflip license ${key}`;
   const sent = await dm(s.id, { embeds: [{ title: `Your ${name} trial key`, color: 0x6ba4e8,
-    description: `This key lasts ${HOURS} hours.\n\`${key}\`\n\nIn game, run:\n\`${cmd}\`\n\nLike it? Plans start at ₹20 a week in the store.` }] });
+    description: `This key lasts ${HOURS} hours.\n\`${key}\`\n\nIn game, run:\n\`${cmd}\`\n\nDownload the mod: ${siteUrl(req)}/download\n\nLike it? Plans start at ₹20 a week in the store.` }] });
 
   if (E.ADMIN_CHANNEL_ID) {
     await bot(`/channels/${E.ADMIN_CHANNEL_ID}/messages`, 'POST', {

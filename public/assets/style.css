@@ -94,3 +94,50 @@ header nav a.trial:hover{color:#fff}
   .qr,.qrnote{display:none}
   footer{margin-top:60px}
 }
+
+/* ---- logo + product marks ---- */
+.logo{display:flex;align-items:center;gap:9px}
+.mk{width:30px;height:30px;border-radius:8px;border:2px solid var(--ink);display:block}
+.plogo{width:48px;height:48px;border-radius:12px;border:2px solid var(--ink);flex:none;object-fit:cover;background:#fff}
+.plogo.sm{width:34px;height:34px;border-radius:9px}
+.plogo.big{width:72px;height:72px;border-radius:16px;margin-bottom:14px;display:block}
+.chead{display:flex;align-items:center;gap:12px}.chead h3{margin-bottom:4px}
+.btnrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.m h3 .chead{font:inherit}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+.dlbox{display:grid;gap:16px;max-width:640px}
+.dl{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:16px}
+.dl>div{flex:1;min-width:0}.dl h3{font-size:1.3rem}
+.dl .tier-d{min-height:0}
+
+/* ---- payment feedback ---- */
+.state{display:grid;justify-items:center;text-align:center;gap:12px;padding:14px 0 6px;animation:rise .35s ease-out both}
+.state h3{font-size:1.7rem;display:block}
+.state .btn{width:100%;max-width:320px;text-align:center}
+.state.ok h3{color:var(--ok)}.state.bad h3{color:#b3261e}
+.amt{font:800 2.4rem 'Bricolage Grotesque',sans-serif;line-height:1}
+.spin{width:54px;height:54px;border-radius:50%;border:5px solid var(--line);border-top-color:var(--blue);animation:spin .8s linear infinite}
+.sum{width:100%;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:6px 14px;text-align:left}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+.sum div:last-child{border:0}.sum span{color:var(--mute)}.sum b{text-align:right;word-break:break-all}
+.next{text-align:left;font-size:14.5px;color:var(--mute);padding-left:1.2em;display:grid;gap:3px}
+.tickwrap{position:relative;width:96px;height:96px;display:grid;place-items:center;margin:22px 0 8px}
+.tickwrap::before,.tickwrap::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--ok);opacity:0;animation:ring 1.1s ease-out .35s both}
+.tickwrap::after{animation-delay:.6s}.state.bad .tickwrap::before,.state.bad .tickwrap::after{display:none}
+.tick{width:96px;height:96px;transform:scale(0);animation:pop .5s cubic-bezier(.2,1.4,.4,1) .05s forwards}
+.tc{fill:none;stroke:var(--ok);stroke-width:3;stroke-dasharray:151;stroke-dashoffset:151;animation:draw .6s ease-out .1s forwards}
+.tp{fill:none;stroke:var(--ok);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .35s ease-out .55s forwards}
+.state.bad .tc,.state.bad .tp{stroke:#b3261e}
+.state.bad .tick{animation:pop .5s cubic-bezier(.2,1.4,.4,1) .05s forwards,shake .4s .6s}
+.burst{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none}
+.burst i{position:absolute;width:9px;height:9px;border:1.5px solid var(--ink);border-radius:2px;opacity:0;animation:fly 1s ease-out forwards}
+input.shake{animation:shake .4s}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes ring{0%{opacity:.7;transform:scale(.6)}100%{opacity:0;transform:scale(1.5)}}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 60px)) rotate(var(--r))}}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+@media(prefers-reduced-motion:reduce){.state,.tick,.tc,.tp,.tickwrap::before,.tickwrap::after{animation:none!important}.tick{transform:none}.tc,.tp{stroke-dashoffset:0}.spin{animation-duration:2s!important}}
+@media(max-width:820px){.dl{flex-wrap:wrap}.dl .btn{width:100%;text-align:center}}

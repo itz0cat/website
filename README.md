@@ -1,17 +1,24 @@
 # Cat Game site
 
-Pages: `/` home, `/store`, `/custom`, `/redeem`, `/trial`, `/legal`. Shared code in `assets/`, serverless API in `api/`.
+```
+public/     everything served to visitors (pages + assets). Logo: public/assets/logo.png
+api/        serverless functions (Discord login, trial, orders, private downloads)
+private/    mod jars. NOT served. Only api/download.js can read them, after login + key check
+```
 
-## 1. Payments
-Edit `CONFIG` at the top of `assets/site.js` (UPI ID now, crypto addresses later).
-Paid orders are posted to your private admin channel with the buyer's UTR. You verify the payment, then deliver the key.
+Pages: `/` `/store` `/store/<mod>` `/custom` `/redeem` `/trial` `/legal`.
+`/download` is not linked anywhere on the site. It is only given to buyers (order screen, DMs, trial, redeem).
 
-## 2. Discord login + free trial
-1. Discord Developer Portal > your app > OAuth2 > add redirect `https://YOUR-SITE/api/auth/callback`.
-2. The bot must be in your server with the "Create Invite" permission (needed to add members).
-3. Add every variable from `.env.example` in Vercel, then redeploy.
-4. `createKey()` in `api/_lib.js` already calls catcore's `/admin/create-key` and `/admin/set-key-expiry`.
+## Rules the code enforces
+- Buying and the trial both require Discord login (the bot needs to DM the key).
+- A download needs: logged in + an ACTIVE, unexpired catcore key for that mod whose `discordId` equals the logged-in user.
+  When you deliver a paid key, set its Discord ID (shown in the order message) with catcore `set-key-discord`, or create it with `discordId`.
 
-Login adds the user to your server, then the bot DMs the 2-hour key. If their DMs are closed, the key is shown on the page instead.
+## Updating a mod
+Replace `private/jars/catgame-latest.jar` / `catflip-latest.jar` and update `ver` in `DOWNLOADS` (api/_lib.js).
 
-Deploy: `vercel --prod`
+## Env vars
+See `.env.example`. Set them in Vercel, never in files.
+
+## Logo
+Replace `public/assets/logo.png` (header + favicon). Product logos: `catgame.png`, `catflip.png`, `catpay.svg` (CatPay's is a placeholder tile).

@@ -1,5 +1,7 @@
 // Shared helpers for the API routes. Secrets come from Vercel environment variables only.
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const E = process.env;
 const DAPI = 'https://discord.com/api/v10';
 
@@ -68,4 +70,24 @@ async function createKey({ product, tier, hours, days, discordId, name, note }) 
   return j.key;
 }
 
-module.exports = { E, DAPI, sign, verify, cookies, setCookie, session, siteUrl, redis, bot, dm, createKey };
+/* ---- Private downloads: jars live in /private/jars (never served statically) ---- */
+const DOWNLOADS = {
+  catgame: { name: 'CatGame', file: 'catgame-latest.jar', ver: '2.0.4', mc: '1.21.11', logo: '/assets/catgame.png', extra: 'Needs Fabric API, Cloth Config and Mod Menu.' },
+  catflip: { name: 'CatFlip', file: 'catflip-latest.jar', ver: '1.3.2', mc: '1.21.11', logo: '/assets/catflip.png', extra: 'Needs Fabric API and Cloth Config.' }
+};
+const jarPath = f => path.join(process.cwd(), 'private', 'jars', f);
+const fileSize = f => { try { return Math.round(fs.statSync(jarPath(f)).size / 1024) + ' KB'; } catch { return ''; } };
+/* Which products does this Discord user hold an ACTIVE, unexpired key for? (keys need discordId set in catcore) */
+async function entitled(discordId) {
+  const r = await fetch(E.CATCORE_API_URL.replace(/\/$/, '') + '/keys', { headers: { 'X-Admin-Secret': E.CATCORE_ADMIN_TOKEN } });
+  if (!r.ok) throw new Error('backend_' + r.status);
+  const { keys = {} } = await r.json(), now = Date.now(), out = new Set();
+  for (const k of Object.values(keys)) {
+    if (String(k.discordId || '') !== String(discordId) || k.status !== 'ACTIVE') continue;
+    if (k.expiresAt && new Date(k.expiresAt).getTime() <= now) continue;
+    for (const p of k.products || []) out.add(String(p).toLowerCase());
+  }
+  return out;
+}
+
+module.exports = { DOWNLOADS, jarPath, fileSize, entitled, fs, E, DAPI, sign, verify, cookies, setCookie, session, siteUrl, redis, bot, dm, createKey };

@@ -1,0 +1,4 @@
+.env*
+.offline_jars_backup
+graphify-out
+momentum

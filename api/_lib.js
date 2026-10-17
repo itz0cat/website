@@ -78,13 +78,15 @@ const DOWNLOADS = {
 };
 const jarPath = f => path.join(process.cwd(), 'private', 'jars', f);
 const fileSize = f => { try { return Math.round(fs.statSync(jarPath(f)).size / 1024) + ' KB'; } catch { return ''; } };
+const matchesDiscord = (k, id) => String(k.discordId || '') === String(id) || (Array.isArray(k.discordIds) && k.discordIds.map(String).includes(String(id)));
+
 /* Which products does this Discord user hold an ACTIVE, unexpired key for? (keys need discordId set in catcore) */
 async function entitled(discordId) {
   const r = await fetch(E.CATCORE_API_URL.replace(/\/$/, '') + '/keys', { headers: { 'X-Admin-Secret': E.CATCORE_ADMIN_TOKEN } });
   if (!r.ok) throw new Error('backend_' + r.status);
   const { keys = {} } = await r.json(), now = Date.now(), out = new Set();
   for (const k of Object.values(keys)) {
-    if (String(k.discordId || '') !== String(discordId) || k.status !== 'ACTIVE') continue;
+    if (!matchesDiscord(k, discordId) || k.status !== 'ACTIVE') continue;
     if (k.expiresAt && new Date(k.expiresAt).getTime() <= now) continue;
     for (const p of k.products || []) out.add(String(p).toLowerCase());
   }
@@ -97,7 +99,7 @@ async function getActiveUserKey(discordId, product) {
     if (!r.ok) return null;
     const { keys = {} } = await r.json(), now = Date.now(), prod = String(product).toLowerCase();
     for (const [kStr, k] of Object.entries(keys)) {
-      if (String(k.discordId || '') !== String(discordId) || k.status !== 'ACTIVE') continue;
+      if (!matchesDiscord(k, discordId) || k.status !== 'ACTIVE') continue;
       if (k.expiresAt && new Date(k.expiresAt).getTime() <= now) continue;
       if ((k.products || []).map(p => String(p).toLowerCase()).includes(prod)) return kStr;
     }

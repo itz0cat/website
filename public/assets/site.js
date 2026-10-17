@@ -19,6 +19,11 @@ const P = {
       { n: 'Iron', w: [20, .25], m: [70, .85], d: 'Conservative math engine, vault and loss cutoff, 1 device.' },
       { n: 'Gold', w: [40, .49], m: [140, 1.69], d: 'Adds aggressive mode, custom max bet (25–90%), 2 devices.' },
       { n: 'Diamond', w: [70, .85], m: [250, 2.99], d: 'Adds 5 devices, CatGame included, custom server rule presets.' }] },
+  catsell: { logo: '/assets/catsell-icon.png', name: 'CatSell', chip: 'Key · flat rate', blurb: 'Autonomous chest unloader & auto-seller for Fabric 1.21.11. Rotation-locking, smart scanning, and automatic /sellgui integration.',
+    pts: ['Rotation lock keeps you locked on target chest', 'Scans slots until chest is 100% full before looting', 'Hands-free /sellgui and /sell automation loop'],
+    noTiers: true,
+    tiers: [
+      { n: 'Standard', o: [15, .19], d: 'Flat rate license: full mod features, rotation-lock, auto-seller, HWID-bound key.' }] },
   catpay: { logo: '/assets/catpay.svg', name: 'CatPay', chip: 'One-time · no key', blurb: 'Client-side /pay simulator that matches a server\'s currency glyph and colors, for tutorials and video content.',
     pts: ['Works offline, no key or HWID', 'Reads MiniMessage and hex colors', 'Parses 10m, 1.5b and similar'],
     tiers: [
@@ -107,7 +112,7 @@ if ($('#pay')) {
         <div class="chead"><img class="plogo" src="${p.logo}" alt=""><div><h3>${p.name}</h3><span class="chip">${p.chip}</span></div></div>
         <p>${p.blurb}</p>
         <ul>${p.pts.map(x => `<li>${x}</li>`).join('')}</ul>
-        <div class="price"><small>from</small> ₹${first[0]}${t.o ? '' : ' <small>/ week</small>'}</div>
+        <div class="price">${p.tiers.length > 1 ? '<small>from</small> ' : ''}₹${first[0]}${t.o ? '' : ' <small>/ week</small>'}</div>
         <div class="btnrow"><button class="btn" data-buy="${k}">Buy ${p.name}</button><a href="/store/${k}" class="btn alt sm">Details</a></div>
       </article>`;
     }).join('');
@@ -142,13 +147,13 @@ if ($('#pay')) {
 
   function renderPay() {
     const p = P[S.p], t = p.tiers[S.t], [inr, usd] = amount(), once = !!t.o, hasCrypto = CONFIG.crypto.length > 0;
-    const order = `${p.name} ${t.n}${once ? '' : S.per === 'w' ? ' (week)' : ' (month)'}`;
+    const order = `${p.name}${p.noTiers || p.tiers.length === 1 ? '' : ' ' + t.n}${once ? '' : S.per === 'w' ? ' (week)' : ' (month)'}`;
     const on = v => `aria-pressed="${v}"`;
     const upiLink = `upi://pay?pa=${encodeURIComponent(CONFIG.upi.id)}&pn=${encodeURIComponent(CONFIG.upi.name)}&am=${inr}&cu=INR&tn=${encodeURIComponent(S.oid)}`;
     const c = CONFIG.crypto[S.crypto];
     $('#pBody').innerHTML = `
     <h3 id="pTitle"><span class="chead"><img class="plogo sm" src="${p.logo}" alt="">${p.name}</span><button class="btn alt sm" data-x aria-label="Close">Close</button></h3>
-    <div class="seg" role="group" aria-label="Tier">${p.tiers.map((x, i) => `<button ${on(i === S.t)} data-t="${i}">${x.n}</button>`).join('')}</div>
+    ${p.noTiers || p.tiers.length <= 1 ? '' : `<div class="seg" role="group" aria-label="Tier">${p.tiers.map((x, i) => `<button ${on(i === S.t)} data-t="${i}">${x.n}</button>`).join('')}</div>`}
     <div class="tier-d">${t.d}</div>
     ${once ? '' : `<div class="seg" role="group" aria-label="Period"><button ${on(S.per === 'w')} data-per="w">Weekly</button><button ${on(S.per === 'm')} data-per="m">Monthly</button></div>`}
     <div class="total">₹${inr} <small>or $${usd}</small></div>
@@ -278,7 +283,7 @@ if ($('#rBtn')) {
     await sleep(Math.max(0, 900 - (Date.now() - t0)));
     if (bad) { const v = t.show(`<div class="state bad">${tickHTML(false)}<h3>Key not valid</h3><p class="tier-d">${bad}</p><button class="btn" data-back>Try again</button></div>`); v.querySelector('[data-back]').onclick = t.restore; buzz(120); return; }
     const v = t.show(`<div class="state ok">${tickHTML(true)}<h3>${verified ? 'Key is active' : 'Ready to activate'}</h3>${info ? `<p class="tier-d">${info}</p>` : ''}
-      <p class="tier-d">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>${cmd(`/cat key ${code}`, 'CatGame')}${cmd(`/catflip license ${code}`, 'CatFlip')}
+      <p class="tier-d">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>${cmd(`/cat key ${code}`, 'CatGame')}${cmd(`/catflip license ${code}`, 'CatFlip')}${cmd(`/catsell key ${code}`, 'CatSell')}
       <a class="btn" href="/download">Get the mod file</a><button class="btn alt" data-back>Redeem another</button><p class="tier-d">Need help or a device reset? Ask in a Discord ticket.</p></div>`);
     celebrate(v); v.querySelector('[data-back]').onclick = () => { t.restore(); rc.value = ''; };
   };

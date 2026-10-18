@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CatOrder: Autonomous Bone Buyer &amp; Order Delivery Macro | Itz Cat</title>
+  <meta name="description" content="High-profit autonomous bone shop buyer and order delivery macro client mod for Fabric 1.21.11. Packet sign interception, highest price-per-item sorting, and instant kill switch.">
+  <link rel="icon" type="image/png" href="/assets/logo.png"><link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .breadcrumb{display:flex;gap:8px;font-size:14.5px;color:var(--mute);margin-bottom:18px;font-weight:500}
+    .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}
+    .badge-tag{background:#fff;border:1.5px solid var(--ink);border-radius:6px;padding:3px 10px;font-size:13px;font-weight:600}
+    .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:24px}
+    .feat-card{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:8px;box-shadow:3px 3px 0 var(--ink)}
+    .feat-card h4{font-size:1.25rem;font-family:'Bricolage Grotesque',sans-serif}
+    .step-list{display:grid;gap:18px;margin-top:24px}
+    .step-card{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:20px 24px;box-shadow:3px 3px 0 var(--ink);display:grid;grid-template-columns:48px 1fr;gap:18px;align-items:start}
+    .step-num{width:48px;height:48px;border-radius:10px;background:var(--blue);color:#fff;display:grid;place-items:center;font:800 1.5rem 'Bricolage Grotesque',sans-serif;border:2px solid var(--ink)}
+    .step-content h3{margin-bottom:6px;font-size:1.35rem}
+    .step-content p{color:#2b3350;line-height:1.6;margin:0}
+    .cmd-table{width:100%;border-collapse:collapse;background:#fff;border:2px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:3px 3px 0 var(--ink);margin-top:20px}
+    .cmd-table th,.cmd-table td{padding:12px 16px;border:1px solid #dcdfee;text-align:left;font-size:14.5px}
+    .cmd-table th{background:#eef1f8;font-weight:700;color:var(--ink);border-bottom:2px solid var(--ink)}
+    .pricing-box{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:32px;box-shadow:5px 5px 0 var(--ink);max-width:540px;margin:32px auto 0;text-align:center}
+    .pricing-box .cost{font:800 3rem 'Bricolage Grotesque',sans-serif;color:var(--ink);margin:14px 0}
+    .pricing-box ul{list-style:none;padding:0;display:grid;gap:10px;text-align:left;margin:20px 0 28px}
+    .pricing-box li::before{content:"";display:inline-block;width:8px;height:8px;margin-right:10px;background:var(--blue);border-radius:2px;vertical-align:1px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="/">Itz Cat</a>
+    <nav>
+      <a href="/store" aria-current="page">Store</a>
+      <a href="/custom">Custom</a>
+      <a href="/redeem">Redeem</a>
+      <a href="/trial" class="trial">Free trial</a>
+    </nav>
+    <div id="acct"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section style="padding-top:40px">
+    <div class="breadcrumb">
+      <a href="/store">Store</a> <span>/</span> <span>CatOrder</span>
+    </div>
+
+    <div class="hero" style="padding-top:0">
+      <div>
+        <span class="chip">Key · Monthly ₹45</span>
+        <img class="plogo big" src="/assets/catorder-icon.png" alt="CatOrder Logo">
+        <h1 style="margin-top:8px">CatOrder: Autonomous Bone Buyer &amp; Order Delivery Macro</h1>
+        <p class="lead" style="margin-bottom:16px">
+          The high-profit automated bone buyer and order delivery macro mod for Fabric 1.21.11. Automatically checks balance, bulk-buys bones from <code>/shop</code>, intercepts sign packets to search <code>/order</code>, sorts for the highest price-per-item, and fulfills orders autonomously.
+        </p>
+        <div class="badge-row">
+          <span class="badge-tag">Fabric 1.21.11</span>
+          <span class="badge-tag">Smart /bal Profit Tracker</span>
+          <span class="badge-tag">Sign Packet Interception</span>
+          <span class="badge-tag">Highest-Profit Matcher</span>
+          <span class="badge-tag">Emergency Kill Switch [L]</span>
+          <span class="badge-tag">₹45 / Month</span>
+        </div>
+        <div class="row" style="margin-top:20px">
+          <button class="btn" data-buy="catorder">Buy CatOrder - ₹45 / mo</button>
+          <a class="btn alt" href="#how-it-works">How It Works</a>
+        </div>
+      </div>
+      <div class="chat" style="display:flex;flex-direction:column;justify-content:center;gap:10px" aria-label="CatOrder in-game preview">
+        <div><s>[CatOrder]</s> -&gt; <i style="color:#f6c344">Cycle started. Starting Balance: $4,250,000</i></div>
+        <div><s>[CatOrder]</s> <i>Opening /shop: Purchasing 2,304 bones in bulk...</i></div>
+        <div><s>[CatOrder]</s> <b>/order sign packet intercepted: searching "bone"</b></div>
+        <div><s>[CatOrder]</s> <i>Sorted by Most Money Per Item. Slot 12 selected: $18,500/bone.</i></div>
+        <div><s>[CatOrder]</s> <i style="color:#8fe0b4">Bones delivered. Net Profit: +$842,500 (+19.8% growth).</i></div>
+        <div><s>[CatOrder]</s> <i>Round 1 complete. Next cycle starting in 2.1s...</i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Deep Dive -->
+  <section id="how-it-works">
+    <h2>How CatOrder Works (Autonomous Macro Routine)</h2>
+    <p class="lead">Built on a multi-stage automated state machine that safely executes orders with anti-spam pacing and zero manual interaction.</p>
+
+    <div class="step-list">
+      <article class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Balance Snapshotting &amp; Pre-Cycle Check (START)</h3>
+          <p>CatOrder parses your player balance via <code>/bal</code> to establish a baseline. It inspects your inventory: if you already hold 2,304 or more bones, it immediately skips the purchase stage to save money and moves straight to fulfilling active orders.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Automated Bulk Shop Routine (BUY_BONES)</h3>
+          <p>Sends <code>/shop</code> with an enforced 2.1s anti-spam cooldown, navigates through the Mob Drops category, selects Bone, opens the Chest bulk purchase window, and buys full stacks (36x bones) until your inventory is packed, then cleanly closes the GUI.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Sign Packet Interception &amp; Search (ORDER_SEARCH)</h3>
+          <p>Sends <code>/order</code>, clicks the search compass, and intercepts the server's <code>SignEditorOpenS2CPacket</code>. Instead of opening a manual screen, CatOrder automatically submits an <code>UpdateSignC2SPacket</code> with "bone" on line 1, immediately returning live player buy orders.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Smart Sorting &amp; Shift-Click Delivery (DELIVER_BONES)</h3>
+          <p>Configures order sorting to "Most Money Per Item" (slot 47), selects the highest paying active bone order, shift-clicks your bones into the delivery container, and clicks the confirm button (slot 16). If an order cancels or expires, it safely clicks slot 10 to retrieve all items without losses.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Profit Verification &amp; Repeat Loop (LOG_PROFIT)</h3>
+          <p>Runs up to 12 consecutive rounds until your bone stock is fully cleared. CatOrder queries <code>/bal</code>, calculates your exact cycle net profit and percentage growth, logs the metrics to your chat, and seamlessly begins the next round.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Commands & Controls -->
+  <section>
+    <h2>In-Game Commands &amp; Controls</h2>
+    <p class="lead">Intuitive controls with an immediate emergency kill switch.</p>
+
+    <div style="overflow-x:auto">
+      <table class="cmd-table">
+        <thead>
+          <tr>
+            <th>Command / Key</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/catorder key &lt;license_key&gt;</code></td>
+            <td>Activates your license key and cryptographically binds your device HWID.</td>
+          </tr>
+          <tr>
+            <td><code>/catorder start</code></td>
+            <td>Begins the automated bone buying and order delivery cycle.</td>
+          </tr>
+          <tr>
+            <td><code>/catorder stop</code></td>
+            <td>Stops the macro cycle, cancels active packets, and returns full control.</td>
+          </tr>
+          <tr>
+            <td><code>KeyBinding [L]</code></td>
+            <td>Dedicated emergency kill switch in Controls. Instantly halts all macro actions.</td>
+          </tr>
+          <tr>
+            <td><code>/catorder status</code></td>
+            <td>Displays active license tier, current macro stage, and cycle metrics.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <div class="pricing-box">
+      <span class="chip">Monthly · 30 Days</span>
+      <h2>Get CatOrder Today</h2>
+      <p class="lead" style="margin:6px 0 0">Full access to all features, updates, and Discord support.</p>
+      <div class="cost">₹45 <small style="font-size:1.1rem;color:var(--mute)">or $0.55 USD / month</small></div>
+      <ul>
+        <li>Includes full Fabric 1.21.11 client mod JAR</li>
+        <li>Automated <code>/shop</code> bulk bone purchasing</li>
+        <li>Sign packet interception for instant <code>/order</code> searches</li>
+        <li>Automatic sorting by highest price-per-item</li>
+        <li>Auto-delivery with rollback safety and bone retrieval</li>
+        <li>Smart <code>/bal</code> net profit tracking and growth logging</li>
+        <li>Emergency kill switch bound to <code>[L]</code></li>
+        <li>Instant automated delivery to your Discord DM</li>
+      </ul>
+      <button class="btn" style="width:100%;font-size:1.15rem;padding:14px" data-buy="catorder">Buy CatOrder Now - ₹45 / mo</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Pritam Raj. All rights reserved. Not affiliated with Mojang or Microsoft.</span>
+    <a href="/legal#1-parties-acceptance">Terms</a>
+    <a href="/legal#7-intellectual-property-anti-decompilation">Anti-Decompilation</a>
+    <a href="/legal#11-privacy-policy-data-collection">Privacy</a>
+    <a href="/legal#12-refunds-replacement-policy">Refunds</a>
+    <a data-dc href="#">Discord</a>
+  </div>
+</footer>
+
+<dialog id="pay" aria-labelledby="pTitle"><div class="m" id="pBody"></div></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

@@ -24,6 +24,17 @@ export default function middleware(request) {
       });
     }
   }
+
+  const { pathname } = new URL(request.url);
+  if (pathname === '/google7dbcc2491c71fe16.html' || pathname === '/google7dbcc2491c71fe16') {
+    return new Response('google-site-verification: google7dbcc2491c71fe16.html', {
+      status: 200,
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'cache-control': 'public, max-age=0, must-revalidate'
+      }
+    });
+  }
 }
 
 export const config = {

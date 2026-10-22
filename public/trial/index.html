@@ -13,7 +13,13 @@
 <p class="tier-d">Logging in adds you to the Cat Game Discord server so the bot can message you. We only read your username and ID.</p></div>
 <div class="box">
 <div data-out><a class="btn" data-login href="/api/auth/login?next=/trial">Log in with Discord</a></div>
-<div data-in hidden style="display:grid;gap:12px"><label>Mod<select id="tProd"><option value="catgame">CatGame</option><option value="catflip">CatFlip</option></select></label>
+<div data-in hidden style="display:grid;gap:12px"><label>Mod<select id="tProd">
+  <option value="catgame">CatGame (Chat Game Solver)</option>
+  <option value="catflip">CatFlip (Coinflip Bankroll Manager)</option>
+  <option value="catsell">CatSell (Autonomous Chest Unloader)</option>
+  <option value="catorder">CatOrder (Bone Order Macro)</option>
+  <option value="catdrop">CatDrop (Bone Buyer &amp; Auto-Drop)</option>
+</select></label>
 <button class="btn" id="tBtn">Get my trial key</button></div>
 <div id="tOut" class="out" role="status"></div>
 </div></div></section></main>

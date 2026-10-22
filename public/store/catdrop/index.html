@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CatDrop: Autonomous Bone Buyer &amp; Auto-Drop Macro | Cat Game</title>
+  <meta name="description" content="Autonomous bone shop buyer and auto-dropping macro for Fabric 1.21.11. Hands-free bulk purchasing and fast inventory throwing.">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
+    .badge-tag { background: var(--bg); border: 2px solid var(--ink); padding: 4px 10px; font-weight: 700; font-size: 0.85rem; box-shadow: 2px 2px 0 var(--ink); border-radius: 4px; }
+    .step-list { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+    .step-card { background: var(--surface); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 18px 20px; border-radius: 6px; display: flex; gap: 16px; align-items: flex-start; }
+    .step-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.8rem; font-weight: 800; background: var(--accent); color: var(--ink); border: 2px solid var(--ink); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 4px; box-shadow: 2px 2px 0 var(--ink); flex-shrink: 0; }
+    .step-content h3 { margin: 0 0 6px; font-size: 1.15rem; }
+    .step-content p { margin: 0; font-size: 0.95rem; color: var(--text-mute, #2b2b2b); }
+    .cmd-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+    .cmd-table th, .cmd-table td { border: 1px solid var(--ink); padding: 10px 14px; text-align: left; }
+    .cmd-table th { background: var(--bg); font-family: 'Bricolage Grotesque', sans-serif; }
+    .pricing-box { background: var(--surface); border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); padding: 28px; border-radius: 8px; margin-top: 32px; text-align: center; }
+    .pricing-box .cost { font-family: 'Bricolage Grotesque', sans-serif; font-size: 2.5rem; font-weight: 800; margin: 12px 0; }
+    .pricing-box ul { text-align: left; margin: 16px auto 24px; max-width: 440px; padding-left: 20px; }
+    .pricing-box li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="/">Itz Cat</a>
+    <nav>
+      <a href="/store" aria-current="page">Store</a>
+      <a href="/custom">Custom</a>
+      <a href="/redeem">Redeem</a>
+      <a href="/trial" class="trial">Free trial</a>
+    </nav>
+    <div id="acct"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- Hero Section -->
+  <section id="catdrop-hero">
+    <div class="breadcrumb" style="margin-bottom:12px;font-size:0.9rem">
+      <a href="/store" style="color:var(--ink);font-weight:600">&larr; Back to Store</a>
+    </div>
+
+    <div class="hero" style="padding-top:0">
+      <div>
+        <span class="chip">Key · Monthly ₹39</span>
+        <img class="plogo big" src="/assets/catdrop-icon.png" alt="CatDrop Logo">
+        <h1 style="margin-top:8px">CatDrop: Autonomous Bone Buyer &amp; Auto-Drop Macro</h1>
+        <p class="lead" style="margin-bottom:16px">
+          The high-speed automated bone shop purchasing and auto-dropping macro mod for Fabric 1.21.11. Automatically checks inventory, bulk-buys bones from <code>/shop</code>, cleanly closes containers, and drops all inventory stacks with sub-tick safety.
+        </p>
+        <div class="badge-row">
+          <span class="badge-tag">Fabric 1.21.11</span>
+          <span class="badge-tag">Bulk /shop Buyer</span>
+          <span class="badge-tag">Auto-Throwing Loop</span>
+          <span class="badge-tag">Emergency Kill Switch [I]</span>
+          <span class="badge-tag">Configurable Delay</span>
+          <span class="badge-tag">₹39 / Month</span>
+        </div>
+        <div class="row" style="margin-top:20px">
+          <button class="btn" data-buy="catdrop">Buy CatDrop - ₹39 / mo</button>
+          <a class="btn alt" href="#how-it-works">How It Works</a>
+        </div>
+      </div>
+      <div class="chat" style="display:flex;flex-direction:column;justify-content:center;gap:10px" aria-label="CatDrop in-game preview">
+        <div><s>[CatDrop]</s> -&gt; <i style="color:#f6c344">License active. Starting macro loop...</i></div>
+        <div><s>[CatDrop]</s> <i>Inventory check: 0/36 bone stacks. Opening /shop...</i></div>
+        <div><s>[CatDrop]</s> <b>Bulk buying 36x Bone stacks from Mob Drops...</b></div>
+        <div><s>[CatDrop]</s> <i>Inventory full. Starting auto-drop sequence (slots 9-44)...</i></div>
+        <div><s>[CatDrop]</s> <b style="color:#8fe0b4">All 36 stacks dropped. Cycle complete in 3.6s.</b></div>
+        <div><s>[CatDrop]</s> <i>Beginning next cycle...</i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Deep Dive -->
+  <section id="how-it-works">
+    <h2>How CatDrop Works (Autonomous Macro Routine)</h2>
+    <p class="lead">Engineered with a robust 9-stage state machine that interacts cleanly with the server without anti-cheat kicks.</p>
+
+    <div class="step-list">
+      <article class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>License Verification &amp; Initialization (START)</h3>
+          <p>CatDrop authenticates your license with CatCore. If valid, it snapshots your current inventory layout and verifies your player state before triggering any server interactions.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Inventory Capacity Check (CHECK_INV)</h3>
+          <p>Inspects inventory slots 9 through 44. If already packed with 36 stacks of bones, CatDrop skips the shop stage completely and transitions immediately to dropping items to save time.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Safe /shop Bulk Purchasing Routine (OPEN_SHOP &rarr; BUY_STACK)</h3>
+          <p>Sends <code>/shop</code> with an anti-spam cooldown, clicks Mob Drops (slot 16), selects Bone, switches to Chest bulk mode, and purchases 36x bone stacks in a single clean interaction before closing the GUI.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>High-Speed Auto-Drop Loop (DROP_BONES)</h3>
+          <p>Iterates through player inventory slots 9-44 and fires <code>SlotActionType.THROW</code> packets with humanized, configurable tick pacing (default 2 ticks / 100ms) until every bone stack is dropped.</p>
+        </div>
+      </article>
+
+      <article class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Autonomous Continuous Loop</h3>
+          <p>Once inventory is cleared, CatDrop safely pauses for the configured cooldown period and loops back to Step 2, running 24/7 without manual intervention.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Commands & Controls -->
+  <section>
+    <h2>In-Game Commands &amp; Controls</h2>
+    <p class="lead">Intuitive controls with a dedicated emergency kill switch.</p>
+
+    <div style="overflow-x:auto">
+      <table class="cmd-table">
+        <thead>
+          <tr>
+            <th>Command / Key</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/catdrop key &lt;license_key&gt;</code></td>
+            <td>Activates your license key and cryptographically binds your device HWID.</td>
+          </tr>
+          <tr>
+            <td><code>/catdrop start</code></td>
+            <td>Begins the automated bone buying and dropping cycle.</td>
+          </tr>
+          <tr>
+            <td><code>/catdrop stop</code></td>
+            <td>Halts the cycle, closes open GUIs, and returns player control.</td>
+          </tr>
+          <tr>
+            <td><code>KeyBinding [I]</code></td>
+            <td>Dedicated emergency kill switch in Controls. Instantly halts all macro actions.</td>
+          </tr>
+          <tr>
+            <td><code>/catdrop status</code></td>
+            <td>Displays active license tier, current macro stage, and cycle stats.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <div class="pricing-box">
+      <span class="chip">Monthly · 30 Days</span>
+      <h2>Get CatDrop Today</h2>
+      <p class="lead" style="margin:6px 0 0">Full access to all features, updates, and Discord support.</p>
+      <div class="cost">₹39 <small style="font-size:1.1rem;color:var(--mute)">or $0.49 USD / month</small></div>
+      <ul>
+        <li>Includes full Fabric 1.21.11 client mod JAR</li>
+        <li>Automated <code>/shop</code> bulk bone purchasing</li>
+        <li>Rapid-fire inventory dropping (slots 9-44)</li>
+        <li>Configurable throw tick delays (Cloth Config support)</li>
+        <li>Emergency kill switch bound to <code>[I]</code></li>
+        <li>Cryptographic HWID device binding</li>
+        <li>Instant automated delivery to your Discord DM</li>
+      </ul>
+      <button class="btn" style="width:100%;font-size:1.15rem;padding:14px" data-buy="catdrop">Buy CatDrop Now - ₹39 / mo</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Pritam Raj. All rights reserved. Not affiliated with Mojang or Microsoft.</span>
+    <a href="/legal#1-parties-acceptance">Terms</a>
+    <a href="/legal#7-intellectual-property-anti-decompilation">Anti-Decompilation</a>
+    <a href="/legal#11-privacy-policy-data-collection">Privacy</a>
+    <a href="/legal#12-refunds-replacement-policy">Refunds</a>
+    <a data-dc href="#">Discord</a>
+  </div>
+</footer>
+
+<dialog id="pay" aria-labelledby="pTitle"><div class="m" id="pBody"></div></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

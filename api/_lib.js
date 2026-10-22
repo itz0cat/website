@@ -75,7 +75,8 @@ const DOWNLOADS = {
   catgame: { name: 'CatGame', file: 'catgame-latest.jar', ver: '2.0.4', mc: '1.21.11', logo: '/assets/catgame.png', extra: 'Needs Fabric API, Cloth Config and Mod Menu.' },
   catflip: { name: 'CatFlip', file: 'catflip-latest.jar', ver: '1.3.2', mc: '1.21.11', logo: '/assets/catflip.png', extra: 'Needs Fabric API and Cloth Config.' },
   catsell: { name: 'CatSell', file: 'catsell-latest.jar', ver: '1.0.0', mc: '1.21.11', logo: '/assets/catsell-icon.png', extra: 'Needs Fabric API and Cloth Config.' },
-  catorder: { name: 'CatOrder', file: 'catorder-latest.jar', ver: '1.0.2', mc: '1.21.11', logo: '/assets/catorder-icon.png', extra: 'Needs Fabric API and Cloth Config.' }
+  catorder: { name: 'CatOrder', file: 'catorder-latest.jar', ver: '1.0.2', mc: '1.21.11', logo: '/assets/catorder-icon.png', extra: 'Needs Fabric API and Cloth Config.' },
+  catdrop: { name: 'CatDrop', file: 'catdrop-latest.jar', ver: '1.0.0', mc: '1.21.11', logo: '/assets/catdrop-icon.png', extra: 'Needs Fabric API and Cloth Config.' }
 };
 const jarPath = f => path.join(process.cwd(), 'private', 'jars', f);
 const fileSize = f => { try { return Math.round(fs.statSync(jarPath(f)).size / 1024) + ' KB'; } catch { return ''; } };

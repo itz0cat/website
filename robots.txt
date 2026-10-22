@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://itz0cat.vercel.app/sitemap.xml

@@ -29,6 +29,11 @@ const P = {
     noTiers: true,
     tiers: [
       { n: 'Standard', m: [45, .55], d: 'Monthly license: full macro routine, /bal profit tracking, sign interceptor, HWID-bound key.' }] },
+  catdrop: { logo: '/assets/catdrop-icon.png', name: 'CatDrop', chip: 'Key · monthly', blurb: 'Autonomous bone buyer & auto-drop macro for Fabric 1.21.11. Bulk /shop buyer, smart inventory scanner, and automated slot throw loop.',
+    pts: ['Auto-buys bones from /shop in bulk (36x stacks)', 'Automated inventory throwing loop (slots 9-44)', 'Configurable tick delay and emergency kill switch [I]'],
+    noTiers: true,
+    tiers: [
+      { n: 'Standard', m: [39, .49], d: 'Monthly license: full macro routine, bulk buyer, auto-drop engine, HWID-bound key.' }] },
   catpay: { logo: '/assets/catpay.svg', name: 'CatPay', chip: 'One-time · no key', blurb: 'Client-side /pay simulator that matches a server\'s currency glyph and colors, for tutorials and video content.',
     pts: ['Works offline, no key or HWID', 'Reads MiniMessage and hex colors', 'Parses 10m, 1.5b and similar'],
     tiers: [
@@ -292,7 +297,7 @@ if ($('#rBtn')) {
     await sleep(Math.max(0, 900 - (Date.now() - t0)));
     if (bad) { const v = t.show(`<div class="state bad">${tickHTML(false)}<h3>Key not valid</h3><p class="tier-d">${bad}</p><button class="btn" data-back>Try again</button></div>`); v.querySelector('[data-back]').onclick = t.restore; buzz(120); return; }
     const v = t.show(`<div class="state ok">${tickHTML(true)}<h3>${verified ? 'Key is active' : 'Ready to activate'}</h3>${info ? `<p class="tier-d">${info}</p>` : ''}
-      <p class="tier-d">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>${cmd(`/cat key ${code}`, 'CatGame')}${cmd(`/catflip license ${code}`, 'CatFlip')}${cmd(`/catsell key ${code}`, 'CatSell')}${cmd(`/catorder key ${code}`, 'CatOrder')}
+      <p class="tier-d">Put the mod in <code>.minecraft/mods</code> with Fabric API and Cloth Config, start the game, then run:</p>${cmd(`/cat key ${code}`, 'CatGame')}${cmd(`/catflip license ${code}`, 'CatFlip')}${cmd(`/catsell key ${code}`, 'CatSell')}${cmd(`/catorder key ${code}`, 'CatOrder')}${cmd(`/catdrop key ${code}`, 'CatDrop')}
       <a class="btn" href="/download">Get the mod file</a><button class="btn alt" data-back>Redeem another</button><p class="tier-d">Need help or a device reset? Ask in a Discord ticket.</p></div>`);
     celebrate(v); v.querySelector('[data-back]').onclick = () => { t.restore(); rc.value = ''; };
   };

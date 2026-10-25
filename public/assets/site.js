@@ -12,7 +12,12 @@ const CONFIG = {
   discord: 'https://discord.gg/Ga6y7rzd5u',
   upi: { id: '9470726690@fam', name: 'Cat Game' },
   crypto: [], // later, e.g. { name: 'USDT (TRC20)', addr: 'T...' }
-  redeemApi: '' // optional: POST {code} -> {ok, product, tier, expires}
+  redeemApi: '', // optional: POST {code} -> {ok, product, tier, expires}
+  announcement: {
+    tag: 'Events & Community',
+    text: 'Join our Discord server for weekly mod tournaments, key giveaways, and live events!',
+    cta: 'Join Discord'
+  }
 };
 /* prices: [INR, USD] */
 const P = {
@@ -55,7 +60,38 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const copy = t => (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).catch(() => {});
 const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-document.querySelectorAll('[data-dc]').forEach(a => { a.href = CONFIG.discord; a.target = '_blank'; a.rel = 'noopener'; });
+const bindDc = (root = document) => root.querySelectorAll('[data-dc]').forEach(a => { a.href = CONFIG.discord; a.target = '_blank'; a.rel = 'noopener'; });
+
+function renderTopBanner() {
+  if (document.querySelector('.top-banner')) return;
+  const header = document.querySelector('header');
+  if (!header) return;
+  const banner = document.createElement('div');
+  banner.className = 'top-banner';
+  banner.innerHTML = `
+    <div class="wrap top-banner-wrap">
+      <span class="top-banner-tag">${esc(CONFIG.announcement.tag)}</span>
+      <span class="top-banner-text">${esc(CONFIG.announcement.text)}</span>
+      <a data-dc href="${CONFIG.discord}" class="top-banner-link">${esc(CONFIG.announcement.cta)} &rarr;</a>
+    </div>
+  `;
+  header.parentNode.insertBefore(banner, header);
+}
+
+function enhanceNavDiscord() {
+  const nav = document.querySelector('header nav');
+  if (nav && !nav.querySelector('[data-dc]')) {
+    const a = document.createElement('a');
+    a.setAttribute('data-dc', '');
+    a.className = 'nav-dc';
+    a.textContent = 'Discord';
+    nav.appendChild(a);
+  }
+}
+
+renderTopBanner();
+enhanceNavDiscord();
+bindDc();
 
 /* ---------- shared feedback: spinner, tick/cross, confetti ---------- */
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;

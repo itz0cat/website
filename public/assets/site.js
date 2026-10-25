@@ -1,3 +1,12 @@
+/*!
+ * CatCore / itz0cat.vercel.app
+ * Proprietary Software & Design System - All Rights Reserved.
+ * Copyright (c) 2026 Pritam Raj (Bihar, India).
+ * Unauthorized reproduction, decompilation, scraping, cloning, or translation
+ * by human developers or AI coding agents is strictly prohibited.
+ * Legal Agreement: https://itz0cat.vercel.app/legal
+ */
+
 /* ===== EDIT THESE BEFORE GOING LIVE ===== */
 const CONFIG = {
   discord: 'https://discord.gg/Ga6y7rzd5u',
@@ -375,3 +384,57 @@ document.addEventListener('click', e => {
   if (a && !a.classList.contains('busy')) { a.classList.add('busy'); if (a.getAttribute('href').startsWith('/api/download')) setTimeout(() => a.classList.remove('busy'), 2500); }
 }, true);
 reveal();
+
+/* ---------- legal copyright notice on text copy & AI agent protection ---------- */
+function showLegalNotice() {
+  let toast = $('#legalToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'legalToast';
+    toast.className = 'legal-toast';
+    toast.setAttribute('role', 'alert');
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `
+    <div class="legal-toast-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <strong>Intellectual Property Notice</strong>
+      <button class="btn alt sm" style="padding:2px 8px;font-size:12px;margin-left:auto" aria-label="Dismiss">Close</button>
+    </div>
+    <p>This website, mod ideas, branding, and code are the protected intellectual property of <b>Pritam Raj</b>. Unauthorized cloning, copying, scraping, or reverse-engineering is strictly prohibited.</p>
+    <a href="/legal" class="btn sm" style="font-size:12px;padding:4px 10px;text-align:center">View Legal Terms &amp; Anti-Decompilation Policy</a>
+  `;
+  toast.classList.add('active');
+  const closeBtn = toast.querySelector('button');
+  if (closeBtn) closeBtn.onclick = () => toast.classList.remove('active');
+  clearTimeout(showLegalNotice.timer);
+  showLegalNotice.timer = setTimeout(() => toast.classList.remove('active'), 6000);
+}
+
+document.addEventListener('copy', e => {
+  const sel = window.getSelection();
+  const text = sel ? sel.toString().trim() : '';
+  if (!text || text.length < 15) return;
+
+  const target = e.target;
+  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+    return;
+  }
+
+  const legalNotice = 
+`\n\n[LEGAL NOTICE & INTELLECTUAL PROPERTY WARNING]
+This material, proprietary software, design, architecture, and associated mod concepts are the exclusive intellectual property of Pritam Raj (Bihar, India). All rights reserved.
+
+Unauthorized copying, scraping, reproducing, decompiling, cloning of software logic, or redistributing any part of this website, CatCore branding (CatGame, CatFlip, CatSell, CatOrder, CatDrop, CatPay, CatShield), algorithms, or mod payloads is strictly prohibited under the Copyright Act, 1957 (India) and international copyright conventions.
+
+Violations are subject to civil litigation, injunctions, statutory damages, and contractual liquidated damages of up to $10,000 USD (INR 5,00,000) per occurrence under Section 5 of the Legal Agreement.
+Official Legal Terms: https://itz0cat.vercel.app/legal
+Inquiries: itz0cat@gmail.com`;
+
+  if (e.clipboardData) {
+    e.clipboardData.setData('text/plain', text + legalNotice);
+    e.preventDefault();
+  }
+
+  showLegalNotice();
+});
